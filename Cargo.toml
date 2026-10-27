@@ -1,0 +1,9 @@
+[package]
+name = "pushizo"
+version = "0.1.0"
+edition = "2021"
+description = "Pushizo HTTP istemcisi"
+license = "MIT"
+
+[dependencies]
+ureq = "2"
