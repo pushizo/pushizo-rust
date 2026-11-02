@@ -1,32 +1,65 @@
-//! Pushizo public API istemcisi. Anahtar hata metnine yazılmaz.
+//! Pushizo public API'si için Rust sunucu SDK'sı.
+//!
+//! ```no_run
+//! use pushizo::models::{CreateNotificationDto, CreateNotificationDtoTarget};
+//! use pushizo::{Client, RequestOptions};
+//! use std::collections::HashMap;
+//!
+//! # fn main() -> pushizo::Result<()> {
+//! let client = Client::builder(std::env::var("PUSHIZO_API_KEY").unwrap_or_default())
+//!     .app_id("app_…")
+//!     .build()?;
+//!
+//! let mut target = CreateNotificationDtoTarget::default();
+//! target.include_aliases = Some(HashMap::from([(
+//!     "external_id".to_string(),
+//!     vec!["user-42".to_string()],
+//! )]));
+//! let body = CreateNotificationDto {
+//!     target,
+//!     contents: Some(HashMap::from([("en".to_string(), "Your order shipped".to_string())])),
+//!     ..Default::default()
+//! };
+//! let result = client
+//!     .notifications()
+//!     .with_options(RequestOptions::new().idempotency_key("order-1001"))
+//!     .create(&body)?;
+//! println!("{}", result.id);
+//! # Ok(())
+//! # }
+//! ```
+//!
+//! Modeller (`models`) ve kaynak servisleri (`resources`) `api/openapi.yaml`'dan üretilir; HTTP katmanı, yeniden
+//! deneme, idempotency, sayfalama, multipart, webhook imza doğrulaması ve kimlik doğrulama yardımcıları el yazımıdır.
+//! API anahtarı hata metinlerine ve `Debug` çıktısına yazılmaz.
 
-pub struct Client {
-    api_url: String,
-    api_key: String,
-    app_id: String,
-}
+#![forbid(unsafe_code)]
 
-impl Client {
-    pub fn new(api_url: impl Into<String>, api_key: impl Into<String>, app_id: impl Into<String>) -> Self {
-        Self { api_url: api_url.into().trim_end_matches('/').to_string(), api_key: api_key.into(), app_id: app_id.into() }
-    }
+mod client;
+mod de;
+mod error;
+mod identity;
+mod multipart;
+mod pagination;
+mod webhooks;
 
-    pub fn send(&self, title: &str, body: &str) -> Result<u16, String> {
-        let payload = format!(
-            r#"{{"app_id":"{}","target":{{"included_segments":["Subscribed Users"]}},"headings":{{"en":"{}"}},"contents":{{"en":"{}"}}}}"#,
-            escape(&self.app_id),
-            escape(title),
-            escape(body)
-        );
-        let response = ureq::post(&format!("{}/v1/notifications", self.api_url))
-            .set("Authorization", &format!("Bearer {}", self.api_key))
-            .set("Content-Type", "application/json")
-            .send_string(&payload)
-            .map_err(|err| err.to_string())?;
-        Ok(response.status())
-    }
-}
+#[path = "generated/models.rs"]
+pub mod models;
+#[path = "generated/resources.rs"]
+pub mod resources;
 
-fn escape(value: &str) -> String {
-    value.replace('\\', "\\\\").replace('"', "\\\"")
-}
+pub use client::{Client, ClientBuilder, RequestOptions, DEFAULT_BASE_URL, VERSION};
+pub use error::{codes, Error, ErrorKind, Result};
+pub use identity::{
+    identity_hash, identity_token, IdentityTokenOptions, IDENTITY_TOKEN_MAX_LIFETIME,
+};
+pub use multipart::FileUpload;
+pub use pagination::Paginator;
+pub use resources::API_VERSION;
+pub use webhooks::{
+    construct_webhook_events, verify_webhook_signature, WebhookEvent, WebhookSignatureError,
+    WebhookVerifyOptions, WebhookVerifyResult, WEBHOOK_DEFAULT_TOLERANCE,
+    WEBHOOK_EVENT_ID_HEADER, WEBHOOK_REASON_MALFORMED_BODY, WEBHOOK_REASON_MALFORMED_HEADER,
+    WEBHOOK_REASON_MISSING_HEADER, WEBHOOK_REASON_SIGNATURE_MISMATCH,
+    WEBHOOK_REASON_TIMESTAMP_OUT_OF_TOLERANCE, WEBHOOK_SIGNATURE_HEADER,
+};

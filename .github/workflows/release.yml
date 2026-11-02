@@ -1,0 +1,58 @@
+# crates.io yayını
+#
+# Trusted publishing (OIDC): uzun ömürlü belirteç saklanmaz; rust-lang/crates-io-auth-action iş başına kısa ömürlü
+# belirteç alır. Ana depodaki yayın betiği testleri koşar, .crate dosyasını bu deponun GitHub Release'ine ekler ve
+# bu iş akışını sürüm etiketiyle çalıştırır:
+#   npm run sdk:publish -- crates --yalnizca-github --tetikle --yayinla
+# Elle: Actions → Release → Run workflow → tag.
+# Kurulum (bir kez): crates.io trusted publishing yalnızca var olan crate için açılır. İlk sürüm belirteçle
+# (CARGO_REGISTRY_TOKEN, .env.publish) `npm run sdk:publish -- crates --yayinla` ile yayımlanır; sonra crates.io →
+# pushizo → Settings → Trusted Publishing → GitHub: owner pushizo, depo pushizo-rust, iş akışı release.yml, ortam release.
+
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Sürüm etiketi (ör. v0.1.0)
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  crates:
+    runs-on: ubuntu-latest
+    environment: release
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+      - name: Sürüm etiketle eşleşiyor mu
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)
+          test "v$version" = "$TAG" || { echo "Cargo.toml $version, etiket $TAG"; exit 1; }
+      - name: Test
+        run: cargo test
+      - name: Zaten yayında mı
+        id: exists
+        run: |
+          version=$(sed -n 's/^version = "\(.*\)"/\1/p' Cargo.toml | head -n1)
+          if curl -fsS -A "pushizo-release (support@pushizo.com)" "https://crates.io/api/v1/crates/pushizo/$version" >/dev/null 2>&1; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "pushizo $version zaten crates.io'da"
+          fi
+      - uses: rust-lang/crates-io-auth-action@v1
+        if: steps.exists.outputs.skip != 'true'
+        id: auth
+      - name: Yayımla
+        if: steps.exists.outputs.skip != 'true'
+        run: cargo publish
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ steps.auth.outputs.token }}
