@@ -13,17 +13,6 @@
 
 **Pushizo Rust SDK** — Server-side SDK for Rust 1.71+ (blocking, ureq). Models and services are generated from the Pushizo OpenAPI schema and cover the same endpoints as the other server SDKs; authentication, retries, idempotency, cursor pagination, multipart uploads, webhook signature verification and identity verification helpers are hand-written.
 
-> **Status:** The pushizo crate 0.1.0 is not on crates.io yet; until then you can depend on this repository with a git tag.<br>
-> **Durum:** pushizo crate'i 0.1.0 henüz crates.io'da değil; o zamana kadar bu depoya git etiketiyle bağımlı olabilirsiniz.
-
-**Install from GitHub until then · O zamana kadar GitHub'dan kurulum:**
-
-```bash
-cargo add pushizo --git https://github.com/pushizo/pushizo-rust --tag v0.1.0
-```
-
-**After publication · Yayından sonra:**
-
 ```bash
 cargo add pushizo
 ```
