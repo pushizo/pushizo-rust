@@ -118,6 +118,11 @@ impl Client {
         CannedResponsesService::new(self)
     }
 
+    /// `catalogs` kaynağı.
+    pub fn catalogs(&self) -> CatalogsService<'_> {
+        CatalogsService::new(self)
+    }
+
     /// `categories` kaynağı.
     pub fn categories(&self) -> CategoriesService<'_> {
         CategoriesService::new(self)
@@ -3630,6 +3635,184 @@ impl<'a> CannedResponsesService<'a> {
     pub fn delete_canned(&self, canned_id: &str) -> Result<OkModel> {
         let mut op = Operation::new("DELETE", "/v1/apps/{appId}/canned-responses/{cannedId}");
         op.path_param("cannedId", canned_id);
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `catalogs` kaynağı.
+/// `Client::catalogs()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct CatalogsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `CatalogsService::items` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct CatalogsItemsParams {
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+    pub q: Option<String>,
+    pub category: Option<String>,
+}
+
+impl CatalogsItemsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.offset {
+            op.query("offset", v);
+        }
+        if let Some(v) = &self.q {
+            op.query("q", v);
+        }
+        if let Some(v) = &self.category {
+            op.query("category", v);
+        }
+    }
+}
+
+/// `CatalogsService::upload` için multipart/form-data alanları.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct CatalogsUploadForm {
+    /// Zorunlu. UTF-8 CSV. Zorunlu sütunlar: id, title. Bilinen: description, image_url, url, price, sale_price, currency, category, brand, in_stock. Diğerleri özellik olur. En fazla 100.000 satır, 20 MB.
+    pub file: Option<FileUpload>,
+}
+
+impl<'a> CatalogsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Ürün katalogları
+    ///
+    /// `GET /v1/apps/{appId}/catalogs`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<CatalogList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Katalog oluştur
+    ///
+    /// `POST /v1/apps/{appId}/catalogs`
+    ///
+    /// Şablonda `{% catalog_item '<ad>' id: custom_data.product_id as urun %}{{ urun.title }}`.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateCatalogDto) -> Result<Catalog> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/catalogs");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Katalog ayrıntısı
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, catalog_id: &str) -> Result<Catalog> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}");
+        op.path_param("catalogId", catalog_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kataloğu güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/catalogs/{catalogId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, catalog_id: &str, body: &UpdateCatalogDto) -> Result<Catalog> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/catalogs/{catalogId}");
+        op.path_param("catalogId", catalog_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kataloğu sil
+    ///
+    /// `DELETE /v1/apps/{appId}/catalogs/{catalogId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete(&self, catalog_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/catalogs/{catalogId}");
+        op.path_param("catalogId", catalog_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ürünler
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/items`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn items(&self, catalog_id: &str, params: Option<&CatalogsItemsParams>) -> Result<CatalogItemsPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/items");
+        op.path_param("catalogId", catalog_id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ürünleri ekle veya güncelle (en fazla 1000)
+    ///
+    /// `PUT /v1/apps/{appId}/catalogs/{catalogId}/items`
+    ///
+    /// Listede olmayan ürünlere dokunulmaz. Listedeki ürünün verilmeyen alanları temizlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn upsert(&self, catalog_id: &str, body: &UpsertCatalogItemsDto) -> Result<CatalogUpsertResult> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/catalogs/{catalogId}/items");
+        op.path_param("catalogId", catalog_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// CSV ile ürün ekle veya güncelle
+    ///
+    /// `POST /v1/apps/{appId}/catalogs/{catalogId}/items/upload`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn upload(&self, catalog_id: &str, form: &CatalogsUploadForm) -> Result<CatalogUpsertResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/catalogs/{catalogId}/items/upload");
+        op.path_param("catalogId", catalog_id);
+        let mut mp = Multipart::new();
+        if let Some(v) = &form.file {
+            mp.file("file", v);
+        }
+        op.multipart = Some(mp);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ürün ayrıntısı
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn item(&self, catalog_id: &str, item_id: &str) -> Result<CatalogItem> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}");
+        op.path_param("catalogId", catalog_id);
+        op.path_param("itemId", item_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ürünü sil
+    ///
+    /// `DELETE /v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn remove_item(&self, catalog_id: &str, item_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}");
+        op.path_param("catalogId", catalog_id);
+        op.path_param("itemId", item_id);
         self.client.execute(op, &self.opts)
     }
 }

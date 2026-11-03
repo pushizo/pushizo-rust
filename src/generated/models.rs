@@ -2618,6 +2618,117 @@ pub struct CannedUpdateDto {
     pub language: Option<String>,
 }
 
+/// `Catalog` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Catalog {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description")]
+    pub description: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "currency", deserialize_with = "crate::de::null_default")]
+    pub currency: String,
+    /// Zorunlu.
+    #[serde(rename = "item_count", deserialize_with = "crate::de::null_default")]
+    pub item_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "liquid", deserialize_with = "crate::de::null_default")]
+    pub liquid: String,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `CatalogItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CatalogItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "title", deserialize_with = "crate::de::null_default")]
+    pub title: String,
+    /// Zorunlu.
+    #[serde(rename = "description")]
+    pub description: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "image_url")]
+    pub image_url: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "url")]
+    pub url: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "price")]
+    pub price: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "sale_price")]
+    pub sale_price: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "currency", deserialize_with = "crate::de::null_default")]
+    pub currency: String,
+    /// Zorunlu.
+    #[serde(rename = "category")]
+    pub category: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "brand")]
+    pub brand: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "in_stock", deserialize_with = "crate::de::null_default")]
+    pub in_stock: bool,
+    /// Zorunlu.
+    #[serde(rename = "attributes", deserialize_with = "crate::de::null_default")]
+    pub attributes: std::collections::HashMap<String, String>,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `CatalogItemsPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CatalogItemsPage {
+    /// Zorunlu.
+    #[serde(rename = "total", deserialize_with = "crate::de::null_default")]
+    pub total: i64,
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CatalogItem>,
+}
+
+/// `CatalogList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CatalogList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<Catalog>,
+}
+
+/// `CatalogUpsertResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CatalogUpsertResult {
+    /// Zorunlu.
+    #[serde(rename = "catalog", deserialize_with = "crate::de::null_default")]
+    pub catalog: Catalog,
+    /// Zorunlu.
+    #[serde(rename = "upserted", deserialize_with = "crate::de::null_default")]
+    pub upserted: i64,
+}
+
 /// `ChannelConfig` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -3697,6 +3808,19 @@ pub struct CreateBudgetAlertRuleDto {
     pub recipients: Option<Vec<String>>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+}
+
+/// `CreateCatalogDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateCatalogDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "currency", skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
 }
 
 /// `CreateCategoryDto` şeması.
@@ -12283,6 +12407,16 @@ pub struct UpdateBudgetAlertRuleDto {
     pub enabled: Option<bool>,
 }
 
+/// `UpdateCatalogDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateCatalogDto {
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "currency", skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
+}
+
 /// `UpdateCategoryDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -13342,6 +13476,47 @@ pub struct UpdateWebhookDtoFiltersConditionsItem {
     pub op: String,
     #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
     pub value: Option<serde_json::Value>,
+}
+
+/// `UpsertCatalogItemsDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpsertCatalogItemsDto {
+    /// Zorunlu.
+    #[serde(rename = "items", deserialize_with = "crate::de::null_default")]
+    pub items: Vec<UpsertCatalogItemsDtoItemsItem>,
+}
+
+/// `UpsertCatalogItemsDtoItemsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpsertCatalogItemsDtoItemsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "title", deserialize_with = "crate::de::null_default")]
+    pub title: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "image_url", skip_serializing_if = "Option::is_none")]
+    pub image_url: Option<String>,
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[serde(rename = "price", skip_serializing_if = "Option::is_none")]
+    pub price: Option<f64>,
+    #[serde(rename = "sale_price", skip_serializing_if = "Option::is_none")]
+    pub sale_price: Option<f64>,
+    #[serde(rename = "currency", skip_serializing_if = "Option::is_none")]
+    pub currency: Option<String>,
+    #[serde(rename = "category", skip_serializing_if = "Option::is_none")]
+    pub category: Option<String>,
+    #[serde(rename = "brand", skip_serializing_if = "Option::is_none")]
+    pub brand: Option<String>,
+    #[serde(rename = "in_stock", skip_serializing_if = "Option::is_none")]
+    pub in_stock: Option<bool>,
+    #[serde(rename = "attributes", skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<std::collections::HashMap<String, String>>,
 }
 
 /// `UpsertUserDto` şeması.
