@@ -4816,6 +4816,18 @@ impl<'a> JourneysService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Eski sürümü yeni taslak olarak geri yükle (yayındaki sürüm değişmez)
+    ///
+    /// `POST /v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn restore_version(&self, journey_id: &str, version: &str) -> Result<JourneyDetail> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/journeys/{journeyId}/versions/{version}/restore");
+        op.path_param("journeyId", journey_id);
+        op.path_param("version", version);
+        self.client.execute(op, &self.opts)
+    }
+
     /// Yayınla
     ///
     /// `POST /v1/apps/{appId}/journeys/{journeyId}/publish`

@@ -12821,7 +12821,7 @@ pub struct UpdateWarehouseExportDto {
     /// Değerler: `"deliveries"`, `"delivery_events"`, `"events"`, `"conversions"`, `"users"`, `"subscriptions"`.
     #[serde(rename = "tables", skip_serializing_if = "Option::is_none")]
     pub tables: Option<Vec<String>>,
-    /// Değerler: `"hourly"`, `"daily"`.
+    /// Değerler: `"every_15_minutes"`, `"hourly"`, `"daily"`.
     #[serde(rename = "schedule", skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
@@ -13678,7 +13678,7 @@ pub struct WarehouseExport {
     /// Zorunlu. Değerler: `"deliveries"`, `"delivery_events"`, `"events"`, `"conversions"`, `"users"`, `"subscriptions"`.
     #[serde(rename = "tables", deserialize_with = "crate::de::null_default")]
     pub tables: Vec<String>,
-    /// Zorunlu. Değerler: `"hourly"`, `"daily"`.
+    /// Zorunlu. Değerler: `"every_15_minutes"`, `"hourly"`, `"daily"`.
     #[serde(rename = "schedule", deserialize_with = "crate::de::null_default")]
     pub schedule: String,
     /// Zorunlu.
