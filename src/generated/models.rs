@@ -1224,6 +1224,99 @@ pub struct App {
     pub updated_at: String,
 }
 
+/// `AppFlag` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AppFlag {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description")]
+    pub description: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"boolean"`, `"string"`, `"number"`, `"json"`.
+    #[serde(rename = "value_type", deserialize_with = "crate::de::null_default")]
+    pub value_type: String,
+    /// Zorunlu.
+    #[serde(rename = "on_value")]
+    pub on_value: Option<serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "off_value")]
+    pub off_value: Option<serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "rollout_percent", deserialize_with = "crate::de::null_default")]
+    pub rollout_percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "segment_id")]
+    pub segment_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "rollout_schedule", deserialize_with = "crate::de::null_default")]
+    pub rollout_schedule: Vec<AppFlagRolloutScheduleItem>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `AppFlagEvaluation` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AppFlagEvaluation {
+    /// Zorunlu.
+    #[serde(rename = "flags", deserialize_with = "crate::de::null_default")]
+    pub flags: std::collections::HashMap<String, AppFlagEvaluationFlagsValue>,
+}
+
+/// `AppFlagEvaluationFlagsValue` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AppFlagEvaluationFlagsValue {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "value")]
+    pub value: Option<serde_json::Value>,
+    /// Zorunlu. Değerler: `"on"`, `"disabled"`, `"segment"`, `"rollout"`.
+    #[serde(rename = "reason", deserialize_with = "crate::de::null_default")]
+    pub reason: String,
+}
+
+/// `AppFlagList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AppFlagList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<AppFlag>,
+}
+
+/// `AppFlagRolloutScheduleItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AppFlagRolloutScheduleItem {
+    /// Zorunlu.
+    #[serde(rename = "at", deserialize_with = "crate::de::null_default")]
+    pub at: String,
+    /// Zorunlu.
+    #[serde(rename = "percent", deserialize_with = "crate::de::null_default")]
+    pub percent: i64,
+}
+
 /// `AppList` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -3785,6 +3878,47 @@ pub struct CreateAppDtoPlatformFlags {
     pub sms: Option<bool>,
 }
 
+/// `CreateAppFlagDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAppFlagDto {
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Değerler: `"boolean"`, `"string"`, `"number"`, `"json"`.
+    #[serde(rename = "value_type", skip_serializing_if = "Option::is_none")]
+    pub value_type: Option<String>,
+    #[serde(rename = "on_value", skip_serializing_if = "Option::is_none")]
+    pub on_value: Option<serde_json::Value>,
+    #[serde(rename = "off_value", skip_serializing_if = "Option::is_none")]
+    pub off_value: Option<serde_json::Value>,
+    #[serde(rename = "rollout_percent", skip_serializing_if = "Option::is_none")]
+    pub rollout_percent: Option<i64>,
+    #[serde(rename = "segment_id", skip_serializing_if = "Option::is_none")]
+    pub segment_id: Option<String>,
+    #[serde(rename = "rollout_schedule", skip_serializing_if = "Option::is_none")]
+    pub rollout_schedule: Option<Vec<CreateAppFlagDtoRolloutScheduleItem>>,
+}
+
+/// `CreateAppFlagDtoRolloutScheduleItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAppFlagDtoRolloutScheduleItem {
+    /// Zorunlu.
+    #[serde(rename = "at", deserialize_with = "crate::de::null_default")]
+    pub at: String,
+    /// Zorunlu.
+    #[serde(rename = "percent", deserialize_with = "crate::de::null_default")]
+    pub percent: i64,
+}
+
 /// `CreateBudgetAlertRuleDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -6170,6 +6304,18 @@ pub struct EstimateAudienceResult {
     /// Zorunlu.
     #[serde(rename = "external_id_missing", deserialize_with = "crate::de::null_default")]
     pub external_id_missing: Vec<String>,
+}
+
+/// `EvaluateAppFlagsDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct EvaluateAppFlagsDto {
+    #[serde(rename = "external_id", skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(rename = "subject", skip_serializing_if = "Option::is_none")]
+    pub subject: Option<String>,
 }
 
 /// `EventDefinition` şeması.
@@ -12680,6 +12826,43 @@ pub struct UpdateAppDtoSettingsWebPushWelcomeNotificationTextsValue {
     pub title: Option<String>,
     #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+/// `UpdateAppFlagDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAppFlagDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Değerler: `"boolean"`, `"string"`, `"number"`, `"json"`.
+    #[serde(rename = "value_type", skip_serializing_if = "Option::is_none")]
+    pub value_type: Option<String>,
+    #[serde(rename = "on_value", skip_serializing_if = "Option::is_none")]
+    pub on_value: Option<serde_json::Value>,
+    #[serde(rename = "off_value", skip_serializing_if = "Option::is_none")]
+    pub off_value: Option<serde_json::Value>,
+    #[serde(rename = "rollout_percent", skip_serializing_if = "Option::is_none")]
+    pub rollout_percent: Option<i64>,
+    #[serde(rename = "segment_id", skip_serializing_if = "Option::is_none")]
+    pub segment_id: Option<String>,
+    #[serde(rename = "rollout_schedule", skip_serializing_if = "Option::is_none")]
+    pub rollout_schedule: Option<Vec<UpdateAppFlagDtoRolloutScheduleItem>>,
+}
+
+/// `UpdateAppFlagDtoRolloutScheduleItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAppFlagDtoRolloutScheduleItem {
+    /// Zorunlu.
+    #[serde(rename = "at", deserialize_with = "crate::de::null_default")]
+    pub at: String,
+    /// Zorunlu.
+    #[serde(rename = "percent", deserialize_with = "crate::de::null_default")]
+    pub percent: i64,
 }
 
 /// `UpdateBudgetAlertRuleDto` şeması.

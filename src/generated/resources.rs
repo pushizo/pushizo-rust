@@ -148,6 +148,11 @@ impl Client {
         EmailDeliverabilityService::new(self)
     }
 
+    /// `featureFlags` kaynağı.
+    pub fn feature_flags(&self) -> FeatureFlagsService<'_> {
+        FeatureFlagsService::new(self)
+    }
+
     /// `forms` kaynağı.
     pub fn forms(&self) -> FormsService<'_> {
         FormsService::new(self)
@@ -4602,6 +4607,94 @@ impl<'a> EmailDeliverabilityService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn sync_postmaster(&self) -> Result<PostmasterStats> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/email-deliverability/postmaster/sync");
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `featureFlags` kaynağı.
+/// `Client::feature_flags()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct FeatureFlagsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+impl<'a> FeatureFlagsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Özellik bayrakları
+    ///
+    /// `GET /v1/apps/{appId}/feature-flags`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<AppFlagList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/feature-flags");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bayrak oluştur
+    ///
+    /// `POST /v1/apps/{appId}/feature-flags`
+    ///
+    /// Değerler uygulama kimliğini bilen herkesçe okunabilir; gizli bilgi yazmayın.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateAppFlagDto) -> Result<AppFlag> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/feature-flags");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bayrakları bir kullanıcı için değerlendir
+    ///
+    /// `POST /v1/apps/{appId}/feature-flags/evaluate`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn evaluate(&self, body: &EvaluateAppFlagsDto) -> Result<AppFlagEvaluation> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/feature-flags/evaluate");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bayrak ayrıntısı
+    ///
+    /// `GET /v1/apps/{appId}/feature-flags/{flagId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, flag_id: &str) -> Result<AppFlag> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/feature-flags/{flagId}");
+        op.path_param("flagId", flag_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bayrağı güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/feature-flags/{flagId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, flag_id: &str, body: &UpdateAppFlagDto) -> Result<AppFlag> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/feature-flags/{flagId}");
+        op.path_param("flagId", flag_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bayrağı sil
+    ///
+    /// `DELETE /v1/apps/{appId}/feature-flags/{flagId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete(&self, flag_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/feature-flags/{flagId}");
+        op.path_param("flagId", flag_id);
         self.client.execute(op, &self.opts)
     }
 }
