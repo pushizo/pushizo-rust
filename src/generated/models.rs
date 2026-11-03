@@ -10243,6 +10243,132 @@ pub struct PatchUserDtoDeltasPurchasesItem {
     pub count: Option<i64>,
 }
 
+/// `PathBodyDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PathBodyDto {
+    /// Zorunlu.
+    #[serde(rename = "event", deserialize_with = "crate::de::null_default")]
+    pub event: String,
+    /// Değerler: `"after"`, `"before"`.
+    #[serde(rename = "direction", skip_serializing_if = "Option::is_none")]
+    pub direction: Option<String>,
+    #[serde(rename = "depth", skip_serializing_if = "Option::is_none")]
+    pub depth: Option<i64>,
+    #[serde(rename = "top", skip_serializing_if = "Option::is_none")]
+    pub top: Option<i64>,
+    #[serde(rename = "window_hours", skip_serializing_if = "Option::is_none")]
+    pub window_hours: Option<i64>,
+    #[serde(rename = "exclude", skip_serializing_if = "Option::is_none")]
+    pub exclude: Option<Vec<String>>,
+    #[serde(rename = "from", skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
+    #[serde(rename = "to", skip_serializing_if = "Option::is_none")]
+    pub to: Option<String>,
+    /// Değerler: `"json"`, `"csv"`.
+    #[serde(rename = "format", skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+}
+
+/// `PathReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PathReport {
+    /// Zorunlu.
+    #[serde(rename = "from", deserialize_with = "crate::de::null_default")]
+    pub from: String,
+    /// Zorunlu.
+    #[serde(rename = "to", deserialize_with = "crate::de::null_default")]
+    pub to: String,
+    /// Zorunlu.
+    #[serde(rename = "event", deserialize_with = "crate::de::null_default")]
+    pub event: String,
+    /// Zorunlu. Değerler: `"after"`, `"before"`.
+    #[serde(rename = "direction", deserialize_with = "crate::de::null_default")]
+    pub direction: String,
+    /// Zorunlu.
+    #[serde(rename = "window_hours", deserialize_with = "crate::de::null_default")]
+    pub window_hours: i64,
+    /// Zorunlu.
+    #[serde(rename = "total_users", deserialize_with = "crate::de::null_default")]
+    pub total_users: i64,
+    /// Zorunlu.
+    #[serde(rename = "truncated", deserialize_with = "crate::de::null_default")]
+    pub truncated: bool,
+    /// Zorunlu.
+    #[serde(rename = "levels", deserialize_with = "crate::de::null_default")]
+    pub levels: Vec<PathReportLevelsItem>,
+    /// Zorunlu.
+    #[serde(rename = "links", deserialize_with = "crate::de::null_default")]
+    pub links: Vec<PathReportLinksItem>,
+    /// Zorunlu.
+    #[serde(rename = "top_paths", deserialize_with = "crate::de::null_default")]
+    pub top_paths: Vec<PathReportTopPathsItem>,
+}
+
+/// `PathReportLevelsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PathReportLevelsItem {
+    /// Zorunlu.
+    #[serde(rename = "step", deserialize_with = "crate::de::null_default")]
+    pub step: i64,
+    /// Zorunlu.
+    #[serde(rename = "nodes", deserialize_with = "crate::de::null_default")]
+    pub nodes: Vec<PathReportLevelsItemNodesItem>,
+}
+
+/// `PathReportLevelsItemNodesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PathReportLevelsItemNodesItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "name")]
+    pub name: Option<String>,
+    /// Zorunlu. Değerler: `"event"`, `"other"`, `"end"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "share", deserialize_with = "crate::de::null_default")]
+    pub share: f64,
+}
+
+/// `PathReportLinksItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PathReportLinksItem {
+    /// Zorunlu.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+}
+
+/// `PathReportTopPathsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PathReportTopPathsItem {
+    /// Zorunlu.
+    #[serde(rename = "path", deserialize_with = "crate::de::null_default")]
+    pub path: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "share", deserialize_with = "crate::de::null_default")]
+    pub share: f64,
+}
+
 /// `PostmasterStats` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]

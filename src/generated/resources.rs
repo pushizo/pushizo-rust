@@ -2758,6 +2758,19 @@ impl<'a> AnalyticsService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Yol analizi
+    ///
+    /// `POST /v1/apps/{appId}/analytics/paths`
+    ///
+    /// Başlangıç olayından sonra veya önce kullanıcıların izlediği yollar.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn paths(&self, body: &PathBodyDto) -> Result<PathReport> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/analytics/paths");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
     /// Funnel
     ///
     /// `POST /v1/apps/{appId}/analytics/funnels`
