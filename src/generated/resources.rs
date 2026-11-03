@@ -153,6 +153,11 @@ impl Client {
         FormsService::new(self)
     }
 
+    /// `geofences` kaynağı.
+    pub fn geofences(&self) -> GeofencesService<'_> {
+        GeofencesService::new(self)
+    }
+
     /// `globalControl` kaynağı.
     pub fn global_control(&self) -> GlobalControlService<'_> {
         GlobalControlService::new(self)
@@ -4757,6 +4762,83 @@ impl<'a> FormsService<'a> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/forms/{formId}/submissions");
         op.path_param("formId", form_id);
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `geofences` kaynağı.
+/// `Client::geofences()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct GeofencesService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+impl<'a> GeofencesService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Bölgeler
+    ///
+    /// `GET /v1/apps/{appId}/geofences`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<GeofenceList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/geofences");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bölge oluştur
+    ///
+    /// `POST /v1/apps/{appId}/geofences`
+    ///
+    /// Konum paylaşan abonelik bölgeye girip çıktığında `geofence_enter` ve `geofence_exit` olayları oluşur.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateGeofenceDto) -> Result<Geofence> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/geofences");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bölge ayrıntısı
+    ///
+    /// `GET /v1/apps/{appId}/geofences/{geofenceId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, geofence_id: &str) -> Result<Geofence> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/geofences/{geofenceId}");
+        op.path_param("geofenceId", geofence_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bölgeyi güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/geofences/{geofenceId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, geofence_id: &str, body: &UpdateGeofenceDto) -> Result<Geofence> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/geofences/{geofenceId}");
+        op.path_param("geofenceId", geofence_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bölgeyi sil
+    ///
+    /// `DELETE /v1/apps/{appId}/geofences/{geofenceId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete(&self, geofence_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/geofences/{geofenceId}");
+        op.path_param("geofenceId", geofence_id);
         self.client.execute(op, &self.opts)
     }
 }

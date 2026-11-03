@@ -4058,6 +4058,28 @@ pub struct CreateFormDtoSettingsSubscribe {
     pub sms: Option<bool>,
 }
 
+/// `CreateGeofenceDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateGeofenceDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "lat", deserialize_with = "crate::de::null_default")]
+    pub lat: f64,
+    /// Zorunlu.
+    #[serde(rename = "lng", deserialize_with = "crate::de::null_default")]
+    pub lng: f64,
+    /// Zorunlu.
+    #[serde(rename = "radius_m", deserialize_with = "crate::de::null_default")]
+    pub radius_m: i64,
+    #[serde(rename = "cooldown_minutes", skip_serializing_if = "Option::is_none")]
+    pub cooldown_minutes: Option<i64>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
 /// `CreateIdentityKeyDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -6813,6 +6835,60 @@ pub struct FunnelReportStepsItem {
     /// Zorunlu.
     #[serde(rename = "drop_off", deserialize_with = "crate::de::null_default")]
     pub drop_off: i64,
+}
+
+/// `Geofence` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Geofence {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "lat", deserialize_with = "crate::de::null_default")]
+    pub lat: f64,
+    /// Zorunlu.
+    #[serde(rename = "lng", deserialize_with = "crate::de::null_default")]
+    pub lng: f64,
+    /// Zorunlu.
+    #[serde(rename = "radius_m", deserialize_with = "crate::de::null_default")]
+    pub radius_m: i64,
+    /// Zorunlu.
+    #[serde(rename = "cooldown_minutes", deserialize_with = "crate::de::null_default")]
+    pub cooldown_minutes: i64,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "enter_count", deserialize_with = "crate::de::null_default")]
+    pub enter_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "exit_count", deserialize_with = "crate::de::null_default")]
+    pub exit_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "inside_count", deserialize_with = "crate::de::null_default")]
+    pub inside_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `GeofenceList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct GeofenceList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<Geofence>,
 }
 
 /// `GlobalControl` şeması.
@@ -12682,6 +12758,24 @@ pub struct UpdateDataFeedDto {
     pub cache_ttl_seconds: Option<i64>,
     #[serde(rename = "timeout_ms", skip_serializing_if = "Option::is_none")]
     pub timeout_ms: Option<i64>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
+/// `UpdateGeofenceDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateGeofenceDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "lat", skip_serializing_if = "Option::is_none")]
+    pub lat: Option<f64>,
+    #[serde(rename = "lng", skip_serializing_if = "Option::is_none")]
+    pub lng: Option<f64>,
+    #[serde(rename = "radius_m", skip_serializing_if = "Option::is_none")]
+    pub radius_m: Option<i64>,
+    #[serde(rename = "cooldown_minutes", skip_serializing_if = "Option::is_none")]
+    pub cooldown_minutes: Option<i64>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
 }
