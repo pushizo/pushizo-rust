@@ -183,6 +183,11 @@ impl Client {
         PreferencesService::new(self)
     }
 
+    /// `promoCodeLists` kaynağı.
+    pub fn promo_code_lists(&self) -> PromoCodeListsService<'_> {
+        PromoCodeListsService::new(self)
+    }
+
     /// `reverseEtl` kaynağı.
     pub fn reverse_etl(&self) -> ReverseEtlService<'_> {
         ReverseEtlService::new(self)
@@ -5309,6 +5314,147 @@ impl<'a> PreferencesService<'a> {
         op.path_param("label", label);
         op.path_param("value", value);
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `promoCodeLists` kaynağı.
+/// `Client::promo_code_lists()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct PromoCodeListsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `PromoCodeListsService::upload_promo_list` için multipart/form-data alanları.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct PromoCodeListsUploadPromoListForm {
+    /// Zorunlu. UTF-8 CSV; kodlar ilk sütunda, başlık isteğe bağlı. En fazla 1.000.000 kod, 20 MB.
+    pub file: Option<FileUpload>,
+}
+
+/// `PromoCodeListsService::promo_codes` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct PromoCodeListsPromoCodesParams {
+    pub limit: Option<i64>,
+    pub offset: Option<i64>,
+    pub q: Option<String>,
+    /// Değerler: `"available"`, `"assigned"`.
+    pub status: Option<String>,
+}
+
+impl PromoCodeListsPromoCodesParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.offset {
+            op.query("offset", v);
+        }
+        if let Some(v) = &self.q {
+            op.query("q", v);
+        }
+        if let Some(v) = &self.status {
+            op.query("status", v);
+        }
+    }
+}
+
+impl<'a> PromoCodeListsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Promosyon kodu listeleri
+    ///
+    /// `GET /v1/apps/{appId}/promo-code-lists`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list_promo_lists(&self) -> Result<PromoCodeListList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/promo-code-lists");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Promosyon kodu listesi oluştur
+    ///
+    /// `POST /v1/apps/{appId}/promo-code-lists`
+    ///
+    /// Şablonda `{% promo_code '<ad>' %}` teslimat başına tek kullanımlık kod verir. Kod kalmazsa teslimat `PromoCodeUnavailable` hatasıyla düşer.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_promo_list(&self, body: &CreatePromoCodeListDto) -> Result<PromoCodeList> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/promo-code-lists");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Promosyon kodu listesi ayrıntısı
+    ///
+    /// `GET /v1/apps/{appId}/promo-code-lists/{listId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get_promo_list(&self, list_id: &str) -> Result<PromoCodeList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/promo-code-lists/{listId}");
+        op.path_param("listId", list_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Promosyon kodu listesini güncelle (açıklama, son kullanma)
+    ///
+    /// `PATCH /v1/apps/{appId}/promo-code-lists/{listId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_promo_list(&self, list_id: &str, body: &UpdatePromoCodeListDto) -> Result<PromoCodeList> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/promo-code-lists/{listId}");
+        op.path_param("listId", list_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Promosyon kodu listesini sil
+    ///
+    /// `DELETE /v1/apps/{appId}/promo-code-lists/{listId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete_promo_list(&self, list_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/promo-code-lists/{listId}");
+        op.path_param("listId", list_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// CSV ile kod ekle (zaten olanlar atlanır)
+    ///
+    /// `POST /v1/apps/{appId}/promo-code-lists/{listId}/codes`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn upload_promo_list(&self, list_id: &str, form: &PromoCodeListsUploadPromoListForm) -> Result<PromoCodeUploadResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/promo-code-lists/{listId}/codes");
+        op.path_param("listId", list_id);
+        let mut mp = Multipart::new();
+        if let Some(v) = &form.file {
+            mp.file("file", v);
+        }
+        op.multipart = Some(mp);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Listedeki kodlar ve atamaları
+    ///
+    /// `GET /v1/apps/{appId}/promo-code-lists/{listId}/codes`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn promo_codes(&self, list_id: &str, params: Option<&PromoCodeListsPromoCodesParams>) -> Result<PromoCodesPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/promo-code-lists/{listId}/codes");
+        op.path_param("listId", list_id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
         self.client.execute(op, &self.opts)
     }
 }
