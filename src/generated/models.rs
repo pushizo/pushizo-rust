@@ -1878,6 +1878,8 @@ pub struct CampaignDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
@@ -2068,6 +2070,8 @@ pub struct CampaignsCreateBodyDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
@@ -2352,6 +2356,8 @@ pub struct CampaignsUpdateBodyDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
@@ -4004,6 +4010,8 @@ pub struct CreateInAppDtoAudience {
     pub included_segments: Option<Vec<String>>,
     #[serde(rename = "excluded_segments", skip_serializing_if = "Option::is_none")]
     pub excluded_segments: Option<Vec<String>>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
 }
 
 /// `CreateInAppDtoDisplay` şeması.
@@ -6683,6 +6691,96 @@ pub struct FunnelReportStepsItem {
     pub drop_off: i64,
 }
 
+/// `GlobalControl` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct GlobalControl {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "percent", deserialize_with = "crate::de::null_default")]
+    pub percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "started_at")]
+    pub started_at: Option<String>,
+}
+
+/// `GlobalControlReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct GlobalControlReport {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "percent", deserialize_with = "crate::de::null_default")]
+    pub percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "started_at")]
+    pub started_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "from", deserialize_with = "crate::de::null_default")]
+    pub from: String,
+    /// Zorunlu.
+    #[serde(rename = "to", deserialize_with = "crate::de::null_default")]
+    pub to: String,
+    /// Zorunlu.
+    #[serde(rename = "events", deserialize_with = "crate::de::null_default")]
+    pub events: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "control", deserialize_with = "crate::de::null_default")]
+    pub control: GlobalControlReportControl,
+    /// Zorunlu.
+    #[serde(rename = "treatment", deserialize_with = "crate::de::null_default")]
+    pub treatment: GlobalControlReportTreatment,
+    /// Zorunlu.
+    #[serde(rename = "lift_percent")]
+    pub lift_percent: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "incremental_conversions", deserialize_with = "crate::de::null_default")]
+    pub incremental_conversions: i64,
+    /// Zorunlu.
+    #[serde(rename = "p_value")]
+    pub p_value: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "significant", deserialize_with = "crate::de::null_default")]
+    pub significant: bool,
+    /// Zorunlu.
+    #[serde(rename = "withheld_messages", deserialize_with = "crate::de::null_default")]
+    pub withheld_messages: i64,
+}
+
+/// `GlobalControlReportControl` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct GlobalControlReportControl {
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "converted", deserialize_with = "crate::de::null_default")]
+    pub converted: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
+    pub conversion_rate: f64,
+}
+
+/// `GlobalControlReportTreatment` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct GlobalControlReportTreatment {
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "converted", deserialize_with = "crate::de::null_default")]
+    pub converted: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
+    pub conversion_rate: f64,
+}
+
 /// `IdentityKey` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -6899,6 +6997,8 @@ pub struct InAppMessageAudience {
     pub included_segments: Option<Vec<String>>,
     #[serde(rename = "excluded_segments", skip_serializing_if = "Option::is_none")]
     pub excluded_segments: Option<Vec<String>>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
 }
 
 /// `InAppMessageDisplay` şeması.
@@ -8867,6 +8967,8 @@ pub struct McpCreateCampaignDraftBodyDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
@@ -12231,6 +12333,18 @@ pub struct UpdateDataFeedDto {
     pub enabled: Option<bool>,
 }
 
+/// `UpdateGlobalControlDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateGlobalControlDto {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "percent", deserialize_with = "crate::de::null_default")]
+    pub percent: i64,
+}
+
 /// `UpdateInAppDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12290,6 +12404,8 @@ pub struct UpdateInAppDtoAudience {
     pub included_segments: Option<Vec<String>>,
     #[serde(rename = "excluded_segments", skip_serializing_if = "Option::is_none")]
     pub excluded_segments: Option<Vec<String>>,
+    #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
+    pub global_control_exempt: Option<bool>,
 }
 
 /// `UpdateInAppDtoDisplay` şeması.

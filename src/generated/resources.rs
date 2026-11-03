@@ -148,6 +148,11 @@ impl Client {
         FormsService::new(self)
     }
 
+    /// `globalControl` kaynağı.
+    pub fn global_control(&self) -> GlobalControlService<'_> {
+        GlobalControlService::new(self)
+    }
+
     /// `identityKeys` kaynağı.
     pub fn identity_keys(&self) -> IdentityKeysService<'_> {
         IdentityKeysService::new(self)
@@ -4479,6 +4484,90 @@ impl<'a> FormsService<'a> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/forms/{formId}/submissions");
         op.path_param("formId", form_id);
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `globalControl` kaynağı.
+/// `Client::global_control()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct GlobalControlService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `GlobalControlService::report` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct GlobalControlReportParams {
+    pub days: Option<i64>,
+    pub event: Option<String>,
+}
+
+impl GlobalControlReportParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.days {
+            op.query("days", v);
+        }
+        if let Some(v) = &self.event {
+            op.query("event", v);
+        }
+    }
+}
+
+impl<'a> GlobalControlService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Genel kontrol grubu ayarı
+    ///
+    /// `GET /v1/apps/{appId}/global-control`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self) -> Result<GlobalControl> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/global-control");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Genel kontrol grubunu ayarla
+    ///
+    /// `PUT /v1/apps/{appId}/global-control`
+    ///
+    /// Gruptaki kullanıcılar kampanya, otomasyon ve uygulama içi mesajları almaz. API ve işlemsel gönderimler etkilenmez.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, body: &UpdateGlobalControlDto) -> Result<GlobalControl> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/global-control");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Grubu yeniden kur (üyelik değişir, ölçüm baştan başlar)
+    ///
+    /// `POST /v1/apps/{appId}/global-control/reset`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn reset(&self) -> Result<GlobalControl> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/global-control/reset");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kontrol ve mesaj alan grubun dönüşüm karşılaştırması
+    ///
+    /// `GET /v1/apps/{appId}/global-control/report`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn report(&self, params: Option<&GlobalControlReportParams>) -> Result<GlobalControlReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/global-control/report");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
         self.client.execute(op, &self.opts)
     }
 }
