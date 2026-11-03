@@ -10729,6 +10729,171 @@ pub struct ReverseEtlSyncList {
     pub data: Vec<ReverseEtlSync>,
 }
 
+/// `RfmConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmConfig {
+    /// Zorunlu.
+    #[serde(rename = "configured", deserialize_with = "crate::de::null_default")]
+    pub configured: bool,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "event_names", deserialize_with = "crate::de::null_default")]
+    pub event_names: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "value_property")]
+    pub value_property: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "use_monetary", deserialize_with = "crate::de::null_default")]
+    pub use_monetary: bool,
+    /// Zorunlu.
+    #[serde(rename = "window_days", deserialize_with = "crate::de::null_default")]
+    pub window_days: i64,
+    /// Zorunlu. Değerler: `"idle"`, `"queued"`, `"running"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "first_computed_at")]
+    pub first_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scored_users", deserialize_with = "crate::de::null_default")]
+    pub scored_users: i64,
+}
+
+/// `RfmOverview` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmOverview {
+    /// Zorunlu.
+    #[serde(rename = "total", deserialize_with = "crate::de::null_default")]
+    pub total: i64,
+    /// Zorunlu.
+    #[serde(rename = "low_population", deserialize_with = "crate::de::null_default")]
+    pub low_population: bool,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "segments", deserialize_with = "crate::de::null_default")]
+    pub segments: Vec<RfmOverviewSegmentsItem>,
+}
+
+/// `RfmOverviewSegmentsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmOverviewSegmentsItem {
+    /// Zorunlu. Değerler: `"champions"`, `"loyal"`, `"potential"`, `"new"`, `"promising"`, `"need_attention"`, `"about_to_sleep"`, `"at_risk"`, `"cant_lose"`, `"hibernating"`, `"lost"`.
+    #[serde(rename = "segment", deserialize_with = "crate::de::null_default")]
+    pub segment: String,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "share", deserialize_with = "crate::de::null_default")]
+    pub share: f64,
+    /// Zorunlu.
+    #[serde(rename = "avg_recency_days")]
+    pub avg_recency_days: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "avg_frequency")]
+    pub avg_frequency: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "avg_monetary")]
+    pub avg_monetary: Option<f64>,
+}
+
+/// `RfmTransitions` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmTransitions {
+    /// Zorunlu.
+    #[serde(rename = "from", deserialize_with = "crate::de::null_default")]
+    pub from: String,
+    /// Zorunlu.
+    #[serde(rename = "to", deserialize_with = "crate::de::null_default")]
+    pub to: String,
+    /// Zorunlu.
+    #[serde(rename = "first_computed_at")]
+    pub first_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "transitions", deserialize_with = "crate::de::null_default")]
+    pub transitions: Vec<RfmTransitionsTransitionsItem>,
+}
+
+/// `RfmTransitionsTransitionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmTransitionsTransitionsItem {
+    /// Zorunlu. Değerler: `"champions"`, `"loyal"`, `"potential"`, `"new"`, `"promising"`, `"need_attention"`, `"about_to_sleep"`, `"at_risk"`, `"cant_lose"`, `"hibernating"`, `"lost"`.
+    #[serde(rename = "from")]
+    pub from: Option<String>,
+    /// Zorunlu. Değerler: `"champions"`, `"loyal"`, `"potential"`, `"new"`, `"promising"`, `"need_attention"`, `"about_to_sleep"`, `"at_risk"`, `"cant_lose"`, `"hibernating"`, `"lost"`.
+    #[serde(rename = "to")]
+    pub to: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+}
+
+/// `RfmUsersPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmUsersPage {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<RfmUsersPageDataItem>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+}
+
+/// `RfmUsersPageDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RfmUsersPageDataItem {
+    /// Zorunlu.
+    #[serde(rename = "user_id", deserialize_with = "crate::de::null_default")]
+    pub user_id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id")]
+    pub external_id: Option<String>,
+    /// Zorunlu. Değerler: `"champions"`, `"loyal"`, `"potential"`, `"new"`, `"promising"`, `"need_attention"`, `"about_to_sleep"`, `"at_risk"`, `"cant_lose"`, `"hibernating"`, `"lost"`.
+    #[serde(rename = "segment", deserialize_with = "crate::de::null_default")]
+    pub segment: String,
+    /// Zorunlu.
+    #[serde(rename = "r", deserialize_with = "crate::de::null_default")]
+    pub r: i64,
+    /// Zorunlu.
+    #[serde(rename = "f", deserialize_with = "crate::de::null_default")]
+    pub f: i64,
+    /// Zorunlu.
+    #[serde(rename = "m")]
+    pub m: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "recency_days", deserialize_with = "crate::de::null_default")]
+    pub recency_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "frequency", deserialize_with = "crate::de::null_default")]
+    pub frequency: i64,
+    /// Zorunlu.
+    #[serde(rename = "monetary", deserialize_with = "crate::de::null_default")]
+    pub monetary: f64,
+    /// Zorunlu.
+    #[serde(rename = "last_event_at", deserialize_with = "crate::de::null_default")]
+    pub last_event_at: String,
+    /// Zorunlu.
+    #[serde(rename = "segment_since", deserialize_with = "crate::de::null_default")]
+    pub segment_since: String,
+}
+
 /// `ScheduleCampaignDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12851,6 +13016,24 @@ pub struct UpdateReverseEtlDto {
     pub config: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "credentials", skip_serializing_if = "Option::is_none")]
     pub credentials: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+/// `UpdateRfmConfigDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateRfmConfigDto {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "event_names", deserialize_with = "crate::de::null_default")]
+    pub event_names: Vec<String>,
+    #[serde(rename = "value_property", skip_serializing_if = "Option::is_none")]
+    pub value_property: Option<String>,
+    #[serde(rename = "use_monetary", skip_serializing_if = "Option::is_none")]
+    pub use_monetary: Option<bool>,
+    #[serde(rename = "window_days", skip_serializing_if = "Option::is_none")]
+    pub window_days: Option<i64>,
 }
 
 /// `UpdateTemplateDto` şeması.

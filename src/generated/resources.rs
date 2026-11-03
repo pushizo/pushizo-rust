@@ -203,6 +203,11 @@ impl Client {
         ReverseEtlService::new(self)
     }
 
+    /// `rfm` kaynağı.
+    pub fn rfm(&self) -> RfmService<'_> {
+        RfmService::new(self)
+    }
+
     /// `smsKeywords` kaynağı.
     pub fn sms_keywords(&self) -> SmsKeywordsService<'_> {
         SmsKeywordsService::new(self)
@@ -5883,6 +5888,138 @@ impl<'a> ReverseEtlService<'a> {
             let page = service.runs(&sync_id, Some(&p))?;
             Ok((page.data, page.next_cursor, page.has_more))
         })
+    }
+}
+
+/// `rfm` kaynağı.
+/// `Client::rfm()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct RfmService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `RfmService::transitions` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct RfmTransitionsParams {
+    pub from: Option<String>,
+    pub to: Option<String>,
+}
+
+impl RfmTransitionsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.from {
+            op.query("from", v);
+        }
+        if let Some(v) = &self.to {
+            op.query("to", v);
+        }
+    }
+}
+
+/// `RfmService::users` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct RfmUsersParams {
+    /// Değerler: `"champions"`, `"loyal"`, `"potential"`, `"new"`, `"promising"`, `"need_attention"`, `"about_to_sleep"`, `"at_risk"`, `"cant_lose"`, `"hibernating"`, `"lost"`.
+    pub segment: Option<String>,
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+}
+
+impl RfmUsersParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.segment {
+            op.query("segment", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+    }
+}
+
+impl<'a> RfmService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// RFM modeli
+    ///
+    /// `GET /v1/apps/{appId}/rfm/config`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn config(&self) -> Result<RfmConfig> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/rfm/config");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// RFM modelini ayarla
+    ///
+    /// `PUT /v1/apps/{appId}/rfm/config`
+    ///
+    /// Model açıksa skorlar kayıttan sonra yeniden hesaplanır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, body: &UpdateRfmConfigDto) -> Result<RfmConfig> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/rfm/config");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Skorları yeniden hesapla
+    ///
+    /// `POST /v1/apps/{appId}/rfm/compute`
+    ///
+    /// İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn compute(&self) -> Result<RfmConfig> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/rfm/compute");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Segment dağılımı
+    ///
+    /// `GET /v1/apps/{appId}/rfm/overview`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn overview(&self) -> Result<RfmOverview> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/rfm/overview");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// İki tarih arası segment geçişleri
+    ///
+    /// `GET /v1/apps/{appId}/rfm/transitions`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn transitions(&self, params: Option<&RfmTransitionsParams>) -> Result<RfmTransitions> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/rfm/transitions");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Skoru olan kullanıcılar
+    ///
+    /// `GET /v1/apps/{appId}/rfm/users`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn users(&self, params: Option<&RfmUsersParams>) -> Result<RfmUsersPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/rfm/users");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
     }
 }
 
