@@ -4253,6 +4253,8 @@ pub struct CreateInAppDto {
     pub frequency: Option<CreateInAppDtoFrequency>,
     #[serde(rename = "journey_only", skip_serializing_if = "Option::is_none")]
     pub journey_only: Option<bool>,
+    #[serde(rename = "placement", skip_serializing_if = "Option::is_none")]
+    pub placement: Option<String>,
     #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
     #[serde(rename = "start_at", skip_serializing_if = "Option::is_none")]
@@ -7279,6 +7281,9 @@ pub struct InAppMessage {
     /// Zorunlu.
     #[serde(rename = "journey_only", deserialize_with = "crate::de::null_default")]
     pub journey_only: bool,
+    /// Zorunlu.
+    #[serde(rename = "placement")]
+    pub placement: Option<String>,
     /// Zorunlu.
     #[serde(rename = "start_at")]
     pub start_at: Option<String>,
@@ -12997,6 +13002,8 @@ pub struct UpdateInAppDto {
     pub frequency: Option<UpdateInAppDtoFrequency>,
     #[serde(rename = "journey_only", skip_serializing_if = "Option::is_none")]
     pub journey_only: Option<bool>,
+    #[serde(rename = "placement", skip_serializing_if = "Option::is_none")]
+    pub placement: Option<String>,
     #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
     #[serde(rename = "start_at", skip_serializing_if = "Option::is_none")]
