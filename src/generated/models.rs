@@ -10132,6 +10132,60 @@ pub struct PublicSurveyResponseDto {
     pub external_id: Option<String>,
 }
 
+/// `RecommendationConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RecommendationConfig {
+    /// Zorunlu.
+    #[serde(rename = "configured", deserialize_with = "crate::de::null_default")]
+    pub configured: bool,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "view_events", deserialize_with = "crate::de::null_default")]
+    pub view_events: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "purchase_events", deserialize_with = "crate::de::null_default")]
+    pub purchase_events: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "item_property", deserialize_with = "crate::de::null_default")]
+    pub item_property: String,
+    /// Zorunlu.
+    #[serde(rename = "window_days", deserialize_with = "crate::de::null_default")]
+    pub window_days: i64,
+    /// Zorunlu. Değerler: `"idle"`, `"queued"`, `"running"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scored_items", deserialize_with = "crate::de::null_default")]
+    pub scored_items: i64,
+    /// Zorunlu.
+    #[serde(rename = "scored_users", deserialize_with = "crate::de::null_default")]
+    pub scored_users: i64,
+}
+
+/// `Recommendations` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Recommendations {
+    /// Zorunlu. Değerler: `"personalized"`, `"popular"`, `"trending"`, `"similar"`, `"category"`, `"recently_viewed"`, `"new_arrivals"`.
+    #[serde(rename = "strategy", deserialize_with = "crate::de::null_default")]
+    pub strategy: String,
+    /// Zorunlu. Değerler: `"personalized"`, `"popular"`, `"trending"`, `"similar"`, `"category"`, `"recently_viewed"`, `"new_arrivals"`.
+    #[serde(rename = "source")]
+    pub source: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CatalogItem>,
+}
+
 /// `RenderPreview` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12999,6 +13053,23 @@ pub struct UpdatePromoCodeListDto {
     pub description: Option<String>,
     #[serde(rename = "expires_at", skip_serializing_if = "Option::is_none")]
     pub expires_at: Option<String>,
+}
+
+/// `UpdateRecommendationConfigDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateRecommendationConfigDto {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    #[serde(rename = "view_events", skip_serializing_if = "Option::is_none")]
+    pub view_events: Option<Vec<String>>,
+    #[serde(rename = "purchase_events", skip_serializing_if = "Option::is_none")]
+    pub purchase_events: Option<Vec<String>>,
+    #[serde(rename = "item_property", skip_serializing_if = "Option::is_none")]
+    pub item_property: Option<String>,
+    #[serde(rename = "window_days", skip_serializing_if = "Option::is_none")]
+    pub window_days: Option<i64>,
 }
 
 /// `UpdateReverseEtlDto` şeması.

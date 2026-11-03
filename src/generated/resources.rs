@@ -3685,6 +3685,36 @@ pub struct CatalogsUploadForm {
     pub file: Option<FileUpload>,
 }
 
+/// `CatalogsService::list_recommendations` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct CatalogsListRecommendationsParams {
+    pub limit: Option<i64>,
+    pub user_id: Option<String>,
+    pub external_id: Option<String>,
+    pub item_id: Option<String>,
+    pub category: Option<String>,
+}
+
+impl CatalogsListRecommendationsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.user_id {
+            op.query("user_id", v);
+        }
+        if let Some(v) = &self.external_id {
+            op.query("external_id", v);
+        }
+        if let Some(v) = &self.item_id {
+            op.query("item_id", v);
+        }
+        if let Some(v) = &self.category {
+            op.query("category", v);
+        }
+    }
+}
+
 impl<'a> CatalogsService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -3818,6 +3848,61 @@ impl<'a> CatalogsService<'a> {
         let mut op = Operation::new("DELETE", "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}");
         op.path_param("catalogId", catalog_id);
         op.path_param("itemId", item_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ürün önerileri
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations`
+    ///
+    /// Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list_recommendations(&self, catalog_id: &str, strategy: &str, params: Option<&CatalogsListRecommendationsParams>) -> Result<Recommendations> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations");
+        op.path_param("catalogId", catalog_id);
+        op.query("strategy", strategy);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öneri modeli
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn config(&self, catalog_id: &str) -> Result<RecommendationConfig> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config");
+        op.path_param("catalogId", catalog_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öneri modelini ayarla
+    ///
+    /// `PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config`
+    ///
+    /// Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_config(&self, catalog_id: &str, body: &UpdateRecommendationConfigDto) -> Result<RecommendationConfig> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config");
+        op.path_param("catalogId", catalog_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Önerileri yeniden hesapla
+    ///
+    /// `POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute`
+    ///
+    /// İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn compute(&self, catalog_id: &str) -> Result<RecommendationConfig> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute");
+        op.path_param("catalogId", catalog_id);
         self.client.execute(op, &self.opts)
     }
 }
