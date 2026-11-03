@@ -10341,7 +10341,7 @@ pub struct ReverseEtlSync {
     /// Zorunlu.
     #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
     pub name: String,
-    /// Zorunlu. Değerler: `"snowflake"`, `"bigquery"`, `"postgres"`, `"mysql"`, `"s3"`, `"google_sheets"`.
+    /// Zorunlu. Değerler: `"snowflake"`, `"bigquery"`, `"postgres"`, `"mysql"`, `"s3"`, `"google_sheets"`, `"clickhouse"`, `"sqlserver"`, `"trino"`, `"athena"`, `"elasticsearch"`, `"kafka"`, `"pubsub"`.
     #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
     pub source: String,
     /// Zorunlu. Değerler: `"event"`, `"user"`.
@@ -10353,7 +10353,7 @@ pub struct ReverseEtlSync {
     /// Zorunlu.
     #[serde(rename = "credentials_hint", deserialize_with = "crate::de::null_default")]
     pub credentials_hint: String,
-    /// Zorunlu. Değerler: `"hourly"`, `"daily"`.
+    /// Zorunlu. Değerler: `"every_5_minutes"`, `"hourly"`, `"daily"`.
     #[serde(rename = "schedule", deserialize_with = "crate::de::null_default")]
     pub schedule: String,
     /// Zorunlu.
@@ -12476,7 +12476,7 @@ pub struct UpdateNodeDtoPosition {
 pub struct UpdateReverseEtlDto {
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// Değerler: `"hourly"`, `"daily"`.
+    /// Değerler: `"every_5_minutes"`, `"hourly"`, `"daily"`.
     #[serde(rename = "schedule", skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
