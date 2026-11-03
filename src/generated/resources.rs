@@ -2758,6 +2758,19 @@ impl<'a> AnalyticsService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Rapor çalıştır
+    ///
+    /// `POST /v1/apps/{appId}/analytics/reports/run`
+    ///
+    /// Kaynak, metrik, boyut ve filtre seçilerek rapor üretir; alanlar izinli listeyle sınırlıdır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn run_report(&self, body: &ReportRunBodyDto) -> Result<ReportResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/analytics/reports/run");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
     /// Yol analizi
     ///
     /// `POST /v1/apps/{appId}/analytics/paths`
@@ -2819,6 +2832,61 @@ impl<'a> AnalyticsService<'a> {
             p.append_query(&mut op);
         }
         self.client.execute(op, &self.opts)
+    }
+
+    /// Kaydedilmiş raporlar
+    ///
+    /// `GET /v1/apps/{appId}/analytics/reports`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<SavedReportList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/reports");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Raporu kaydet
+    ///
+    /// `POST /v1/apps/{appId}/analytics/reports`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateSavedReportDto) -> Result<SavedReport> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/analytics/reports");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kaydedilmiş rapor
+    ///
+    /// `GET /v1/apps/{appId}/analytics/reports/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, id: &str) -> Result<SavedReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/reports/{id}");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Raporu güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/analytics/reports/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, id: &str, body: &UpdateSavedReportDto) -> Result<SavedReport> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/analytics/reports/{id}");
+        op.path_param("id", id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Raporu sil
+    ///
+    /// `DELETE /v1/apps/{appId}/analytics/reports/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete(&self, id: &str) -> Result<()> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/analytics/reports/{id}");
+        op.path_param("id", id);
+        self.client.execute_empty(op, &self.opts)
     }
 }
 

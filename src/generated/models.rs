@@ -5072,6 +5072,57 @@ pub struct CreatePromoCodeListDto {
     pub expires_at: Option<String>,
 }
 
+/// `CreateSavedReportDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateSavedReportDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "definition", deserialize_with = "crate::de::null_default")]
+    pub definition: CreateSavedReportDtoDefinition,
+}
+
+/// `CreateSavedReportDtoDefinition` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateSavedReportDtoDefinition {
+    /// Zorunlu. Değerler: `"deliveries"`, `"events"`, `"conversions"`.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu. Değerler: `"sent"`, `"delivered"`, `"failed"`, `"opened"`, `"clicked"`, `"delivery_rate"`, `"open_rate"`, `"click_rate"`, `"failure_rate"`, `"count"`, `"unique_users"`, `"value_sum"`, `"value_avg"`, `"conversions"`, `"revenue"`.
+    #[serde(rename = "metrics", deserialize_with = "crate::de::null_default")]
+    pub metrics: Vec<String>,
+    /// Değerler: `"day"`, `"week"`, `"month"`, `"channel"`, `"provider"`, `"campaign"`, `"status"`, `"name"`, `"source"`, `"event_name"`, `"kind"`.
+    #[serde(rename = "dimensions", skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Vec<String>>,
+    #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
+    pub filters: Option<std::collections::HashMap<String, Vec<String>>>,
+    #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
+    pub sort: Option<CreateSavedReportDtoDefinitionSort>,
+    #[serde(rename = "limit", skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "days", skip_serializing_if = "Option::is_none")]
+    pub days: Option<i64>,
+    #[serde(rename = "from", skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
+    #[serde(rename = "to", skip_serializing_if = "Option::is_none")]
+    pub to: Option<String>,
+}
+
+/// `CreateSavedReportDtoDefinitionSort` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateSavedReportDtoDefinitionSort {
+    /// Zorunlu.
+    #[serde(rename = "by", deserialize_with = "crate::de::null_default")]
+    pub by: String,
+    /// Değerler: `"asc"`, `"desc"`.
+    #[serde(rename = "direction", skip_serializing_if = "Option::is_none")]
+    pub direction: Option<String>,
+}
+
 /// `CreateSuppressionDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -11106,6 +11157,87 @@ pub struct RenderTemplateDtoUser {
     pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
 }
 
+/// `ReportResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ReportResult {
+    /// Zorunlu.
+    #[serde(rename = "from", deserialize_with = "crate::de::null_default")]
+    pub from: String,
+    /// Zorunlu.
+    #[serde(rename = "to", deserialize_with = "crate::de::null_default")]
+    pub to: String,
+    /// Zorunlu.
+    #[serde(rename = "columns", deserialize_with = "crate::de::null_default")]
+    pub columns: Vec<ReportResultColumnsItem>,
+    /// Zorunlu.
+    #[serde(rename = "rows", deserialize_with = "crate::de::null_default")]
+    pub rows: Vec<std::collections::HashMap<String, serde_json::Value>>,
+    /// Zorunlu.
+    #[serde(rename = "totals")]
+    pub totals: Option<std::collections::HashMap<String, f64>>,
+    /// Zorunlu.
+    #[serde(rename = "truncated", deserialize_with = "crate::de::null_default")]
+    pub truncated: bool,
+}
+
+/// `ReportResultColumnsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ReportResultColumnsItem {
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    /// Zorunlu. Değerler: `"dimension"`, `"metric"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu. Değerler: `"text"`, `"date"`, `"number"`, `"percent"`.
+    #[serde(rename = "format", deserialize_with = "crate::de::null_default")]
+    pub format: String,
+}
+
+/// `ReportRunBodyDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ReportRunBodyDto {
+    /// Zorunlu. Değerler: `"deliveries"`, `"events"`, `"conversions"`.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu. Değerler: `"sent"`, `"delivered"`, `"failed"`, `"opened"`, `"clicked"`, `"delivery_rate"`, `"open_rate"`, `"click_rate"`, `"failure_rate"`, `"count"`, `"unique_users"`, `"value_sum"`, `"value_avg"`, `"conversions"`, `"revenue"`.
+    #[serde(rename = "metrics", deserialize_with = "crate::de::null_default")]
+    pub metrics: Vec<String>,
+    /// Değerler: `"day"`, `"week"`, `"month"`, `"channel"`, `"provider"`, `"campaign"`, `"status"`, `"name"`, `"source"`, `"event_name"`, `"kind"`.
+    #[serde(rename = "dimensions", skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Vec<String>>,
+    #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
+    pub filters: Option<std::collections::HashMap<String, Vec<String>>>,
+    #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
+    pub sort: Option<ReportRunBodyDtoSort>,
+    #[serde(rename = "limit", skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "days", skip_serializing_if = "Option::is_none")]
+    pub days: Option<i64>,
+    #[serde(rename = "from", skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
+    #[serde(rename = "to", skip_serializing_if = "Option::is_none")]
+    pub to: Option<String>,
+    /// Değerler: `"json"`, `"csv"`.
+    #[serde(rename = "format", skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+}
+
+/// `ReportRunBodyDtoSort` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ReportRunBodyDtoSort {
+    /// Zorunlu.
+    #[serde(rename = "by", deserialize_with = "crate::de::null_default")]
+    pub by: String,
+    /// Değerler: `"asc"`, `"desc"`.
+    #[serde(rename = "direction", skip_serializing_if = "Option::is_none")]
+    pub direction: Option<String>,
+}
+
 /// `RetentionReport` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -11422,6 +11554,80 @@ pub struct RfmUsersPageDataItem {
     /// Zorunlu.
     #[serde(rename = "segment_since", deserialize_with = "crate::de::null_default")]
     pub segment_since: String,
+}
+
+/// `SavedReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SavedReport {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "definition", deserialize_with = "crate::de::null_default")]
+    pub definition: SavedReportDefinition,
+    /// Zorunlu.
+    #[serde(rename = "created_by")]
+    pub created_by: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `SavedReportDefinition` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SavedReportDefinition {
+    /// Zorunlu. Değerler: `"deliveries"`, `"events"`, `"conversions"`.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu. Değerler: `"sent"`, `"delivered"`, `"failed"`, `"opened"`, `"clicked"`, `"delivery_rate"`, `"open_rate"`, `"click_rate"`, `"failure_rate"`, `"count"`, `"unique_users"`, `"value_sum"`, `"value_avg"`, `"conversions"`, `"revenue"`.
+    #[serde(rename = "metrics", deserialize_with = "crate::de::null_default")]
+    pub metrics: Vec<String>,
+    /// Zorunlu. Değerler: `"day"`, `"week"`, `"month"`, `"channel"`, `"provider"`, `"campaign"`, `"status"`, `"name"`, `"source"`, `"event_name"`, `"kind"`.
+    #[serde(rename = "dimensions", deserialize_with = "crate::de::null_default")]
+    pub dimensions: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "filters", deserialize_with = "crate::de::null_default")]
+    pub filters: std::collections::HashMap<String, Vec<String>>,
+    #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
+    pub sort: Option<SavedReportDefinitionSort>,
+    /// Zorunlu.
+    #[serde(rename = "limit", deserialize_with = "crate::de::null_default")]
+    pub limit: i64,
+    #[serde(rename = "days", skip_serializing_if = "Option::is_none")]
+    pub days: Option<i64>,
+    #[serde(rename = "from", skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
+    #[serde(rename = "to", skip_serializing_if = "Option::is_none")]
+    pub to: Option<String>,
+}
+
+/// `SavedReportDefinitionSort` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SavedReportDefinitionSort {
+    /// Zorunlu.
+    #[serde(rename = "by", deserialize_with = "crate::de::null_default")]
+    pub by: String,
+    /// Zorunlu. Değerler: `"asc"`, `"desc"`.
+    #[serde(rename = "direction", deserialize_with = "crate::de::null_default")]
+    pub direction: String,
+}
+
+/// `SavedReportList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SavedReportList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<SavedReport>,
 }
 
 /// `ScheduleCampaignDto` şeması.
@@ -13653,6 +13859,55 @@ pub struct UpdateRfmConfigDto {
     pub use_monetary: Option<bool>,
     #[serde(rename = "window_days", skip_serializing_if = "Option::is_none")]
     pub window_days: Option<i64>,
+}
+
+/// `UpdateSavedReportDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSavedReportDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "definition", skip_serializing_if = "Option::is_none")]
+    pub definition: Option<UpdateSavedReportDtoDefinition>,
+}
+
+/// `UpdateSavedReportDtoDefinition` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSavedReportDtoDefinition {
+    /// Zorunlu. Değerler: `"deliveries"`, `"events"`, `"conversions"`.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu. Değerler: `"sent"`, `"delivered"`, `"failed"`, `"opened"`, `"clicked"`, `"delivery_rate"`, `"open_rate"`, `"click_rate"`, `"failure_rate"`, `"count"`, `"unique_users"`, `"value_sum"`, `"value_avg"`, `"conversions"`, `"revenue"`.
+    #[serde(rename = "metrics", deserialize_with = "crate::de::null_default")]
+    pub metrics: Vec<String>,
+    /// Değerler: `"day"`, `"week"`, `"month"`, `"channel"`, `"provider"`, `"campaign"`, `"status"`, `"name"`, `"source"`, `"event_name"`, `"kind"`.
+    #[serde(rename = "dimensions", skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Vec<String>>,
+    #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
+    pub filters: Option<std::collections::HashMap<String, Vec<String>>>,
+    #[serde(rename = "sort", skip_serializing_if = "Option::is_none")]
+    pub sort: Option<UpdateSavedReportDtoDefinitionSort>,
+    #[serde(rename = "limit", skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    #[serde(rename = "days", skip_serializing_if = "Option::is_none")]
+    pub days: Option<i64>,
+    #[serde(rename = "from", skip_serializing_if = "Option::is_none")]
+    pub from: Option<String>,
+    #[serde(rename = "to", skip_serializing_if = "Option::is_none")]
+    pub to: Option<String>,
+}
+
+/// `UpdateSavedReportDtoDefinitionSort` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSavedReportDtoDefinitionSort {
+    /// Zorunlu.
+    #[serde(rename = "by", deserialize_with = "crate::de::null_default")]
+    pub by: String,
+    /// Değerler: `"asc"`, `"desc"`.
+    #[serde(rename = "direction", skip_serializing_if = "Option::is_none")]
+    pub direction: Option<String>,
 }
 
 /// `UpdateTemplateDto` şeması.
