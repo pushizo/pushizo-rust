@@ -128,6 +128,11 @@ impl Client {
         CategoriesService::new(self)
     }
 
+    /// `channelScores` kaynağı.
+    pub fn channel_scores(&self) -> ChannelScoresService<'_> {
+        ChannelScoresService::new(self)
+    }
+
     /// `contentTables` kaynağı.
     pub fn content_tables(&self) -> ContentTablesService<'_> {
         ContentTablesService::new(self)
@@ -3977,6 +3982,118 @@ impl<'a> CategoriesService<'a> {
     pub fn delete(&self, category_id: &str) -> Result<OkModel> {
         let mut op = Operation::new("DELETE", "/v1/apps/{appId}/categories/{categoryId}");
         op.path_param("categoryId", category_id);
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `channelScores` kaynağı.
+/// `Client::channel_scores()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct ChannelScoresService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `ChannelScoresService::users` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct ChannelScoresUsersParams {
+    /// Değerler: `"push"`, `"email"`, `"whatsapp"`, `"rcs"`, `"sms"`.
+    pub channel: Option<String>,
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+}
+
+impl ChannelScoresUsersParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.channel {
+            op.query("channel", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+    }
+}
+
+impl<'a> ChannelScoresService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Kanal skoru ayarı
+    ///
+    /// `GET /v1/apps/{appId}/channel-scores/config`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn config(&self) -> Result<ChannelScoreConfig> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/channel-scores/config");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kanal skorunu ayarla
+    ///
+    /// `PUT /v1/apps/{appId}/channel-scores/config`
+    ///
+    /// Açıkken skorlar kayıttan sonra yeniden hesaplanır; kapatınca silinir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, body: &UpdateChannelScoreConfigDto) -> Result<ChannelScoreConfig> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/channel-scores/config");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kanal skorlarını yeniden hesapla
+    ///
+    /// `POST /v1/apps/{appId}/channel-scores/compute`
+    ///
+    /// İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn compute(&self) -> Result<ChannelScoreConfig> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/channel-scores/compute");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// En iyi kanal dağılımı
+    ///
+    /// `GET /v1/apps/{appId}/channel-scores/overview`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn overview(&self) -> Result<ChannelScoreOverview> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/channel-scores/overview");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// En iyi kanalı belli kullanıcılar
+    ///
+    /// `GET /v1/apps/{appId}/channel-scores/users`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn users(&self, params: Option<&ChannelScoresUsersParams>) -> Result<ChannelScoreUsersPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/channel-scores/users");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kullanıcının kanal skorları
+    ///
+    /// `GET /v1/apps/{appId}/channel-scores/users/{userId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn user(&self, user_id: &str) -> Result<ChannelScoreUser> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/channel-scores/users/{userId}");
+        op.path_param("userId", user_id);
         self.client.execute(op, &self.opts)
     }
 }

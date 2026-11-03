@@ -3036,6 +3036,129 @@ pub struct ChannelList {
     pub data: Vec<ChannelConfig>,
 }
 
+/// `ChannelScoreConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ChannelScoreConfig {
+    /// Zorunlu.
+    #[serde(rename = "configured", deserialize_with = "crate::de::null_default")]
+    pub configured: bool,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "window_days", deserialize_with = "crate::de::null_default")]
+    pub window_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "min_sends", deserialize_with = "crate::de::null_default")]
+    pub min_sends: i64,
+    /// Zorunlu.
+    #[serde(rename = "count_email_opens", deserialize_with = "crate::de::null_default")]
+    pub count_email_opens: bool,
+    /// Zorunlu. Değerler: `"idle"`, `"queued"`, `"running"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scored_users", deserialize_with = "crate::de::null_default")]
+    pub scored_users: i64,
+}
+
+/// `ChannelScoreOverview` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ChannelScoreOverview {
+    /// Zorunlu.
+    #[serde(rename = "total", deserialize_with = "crate::de::null_default")]
+    pub total: i64,
+    /// Zorunlu.
+    #[serde(rename = "low_population", deserialize_with = "crate::de::null_default")]
+    pub low_population: bool,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
+    pub channels: Vec<ChannelScoreOverviewChannelsItem>,
+}
+
+/// `ChannelScoreOverviewChannelsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ChannelScoreOverviewChannelsItem {
+    /// Zorunlu. Değerler: `"push"`, `"email"`, `"whatsapp"`, `"rcs"`, `"sms"`.
+    #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
+    pub channel: String,
+    /// Zorunlu.
+    #[serde(rename = "best_users", deserialize_with = "crate::de::null_default")]
+    pub best_users: i64,
+    /// Zorunlu.
+    #[serde(rename = "share", deserialize_with = "crate::de::null_default")]
+    pub share: f64,
+    /// Zorunlu.
+    #[serde(rename = "sends", deserialize_with = "crate::de::null_default")]
+    pub sends: i64,
+    /// Zorunlu.
+    #[serde(rename = "engaged", deserialize_with = "crate::de::null_default")]
+    pub engaged: i64,
+    /// Zorunlu.
+    #[serde(rename = "engagement_rate")]
+    pub engagement_rate: Option<f64>,
+}
+
+/// `ChannelScoreUser` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ChannelScoreUser {
+    /// Zorunlu.
+    #[serde(rename = "user_id", deserialize_with = "crate::de::null_default")]
+    pub user_id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id")]
+    pub external_id: Option<String>,
+    /// Zorunlu. Değerler: `"push"`, `"email"`, `"whatsapp"`, `"rcs"`, `"sms"`.
+    #[serde(rename = "best_channel")]
+    pub best_channel: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scores", deserialize_with = "crate::de::null_default")]
+    pub scores: Vec<ChannelScoreUserScoresItem>,
+}
+
+/// `ChannelScoreUserScoresItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ChannelScoreUserScoresItem {
+    /// Zorunlu. Değerler: `"push"`, `"email"`, `"whatsapp"`, `"rcs"`, `"sms"`.
+    #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
+    pub channel: String,
+    /// Zorunlu.
+    #[serde(rename = "sends", deserialize_with = "crate::de::null_default")]
+    pub sends: i64,
+    /// Zorunlu.
+    #[serde(rename = "engaged", deserialize_with = "crate::de::null_default")]
+    pub engaged: i64,
+    /// Zorunlu.
+    #[serde(rename = "score", deserialize_with = "crate::de::null_default")]
+    pub score: f64,
+}
+
+/// `ChannelScoreUsersPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ChannelScoreUsersPage {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<ChannelScoreUser>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+}
+
 /// `ChannelValidation` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12915,6 +13038,21 @@ pub struct UpdateCategoryDto {
     pub default_opted_in: Option<bool>,
     #[serde(rename = "position", skip_serializing_if = "Option::is_none")]
     pub position: Option<i64>,
+}
+
+/// `UpdateChannelScoreConfigDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateChannelScoreConfigDto {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    #[serde(rename = "window_days", skip_serializing_if = "Option::is_none")]
+    pub window_days: Option<i64>,
+    #[serde(rename = "min_sends", skip_serializing_if = "Option::is_none")]
+    pub min_sends: Option<i64>,
+    #[serde(rename = "count_email_opens", skip_serializing_if = "Option::is_none")]
+    pub count_email_opens: Option<bool>,
 }
 
 /// `UpdateContentTableDto` şeması.
