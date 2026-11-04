@@ -4178,6 +4178,44 @@ pub struct CreateDataFeedDto {
     pub enabled: Option<bool>,
 }
 
+/// `CreateDecisionAgentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateDecisionAgentDto {
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "arms", deserialize_with = "crate::de::null_default")]
+    pub arms: Vec<CreateDecisionAgentDtoArmsItem>,
+    /// Zorunlu.
+    #[serde(rename = "reward_events", deserialize_with = "crate::de::null_default")]
+    pub reward_events: Vec<String>,
+    #[serde(rename = "reward_window_hours", skip_serializing_if = "Option::is_none")]
+    pub reward_window_hours: Option<i64>,
+    #[serde(rename = "holdout_percent", skip_serializing_if = "Option::is_none")]
+    pub holdout_percent: Option<i64>,
+    #[serde(rename = "context_prediction", skip_serializing_if = "Option::is_none")]
+    pub context_prediction: Option<String>,
+    #[serde(rename = "use_best_channel", skip_serializing_if = "Option::is_none")]
+    pub use_best_channel: Option<bool>,
+}
+
+/// `CreateDecisionAgentDtoArmsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateDecisionAgentDtoArmsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: String,
+}
+
 /// `CreateExportDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -6027,6 +6065,210 @@ pub struct DataFeedTestResultUser {
     /// Zorunlu.
     #[serde(rename = "external_id")]
     pub external_id: Option<String>,
+}
+
+/// `DecideDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecideDto {
+    /// Zorunlu.
+    #[serde(rename = "external_id", deserialize_with = "crate::de::null_default")]
+    pub external_id: String,
+}
+
+/// `DecisionAgent` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionAgent {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "arms", deserialize_with = "crate::de::null_default")]
+    pub arms: Vec<DecisionAgentArmsItem>,
+    /// Zorunlu.
+    #[serde(rename = "reward_events", deserialize_with = "crate::de::null_default")]
+    pub reward_events: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "reward_window_hours", deserialize_with = "crate::de::null_default")]
+    pub reward_window_hours: i64,
+    /// Zorunlu.
+    #[serde(rename = "holdout_percent", deserialize_with = "crate::de::null_default")]
+    pub holdout_percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "context_prediction")]
+    pub context_prediction: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "use_best_channel", deserialize_with = "crate::de::null_default")]
+    pub use_best_channel: bool,
+    /// Zorunlu. Değerler: `"active"`, `"paused"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `DecisionAgentArmsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionAgentArmsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: String,
+}
+
+/// `DecisionAgentList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionAgentList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<DecisionAgent>,
+}
+
+/// `DecisionReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionReport {
+    /// Zorunlu.
+    #[serde(rename = "agent_id", deserialize_with = "crate::de::null_default")]
+    pub agent_id: String,
+    /// Zorunlu.
+    #[serde(rename = "days", deserialize_with = "crate::de::null_default")]
+    pub days: i64,
+    /// Zorunlu.
+    #[serde(rename = "learned", deserialize_with = "crate::de::null_default")]
+    pub learned: DecisionReportLearned,
+    /// Zorunlu.
+    #[serde(rename = "holdout", deserialize_with = "crate::de::null_default")]
+    pub holdout: DecisionReportHoldout,
+    /// Zorunlu.
+    #[serde(rename = "lift")]
+    pub lift: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "p_value")]
+    pub p_value: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "significant", deserialize_with = "crate::de::null_default")]
+    pub significant: bool,
+    /// Zorunlu.
+    #[serde(rename = "arms", deserialize_with = "crate::de::null_default")]
+    pub arms: Vec<DecisionReportArmsItem>,
+    /// Zorunlu.
+    #[serde(rename = "contexts", deserialize_with = "crate::de::null_default")]
+    pub contexts: Vec<DecisionReportContextsItem>,
+}
+
+/// `DecisionReportArmsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionReportArmsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: String,
+    /// Zorunlu.
+    #[serde(rename = "share", deserialize_with = "crate::de::null_default")]
+    pub share: f64,
+    /// Zorunlu.
+    #[serde(rename = "assignments", deserialize_with = "crate::de::null_default")]
+    pub assignments: i64,
+    /// Zorunlu.
+    #[serde(rename = "settled", deserialize_with = "crate::de::null_default")]
+    pub settled: i64,
+    /// Zorunlu.
+    #[serde(rename = "rewards", deserialize_with = "crate::de::null_default")]
+    pub rewards: i64,
+    /// Zorunlu.
+    #[serde(rename = "rate")]
+    pub rate: Option<f64>,
+}
+
+/// `DecisionReportContextsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionReportContextsItem {
+    /// Zorunlu.
+    #[serde(rename = "context", deserialize_with = "crate::de::null_default")]
+    pub context: String,
+    /// Zorunlu.
+    #[serde(rename = "arm_id", deserialize_with = "crate::de::null_default")]
+    pub arm_id: String,
+    /// Zorunlu.
+    #[serde(rename = "settled", deserialize_with = "crate::de::null_default")]
+    pub settled: i64,
+    /// Zorunlu.
+    #[serde(rename = "rate")]
+    pub rate: Option<f64>,
+}
+
+/// `DecisionReportHoldout` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionReportHoldout {
+    /// Zorunlu.
+    #[serde(rename = "assignments", deserialize_with = "crate::de::null_default")]
+    pub assignments: i64,
+    /// Zorunlu.
+    #[serde(rename = "settled", deserialize_with = "crate::de::null_default")]
+    pub settled: i64,
+    /// Zorunlu.
+    #[serde(rename = "rewards", deserialize_with = "crate::de::null_default")]
+    pub rewards: i64,
+    /// Zorunlu.
+    #[serde(rename = "rate")]
+    pub rate: Option<f64>,
+}
+
+/// `DecisionReportLearned` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionReportLearned {
+    /// Zorunlu.
+    #[serde(rename = "assignments", deserialize_with = "crate::de::null_default")]
+    pub assignments: i64,
+    /// Zorunlu.
+    #[serde(rename = "settled", deserialize_with = "crate::de::null_default")]
+    pub settled: i64,
+    /// Zorunlu.
+    #[serde(rename = "rewards", deserialize_with = "crate::de::null_default")]
+    pub rewards: i64,
+    /// Zorunlu.
+    #[serde(rename = "rate")]
+    pub rate: Option<f64>,
+}
+
+/// `DecisionResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DecisionResult {
+    /// Zorunlu.
+    #[serde(rename = "arm_id", deserialize_with = "crate::de::null_default")]
+    pub arm_id: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: String,
+    /// Zorunlu. Değerler: `"thompson"`, `"holdout"`.
+    #[serde(rename = "policy", deserialize_with = "crate::de::null_default")]
+    pub policy: String,
+    /// Zorunlu.
+    #[serde(rename = "context", deserialize_with = "crate::de::null_default")]
+    pub context: String,
 }
 
 /// `DeliverabilitySettingsDto` şeması.
@@ -13674,6 +13916,23 @@ pub struct UpdateDataFeedDto {
     pub timeout_ms: Option<i64>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+}
+
+/// `UpdateDecisionAgentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateDecisionAgentDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Değerler: `"active"`, `"paused"`.
+    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    #[serde(rename = "reward_events", skip_serializing_if = "Option::is_none")]
+    pub reward_events: Option<Vec<String>>,
+    #[serde(rename = "reward_window_hours", skip_serializing_if = "Option::is_none")]
+    pub reward_window_hours: Option<i64>,
+    #[serde(rename = "holdout_percent", skip_serializing_if = "Option::is_none")]
+    pub holdout_percent: Option<i64>,
 }
 
 /// `UpdateGeofenceDto` şeması.

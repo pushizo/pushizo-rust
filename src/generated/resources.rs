@@ -148,6 +148,11 @@ impl Client {
         DataFeedsService::new(self)
     }
 
+    /// `decisionAgents` kaynağı.
+    pub fn decision_agents(&self) -> DecisionAgentsService<'_> {
+        DecisionAgentsService::new(self)
+    }
+
     /// `emailDeliverability` kaynağı.
     pub fn email_deliverability(&self) -> EmailDeliverabilityService<'_> {
         EmailDeliverabilityService::new(self)
@@ -4659,6 +4664,110 @@ impl<'a> DataFeedsService<'a> {
     pub fn test_feed(&self, feed_id: &str, body: &TestDataFeedDto) -> Result<DataFeedTestResult> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/data-feeds/{feedId}/test");
         op.path_param("feedId", feed_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `decisionAgents` kaynağı.
+/// `Client::decision_agents()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct DecisionAgentsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+impl<'a> DecisionAgentsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Karar ajanları
+    ///
+    /// `GET /v1/apps/{appId}/decision-agents`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<DecisionAgentList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/decision-agents");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Karar ajanı oluştur
+    ///
+    /// `POST /v1/apps/{appId}/decision-agents`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateDecisionAgentDto) -> Result<DecisionAgent> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/decision-agents");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Karar ajanı
+    ///
+    /// `GET /v1/apps/{appId}/decision-agents/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, id: &str) -> Result<DecisionAgent> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/decision-agents/{id}");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Karar ajanını güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/decision-agents/{id}`
+    ///
+    /// Seçenekler değiştirilemez: geçmiş öğrenme onlara bağlıdır. Yeni seçenekler için yeni ajan oluşturun.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, id: &str, body: &UpdateDecisionAgentDto) -> Result<DecisionAgent> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/decision-agents/{id}");
+        op.path_param("id", id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Karar ajanını sil
+    ///
+    /// `DELETE /v1/apps/{appId}/decision-agents/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete(&self, id: &str) -> Result<()> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/decision-agents/{id}");
+        op.path_param("id", id);
+        self.client.execute_empty(op, &self.opts)
+    }
+
+    /// Kazanç raporu
+    ///
+    /// `GET /v1/apps/{appId}/decision-agents/{id}/report`
+    ///
+    /// Öğrenen politika ve kontrol grubu karşılaştırması.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn report(&self, id: &str) -> Result<DecisionReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/decision-agents/{id}/report");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kullanıcı için karar al
+    ///
+    /// `POST /v1/apps/{appId}/decision-agents/{id}/decide`
+    ///
+    /// Karar kaydedilir, ödül olayı geldikçe ajan öğrenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn decide(&self, id: &str, body: &DecideDto) -> Result<DecisionResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/decision-agents/{id}/decide");
+        op.path_param("id", id);
         op.json(body)?;
         self.client.execute(op, &self.opts)
     }
