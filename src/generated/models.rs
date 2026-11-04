@@ -15525,6 +15525,174 @@ pub struct UserExport {
     /// Zorunlu.
     #[serde(rename = "events", deserialize_with = "crate::de::null_default")]
     pub events: Vec<UserExportEventsItem>,
+    /// Zorunlu.
+    #[serde(rename = "derived", deserialize_with = "crate::de::null_default")]
+    pub derived: UserExportDerived,
+}
+
+/// `UserExportDerived` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerived {
+    /// Zorunlu.
+    #[serde(rename = "wallet_passes", deserialize_with = "crate::de::null_default")]
+    pub wallet_passes: Vec<UserExportDerivedWalletPassesItem>,
+    /// Zorunlu.
+    #[serde(rename = "rfm")]
+    pub rfm: Option<UserExportDerivedRfm>,
+    /// Zorunlu.
+    #[serde(rename = "predictions", deserialize_with = "crate::de::null_default")]
+    pub predictions: Vec<UserExportDerivedPredictionsItem>,
+    /// Zorunlu.
+    #[serde(rename = "channel_scores", deserialize_with = "crate::de::null_default")]
+    pub channel_scores: Vec<UserExportDerivedChannelScoresItem>,
+    /// Zorunlu.
+    #[serde(rename = "decisions", deserialize_with = "crate::de::null_default")]
+    pub decisions: Vec<UserExportDerivedDecisionsItem>,
+    /// Zorunlu.
+    #[serde(rename = "recommendations", deserialize_with = "crate::de::null_default")]
+    pub recommendations: Vec<UserExportDerivedRecommendationsItem>,
+}
+
+/// `UserExportDerivedChannelScoresItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedChannelScoresItem {
+    /// Zorunlu.
+    #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
+    pub channel: String,
+    /// Zorunlu.
+    #[serde(rename = "sends", deserialize_with = "crate::de::null_default")]
+    pub sends: f64,
+    /// Zorunlu.
+    #[serde(rename = "engaged", deserialize_with = "crate::de::null_default")]
+    pub engaged: f64,
+    /// Zorunlu.
+    #[serde(rename = "score", deserialize_with = "crate::de::null_default")]
+    pub score: f64,
+    /// Zorunlu.
+    #[serde(rename = "is_best", deserialize_with = "crate::de::null_default")]
+    pub is_best: bool,
+    /// Zorunlu.
+    #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
+    pub computed_at: String,
+}
+
+/// `UserExportDerivedDecisionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedDecisionsItem {
+    /// Zorunlu.
+    #[serde(rename = "agent", deserialize_with = "crate::de::null_default")]
+    pub agent: String,
+    /// Zorunlu.
+    #[serde(rename = "arm_id", deserialize_with = "crate::de::null_default")]
+    pub arm_id: String,
+    /// Zorunlu.
+    #[serde(rename = "context", deserialize_with = "crate::de::null_default")]
+    pub context: String,
+    /// Zorunlu.
+    #[serde(rename = "assigned_at", deserialize_with = "crate::de::null_default")]
+    pub assigned_at: String,
+    /// Zorunlu.
+    #[serde(rename = "rewarded_at")]
+    pub rewarded_at: Option<String>,
+}
+
+/// `UserExportDerivedPredictionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedPredictionsItem {
+    /// Zorunlu.
+    #[serde(rename = "model", deserialize_with = "crate::de::null_default")]
+    pub model: String,
+    /// Zorunlu.
+    #[serde(rename = "score", deserialize_with = "crate::de::null_default")]
+    pub score: f64,
+    /// Zorunlu.
+    #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
+    pub computed_at: String,
+}
+
+/// `UserExportDerivedRecommendationsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedRecommendationsItem {
+    /// Zorunlu.
+    #[serde(rename = "catalog_id", deserialize_with = "crate::de::null_default")]
+    pub catalog_id: String,
+    /// Zorunlu.
+    #[serde(rename = "personalized", deserialize_with = "crate::de::null_default")]
+    pub personalized: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "recent", deserialize_with = "crate::de::null_default")]
+    pub recent: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "purchased", deserialize_with = "crate::de::null_default")]
+    pub purchased: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
+    pub computed_at: String,
+}
+
+/// `UserExportDerivedRfm` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedRfm {
+    /// Zorunlu.
+    #[serde(rename = "segment", deserialize_with = "crate::de::null_default")]
+    pub segment: String,
+    /// Zorunlu.
+    #[serde(rename = "segment_since", deserialize_with = "crate::de::null_default")]
+    pub segment_since: String,
+    /// Zorunlu.
+    #[serde(rename = "r", deserialize_with = "crate::de::null_default")]
+    pub r: f64,
+    /// Zorunlu.
+    #[serde(rename = "f", deserialize_with = "crate::de::null_default")]
+    pub f: f64,
+    /// Zorunlu.
+    #[serde(rename = "m")]
+    pub m: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "frequency", deserialize_with = "crate::de::null_default")]
+    pub frequency: f64,
+    /// Zorunlu.
+    #[serde(rename = "monetary", deserialize_with = "crate::de::null_default")]
+    pub monetary: f64,
+    /// Zorunlu.
+    #[serde(rename = "last_event_at", deserialize_with = "crate::de::null_default")]
+    pub last_event_at: String,
+    /// Zorunlu.
+    #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
+    pub computed_at: String,
+}
+
+/// `UserExportDerivedWalletPassesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedWalletPassesItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "template_id", deserialize_with = "crate::de::null_default")]
+    pub template_id: String,
+    /// Zorunlu.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "barcode_value", deserialize_with = "crate::de::null_default")]
+    pub barcode_value: String,
+    /// Zorunlu.
+    #[serde(rename = "values", deserialize_with = "crate::de::null_default")]
+    pub values: std::collections::HashMap<String, String>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
 }
 
 /// `UserExportEventsItem` şeması.
