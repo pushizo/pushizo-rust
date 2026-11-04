@@ -5536,6 +5536,72 @@ pub struct CreateTemplateDtoContentWhatsappTemplateButtonParamsItem {
     pub value: String,
 }
 
+/// `CreateWalletTemplateDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWalletTemplateDto {
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"coupon"`, `"loyalty"`, `"event"`, `"generic"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu.
+    #[serde(rename = "design", deserialize_with = "crate::de::null_default")]
+    pub design: CreateWalletTemplateDtoDesign,
+    #[serde(rename = "images", skip_serializing_if = "Option::is_none")]
+    pub images: Option<std::collections::HashMap<String, String>>,
+}
+
+/// `CreateWalletTemplateDtoDesign` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWalletTemplateDtoDesign {
+    /// Zorunlu.
+    #[serde(rename = "title", deserialize_with = "crate::de::null_default")]
+    pub title: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "organization", deserialize_with = "crate::de::null_default")]
+    pub organization: String,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "foreground_color", skip_serializing_if = "Option::is_none")]
+    pub foreground_color: Option<String>,
+    #[serde(rename = "label_color", skip_serializing_if = "Option::is_none")]
+    pub label_color: Option<String>,
+    /// Değerler: `"qr"`, `"pdf417"`, `"aztec"`, `"code128"`.
+    #[serde(rename = "barcode", skip_serializing_if = "Option::is_none")]
+    pub barcode: Option<String>,
+    #[serde(rename = "fields", skip_serializing_if = "Option::is_none")]
+    pub fields: Option<Vec<CreateWalletTemplateDtoDesignFieldsItem>>,
+    #[serde(rename = "expires_at", skip_serializing_if = "Option::is_none")]
+    pub expires_at: Option<String>,
+    #[serde(rename = "relevant_at", skip_serializing_if = "Option::is_none")]
+    pub relevant_at: Option<String>,
+}
+
+/// `CreateWalletTemplateDtoDesignFieldsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWalletTemplateDtoDesignFieldsItem {
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    #[serde(rename = "label", skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+    /// Değerler: `"header"`, `"primary"`, `"secondary"`, `"auxiliary"`, `"back"`.
+    #[serde(rename = "section", skip_serializing_if = "Option::is_none")]
+    pub section: Option<String>,
+}
+
 /// `CreateWarmupPlanDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -8257,6 +8323,21 @@ pub struct IntegrationOk {
     /// Zorunlu.
     #[serde(rename = "ok", deserialize_with = "crate::de::null_default")]
     pub ok: bool,
+}
+
+/// `IssueWalletPassDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct IssueWalletPassDto {
+    /// Zorunlu.
+    #[serde(rename = "template_id", deserialize_with = "crate::de::null_default")]
+    pub template_id: String,
+    #[serde(rename = "external_id", skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    #[serde(rename = "barcode_value", skip_serializing_if = "Option::is_none")]
+    pub barcode_value: Option<String>,
+    #[serde(rename = "values", skip_serializing_if = "Option::is_none")]
+    pub values: Option<std::collections::HashMap<String, String>>,
 }
 
 /// `Journey` şeması.
@@ -14235,6 +14316,122 @@ pub struct UpdateTemplateDtoContentWhatsappTemplateButtonParamsItem {
     pub value: String,
 }
 
+/// `UpdateWalletConfigDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletConfigDto {
+    #[serde(rename = "apple", skip_serializing_if = "Option::is_none")]
+    pub apple: Option<UpdateWalletConfigDtoApple>,
+    #[serde(rename = "google", skip_serializing_if = "Option::is_none")]
+    pub google: Option<UpdateWalletConfigDtoGoogle>,
+}
+
+/// `UpdateWalletConfigDtoApple` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletConfigDtoApple {
+    /// Zorunlu.
+    #[serde(rename = "pass_type_id", deserialize_with = "crate::de::null_default")]
+    pub pass_type_id: String,
+    /// Zorunlu.
+    #[serde(rename = "team_id", deserialize_with = "crate::de::null_default")]
+    pub team_id: String,
+    /// Zorunlu.
+    #[serde(rename = "certificate_pem", deserialize_with = "crate::de::null_default")]
+    pub certificate_pem: String,
+    /// Zorunlu.
+    #[serde(rename = "private_key_pem", deserialize_with = "crate::de::null_default")]
+    pub private_key_pem: String,
+    #[serde(rename = "key_passphrase", skip_serializing_if = "Option::is_none")]
+    pub key_passphrase: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "wwdr_pem", deserialize_with = "crate::de::null_default")]
+    pub wwdr_pem: String,
+}
+
+/// `UpdateWalletConfigDtoGoogle` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletConfigDtoGoogle {
+    /// Zorunlu.
+    #[serde(rename = "issuer_id", deserialize_with = "crate::de::null_default")]
+    pub issuer_id: String,
+    /// Zorunlu.
+    #[serde(rename = "service_account_json", deserialize_with = "crate::de::null_default")]
+    pub service_account_json: String,
+}
+
+/// `UpdateWalletPassDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletPassDto {
+    #[serde(rename = "barcode_value", skip_serializing_if = "Option::is_none")]
+    pub barcode_value: Option<String>,
+    #[serde(rename = "values", skip_serializing_if = "Option::is_none")]
+    pub values: Option<std::collections::HashMap<String, String>>,
+}
+
+/// `UpdateWalletTemplateDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletTemplateDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Değerler: `"active"`, `"archived"`.
+    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    #[serde(rename = "design", skip_serializing_if = "Option::is_none")]
+    pub design: Option<UpdateWalletTemplateDtoDesign>,
+    #[serde(rename = "images", skip_serializing_if = "Option::is_none")]
+    pub images: Option<std::collections::HashMap<String, String>>,
+}
+
+/// `UpdateWalletTemplateDtoDesign` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletTemplateDtoDesign {
+    /// Zorunlu.
+    #[serde(rename = "title", deserialize_with = "crate::de::null_default")]
+    pub title: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "organization", deserialize_with = "crate::de::null_default")]
+    pub organization: String,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "foreground_color", skip_serializing_if = "Option::is_none")]
+    pub foreground_color: Option<String>,
+    #[serde(rename = "label_color", skip_serializing_if = "Option::is_none")]
+    pub label_color: Option<String>,
+    /// Değerler: `"qr"`, `"pdf417"`, `"aztec"`, `"code128"`.
+    #[serde(rename = "barcode", skip_serializing_if = "Option::is_none")]
+    pub barcode: Option<String>,
+    #[serde(rename = "fields", skip_serializing_if = "Option::is_none")]
+    pub fields: Option<Vec<UpdateWalletTemplateDtoDesignFieldsItem>>,
+    #[serde(rename = "expires_at", skip_serializing_if = "Option::is_none")]
+    pub expires_at: Option<String>,
+    #[serde(rename = "relevant_at", skip_serializing_if = "Option::is_none")]
+    pub relevant_at: Option<String>,
+}
+
+/// `UpdateWalletTemplateDtoDesignFieldsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWalletTemplateDtoDesignFieldsItem {
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    #[serde(rename = "label", skip_serializing_if = "Option::is_none")]
+    pub label: Option<String>,
+    #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+    /// Değerler: `"header"`, `"primary"`, `"secondary"`, `"auxiliary"`, `"back"`.
+    #[serde(rename = "section", skip_serializing_if = "Option::is_none")]
+    pub section: Option<String>,
+}
+
 /// `UpdateWarehouseExportDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -15088,6 +15285,205 @@ pub struct VerifyAddressDto {
     /// Zorunlu.
     #[serde(rename = "address", deserialize_with = "crate::de::null_default")]
     pub address: String,
+}
+
+/// `WalletConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletConfig {
+    /// Zorunlu.
+    #[serde(rename = "apple", deserialize_with = "crate::de::null_default")]
+    pub apple: WalletConfigApple,
+    /// Zorunlu.
+    #[serde(rename = "google", deserialize_with = "crate::de::null_default")]
+    pub google: WalletConfigGoogle,
+}
+
+/// `WalletConfigApple` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletConfigApple {
+    /// Zorunlu.
+    #[serde(rename = "configured", deserialize_with = "crate::de::null_default")]
+    pub configured: bool,
+    /// Zorunlu.
+    #[serde(rename = "pass_type_id")]
+    pub pass_type_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "team_id")]
+    pub team_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "certificate_expires_at")]
+    pub certificate_expires_at: Option<String>,
+}
+
+/// `WalletConfigGoogle` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletConfigGoogle {
+    /// Zorunlu.
+    #[serde(rename = "configured", deserialize_with = "crate::de::null_default")]
+    pub configured: bool,
+    /// Zorunlu.
+    #[serde(rename = "issuer_id")]
+    pub issuer_id: Option<String>,
+}
+
+/// `WalletPass` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletPass {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "template_id", deserialize_with = "crate::de::null_default")]
+    pub template_id: String,
+    /// Zorunlu.
+    #[serde(rename = "user_id")]
+    pub user_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "external_id")]
+    pub external_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "barcode_value", deserialize_with = "crate::de::null_default")]
+    pub barcode_value: String,
+    /// Zorunlu.
+    #[serde(rename = "values", deserialize_with = "crate::de::null_default")]
+    pub values: std::collections::HashMap<String, String>,
+    /// Zorunlu. Değerler: `"active"`, `"voided"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    /// Zorunlu.
+    #[serde(rename = "apple_url", deserialize_with = "crate::de::null_default")]
+    pub apple_url: String,
+    /// Zorunlu.
+    #[serde(rename = "google_url", deserialize_with = "crate::de::null_default")]
+    pub google_url: String,
+    /// Zorunlu.
+    #[serde(rename = "apple_devices", deserialize_with = "crate::de::null_default")]
+    pub apple_devices: i64,
+    /// Zorunlu.
+    #[serde(rename = "version", deserialize_with = "crate::de::null_default")]
+    pub version: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `WalletPassPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletPassPage {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<WalletPass>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+}
+
+/// `WalletTemplate` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletTemplate {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"coupon"`, `"loyalty"`, `"event"`, `"generic"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu. Değerler: `"active"`, `"archived"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "design", deserialize_with = "crate::de::null_default")]
+    pub design: WalletTemplateDesign,
+    /// Zorunlu.
+    #[serde(rename = "images", deserialize_with = "crate::de::null_default")]
+    pub images: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "passes", deserialize_with = "crate::de::null_default")]
+    pub passes: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `WalletTemplateDesign` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletTemplateDesign {
+    /// Zorunlu.
+    #[serde(rename = "title", deserialize_with = "crate::de::null_default")]
+    pub title: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "organization", deserialize_with = "crate::de::null_default")]
+    pub organization: String,
+    /// Zorunlu.
+    #[serde(rename = "background_color", deserialize_with = "crate::de::null_default")]
+    pub background_color: String,
+    /// Zorunlu.
+    #[serde(rename = "foreground_color", deserialize_with = "crate::de::null_default")]
+    pub foreground_color: String,
+    /// Zorunlu.
+    #[serde(rename = "label_color", deserialize_with = "crate::de::null_default")]
+    pub label_color: String,
+    /// Zorunlu. Değerler: `"qr"`, `"pdf417"`, `"aztec"`, `"code128"`.
+    #[serde(rename = "barcode", deserialize_with = "crate::de::null_default")]
+    pub barcode: String,
+    /// Zorunlu.
+    #[serde(rename = "fields", deserialize_with = "crate::de::null_default")]
+    pub fields: Vec<WalletTemplateDesignFieldsItem>,
+    #[serde(rename = "expires_at", skip_serializing_if = "Option::is_none")]
+    pub expires_at: Option<String>,
+    #[serde(rename = "relevant_at", skip_serializing_if = "Option::is_none")]
+    pub relevant_at: Option<String>,
+}
+
+/// `WalletTemplateDesignFieldsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletTemplateDesignFieldsItem {
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+    /// Zorunlu. Değerler: `"header"`, `"primary"`, `"secondary"`, `"auxiliary"`, `"back"`.
+    #[serde(rename = "section", deserialize_with = "crate::de::null_default")]
+    pub section: String,
+}
+
+/// `WalletTemplateList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WalletTemplateList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<WalletTemplate>,
 }
 
 /// `WarehouseConnectionResult` şeması.

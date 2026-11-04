@@ -238,6 +238,11 @@ impl Client {
         VerifyService::new(self)
     }
 
+    /// `wallet` kaynağı.
+    pub fn wallet(&self) -> WalletService<'_> {
+        WalletService::new(self)
+    }
+
     /// `warehouseExports` kaynağı.
     pub fn warehouse_exports(&self) -> WarehouseExportsService<'_> {
         WarehouseExportsService::new(self)
@@ -6783,6 +6788,194 @@ impl<'a> VerifyService<'a> {
     pub fn check(&self, body: &CheckVerifyDto) -> Result<SmsVerificationCheck> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/verify/sms/check");
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `wallet` kaynağı.
+/// `Client::wallet()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct WalletService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `WalletService::passes` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct WalletPassesParams {
+    pub template_id: Option<String>,
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+}
+
+impl WalletPassesParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.template_id {
+            op.query("template_id", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+    }
+}
+
+impl<'a> WalletService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Wallet yapılandırması
+    ///
+    /// `GET /v1/apps/{appId}/wallet/config`
+    ///
+    /// Kimlik bilgisi geri okunamaz, yalnızca durum döner.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn config(&self) -> Result<WalletConfig> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/config");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Wallet kimlik bilgilerini ayarla
+    ///
+    /// `PUT /v1/apps/{appId}/wallet/config`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_config(&self, body: &UpdateWalletConfigDto) -> Result<WalletConfig> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/wallet/config");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Wallet şablonları
+    ///
+    /// `GET /v1/apps/{appId}/wallet/templates`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn templates(&self) -> Result<WalletTemplateList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/templates");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Wallet şablonu oluştur
+    ///
+    /// `POST /v1/apps/{appId}/wallet/templates`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_template(&self, body: &CreateWalletTemplateDto) -> Result<WalletTemplate> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/wallet/templates");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Wallet şablonu
+    ///
+    /// `GET /v1/apps/{appId}/wallet/templates/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn template(&self, id: &str) -> Result<WalletTemplate> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/templates/{id}");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Wallet şablonunu güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/wallet/templates/{id}`
+    ///
+    /// Tasarım değişirse verilmiş kartlar da güncellenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_template(&self, id: &str, body: &UpdateWalletTemplateDto) -> Result<WalletTemplate> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/wallet/templates/{id}");
+        op.path_param("id", id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Wallet şablonunu sil
+    ///
+    /// `DELETE /v1/apps/{appId}/wallet/templates/{id}`
+    ///
+    /// Verilmiş kartı olan şablon silinemez, arşivlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn remove_template(&self, id: &str) -> Result<()> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/wallet/templates/{id}");
+        op.path_param("id", id);
+        self.client.execute_empty(op, &self.opts)
+    }
+
+    /// Verilmiş kartlar
+    ///
+    /// `GET /v1/apps/{appId}/wallet/passes`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn passes(&self, params: Option<&WalletPassesParams>) -> Result<WalletPassPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/passes");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kart ver
+    ///
+    /// `POST /v1/apps/{appId}/wallet/passes`
+    ///
+    /// Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn issue(&self, body: &IssueWalletPassDto) -> Result<WalletPass> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/wallet/passes");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kart
+    ///
+    /// `GET /v1/apps/{appId}/wallet/passes/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn pass(&self, id: &str) -> Result<WalletPass> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/passes/{id}");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kartı güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/wallet/passes/{id}`
+    ///
+    /// Cihazdaki kart arka planda yenilenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_pass(&self, id: &str, body: &UpdateWalletPassDto) -> Result<WalletPass> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/wallet/passes/{id}");
+        op.path_param("id", id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kartı iptal et
+    ///
+    /// `POST /v1/apps/{appId}/wallet/passes/{id}/void`
+    ///
+    /// Geri alınmaz; cihazdaki kart geçersiz görünür.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn void_pass(&self, id: &str) -> Result<WalletPass> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/wallet/passes/{id}/void");
+        op.path_param("id", id);
         self.client.execute(op, &self.opts)
     }
 }
