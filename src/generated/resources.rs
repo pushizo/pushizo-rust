@@ -203,6 +203,11 @@ impl Client {
         McpService::new(self)
     }
 
+    /// `predictions` kaynağı.
+    pub fn predictions(&self) -> PredictionsService<'_> {
+        PredictionsService::new(self)
+    }
+
     /// `preferences` kaynağı.
     pub fn preferences(&self) -> PreferencesService<'_> {
         PreferencesService::new(self)
@@ -6009,6 +6014,133 @@ impl<'a> McpService<'a> {
     pub fn test_send(&self, body: &TestPushDto) -> Result<CreateNotificationResult> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/mcp/test-sends");
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `predictions` kaynağı.
+/// `Client::predictions()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct PredictionsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `PredictionsService::users` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct PredictionsUsersParams {
+    /// Değerler: `"low"`, `"medium"`, `"high"`.
+    pub bucket: Option<String>,
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+}
+
+impl PredictionsUsersParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.bucket {
+            op.query("bucket", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+    }
+}
+
+impl<'a> PredictionsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Öngörü modelleri
+    ///
+    /// `GET /v1/apps/{appId}/predictions`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<PredictionModelList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/predictions");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öngörü modeli oluştur
+    ///
+    /// `POST /v1/apps/{appId}/predictions`
+    ///
+    /// Eğitim kuyruğa alınır; sonuç `outcome` alanından izlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreatePredictionDto) -> Result<PredictionModel> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/predictions");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öngörü modeli
+    ///
+    /// `GET /v1/apps/{appId}/predictions/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, id: &str) -> Result<PredictionModel> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/predictions/{id}");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öngörü modelini güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/predictions/{id}`
+    ///
+    /// Olay veya ufuk değişirse yeniden eğitilir; kapatınca skorlar silinir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, id: &str, body: &UpdatePredictionDto) -> Result<PredictionModel> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/predictions/{id}");
+        op.path_param("id", id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öngörü modelini sil
+    ///
+    /// `DELETE /v1/apps/{appId}/predictions/{id}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete(&self, id: &str) -> Result<()> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/predictions/{id}");
+        op.path_param("id", id);
+        self.client.execute_empty(op, &self.opts)
+    }
+
+    /// Modeli yeniden eğit
+    ///
+    /// `POST /v1/apps/{appId}/predictions/{id}/compute`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn compute(&self, id: &str) -> Result<PredictionModel> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/predictions/{id}/compute");
+        op.path_param("id", id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Skoru olan kullanıcılar
+    ///
+    /// `GET /v1/apps/{appId}/predictions/{id}/users`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn users(&self, id: &str, params: Option<&PredictionsUsersParams>) -> Result<PredictionUsersPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/predictions/{id}/users");
+        op.path_param("id", id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
         self.client.execute(op, &self.opts)
     }
 }

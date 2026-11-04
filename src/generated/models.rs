@@ -5059,6 +5059,25 @@ pub struct CreateNotificationResult {
     pub external_id_missing: Vec<String>,
 }
 
+/// `CreatePredictionDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreatePredictionDto {
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"churn"`, `"event"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    #[serde(rename = "event_names", skip_serializing_if = "Option::is_none")]
+    pub event_names: Option<Vec<String>>,
+    #[serde(rename = "horizon_days", skip_serializing_if = "Option::is_none")]
+    pub horizon_days: Option<i64>,
+}
+
 /// `CreatePromoCodeListDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -10528,6 +10547,162 @@ pub struct PostmasterStatsDataItem {
     pub spam_rate: Option<String>,
 }
 
+/// `PredictionModel` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionModel {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"churn"`, `"event"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu.
+    #[serde(rename = "event_names", deserialize_with = "crate::de::null_default")]
+    pub event_names: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "horizon_days", deserialize_with = "crate::de::null_default")]
+    pub horizon_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"idle"`, `"queued"`, `"running"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu. Değerler: `"ready"`, `"insufficient_data"`, `"low_quality"`.
+    #[serde(rename = "outcome")]
+    pub outcome: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scored_users", deserialize_with = "crate::de::null_default")]
+    pub scored_users: i64,
+    /// Zorunlu.
+    #[serde(rename = "metrics")]
+    pub metrics: Option<PredictionModelMetrics>,
+    /// Zorunlu.
+    #[serde(rename = "distribution", deserialize_with = "crate::de::null_default")]
+    pub distribution: Vec<PredictionModelDistributionItem>,
+}
+
+/// `PredictionModelDistributionItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionModelDistributionItem {
+    /// Zorunlu. Değerler: `"low"`, `"medium"`, `"high"`.
+    #[serde(rename = "bucket", deserialize_with = "crate::de::null_default")]
+    pub bucket: String,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+}
+
+/// `PredictionModelList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionModelList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<PredictionModel>,
+}
+
+/// `PredictionModelMetrics` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionModelMetrics {
+    /// Zorunlu.
+    #[serde(rename = "auc")]
+    pub auc: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "base_rate")]
+    pub base_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "train_users", deserialize_with = "crate::de::null_default")]
+    pub train_users: i64,
+    /// Zorunlu.
+    #[serde(rename = "holdout_users", deserialize_with = "crate::de::null_default")]
+    pub holdout_users: i64,
+    /// Zorunlu.
+    #[serde(rename = "positives", deserialize_with = "crate::de::null_default")]
+    pub positives: i64,
+    /// Zorunlu.
+    #[serde(rename = "negatives", deserialize_with = "crate::de::null_default")]
+    pub negatives: i64,
+    /// Zorunlu.
+    #[serde(rename = "calibration", deserialize_with = "crate::de::null_default")]
+    pub calibration: Vec<PredictionModelMetricsCalibrationItem>,
+    /// Zorunlu.
+    #[serde(rename = "importance", deserialize_with = "crate::de::null_default")]
+    pub importance: Vec<PredictionModelMetricsImportanceItem>,
+}
+
+/// `PredictionModelMetricsCalibrationItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionModelMetricsCalibrationItem {
+    /// Zorunlu. Değerler: `"low"`, `"medium"`, `"high"`.
+    #[serde(rename = "bucket", deserialize_with = "crate::de::null_default")]
+    pub bucket: String,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "predicted")]
+    pub predicted: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "actual")]
+    pub actual: Option<f64>,
+}
+
+/// `PredictionModelMetricsImportanceItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionModelMetricsImportanceItem {
+    /// Zorunlu. Değerler: `"recency_days"`, `"events_7"`, `"events_30"`, `"active_days_30"`, `"target_30"`, `"days_since_target"`, `"tenure_days"`, `"sent_30"`, `"engaged_30"`.
+    #[serde(rename = "feature", deserialize_with = "crate::de::null_default")]
+    pub feature: String,
+    /// Zorunlu.
+    #[serde(rename = "weight", deserialize_with = "crate::de::null_default")]
+    pub weight: f64,
+}
+
+/// `PredictionUsersPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionUsersPage {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<PredictionUsersPageDataItem>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+}
+
+/// `PredictionUsersPageDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PredictionUsersPageDataItem {
+    /// Zorunlu.
+    #[serde(rename = "user_id", deserialize_with = "crate::de::null_default")]
+    pub user_id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id")]
+    pub external_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "score", deserialize_with = "crate::de::null_default")]
+    pub score: i64,
+    /// Zorunlu. Değerler: `"low"`, `"medium"`, `"high"`.
+    #[serde(rename = "bucket", deserialize_with = "crate::de::null_default")]
+    pub bucket: String,
+}
+
 /// `PromoCodeList` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -13878,6 +14053,20 @@ pub struct UpdateNodeDtoPosition {
     /// Zorunlu.
     #[serde(rename = "y", deserialize_with = "crate::de::null_default")]
     pub y: f64,
+}
+
+/// `UpdatePredictionDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdatePredictionDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    #[serde(rename = "event_names", skip_serializing_if = "Option::is_none")]
+    pub event_names: Option<Vec<String>>,
+    #[serde(rename = "horizon_days", skip_serializing_if = "Option::is_none")]
+    pub horizon_days: Option<i64>,
 }
 
 /// `UpdatePromoCodeListDto` şeması.
