@@ -10,7 +10,7 @@ use crate::multipart::Multipart;
 use crate::{Client, FileUpload, Paginator, RequestOptions, Result};
 
 /// SDK'nın üretildiği OpenAPI sözleşmesinin sürümü.
-pub const API_VERSION: &str = "1.0.0";
+pub const API_VERSION: &str = "1.1.0";
 
 impl Client {
     /// Bildirim gönderme, durum, iptal, teslimatlar ve geçmiş dışa aktarımı.
