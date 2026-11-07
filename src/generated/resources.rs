@@ -223,6 +223,11 @@ impl Client {
         PromoCodeListsService::new(self)
     }
 
+    /// `recommendations` kaynağı.
+    pub fn recommendations(&self) -> RecommendationsService<'_> {
+        RecommendationsService::new(self)
+    }
+
     /// `reverseEtl` kaynağı.
     pub fn reverse_etl(&self) -> ReverseEtlService<'_> {
         ReverseEtlService::new(self)
@@ -3796,36 +3801,6 @@ pub struct CatalogsUploadForm {
     pub file: Option<FileUpload>,
 }
 
-/// `CatalogsService::list_recommendations` için isteğe bağlı sorgu parametreleri.
-#[derive(Debug, Clone, Default, PartialEq)]
-pub struct CatalogsListRecommendationsParams {
-    pub limit: Option<i64>,
-    pub user_id: Option<String>,
-    pub external_id: Option<String>,
-    pub item_id: Option<String>,
-    pub category: Option<String>,
-}
-
-impl CatalogsListRecommendationsParams {
-    fn append_query(&self, op: &mut Operation) {
-        if let Some(v) = &self.limit {
-            op.query("limit", v);
-        }
-        if let Some(v) = &self.user_id {
-            op.query("user_id", v);
-        }
-        if let Some(v) = &self.external_id {
-            op.query("external_id", v);
-        }
-        if let Some(v) = &self.item_id {
-            op.query("item_id", v);
-        }
-        if let Some(v) = &self.category {
-            op.query("category", v);
-        }
-    }
-}
-
 impl<'a> CatalogsService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -3959,61 +3934,6 @@ impl<'a> CatalogsService<'a> {
         let mut op = Operation::new("DELETE", "/v1/apps/{appId}/catalogs/{catalogId}/items/{itemId}");
         op.path_param("catalogId", catalog_id);
         op.path_param("itemId", item_id);
-        self.client.execute(op, &self.opts)
-    }
-
-    /// Ürün önerileri
-    ///
-    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations`
-    ///
-    /// Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
-    ///
-    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn list_recommendations(&self, catalog_id: &str, strategy: &str, params: Option<&CatalogsListRecommendationsParams>) -> Result<Recommendations> {
-        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations");
-        op.path_param("catalogId", catalog_id);
-        op.query("strategy", strategy);
-        if let Some(p) = params {
-            p.append_query(&mut op);
-        }
-        self.client.execute(op, &self.opts)
-    }
-
-    /// Öneri modeli
-    ///
-    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config`
-    ///
-    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn config(&self, catalog_id: &str) -> Result<RecommendationConfig> {
-        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config");
-        op.path_param("catalogId", catalog_id);
-        self.client.execute(op, &self.opts)
-    }
-
-    /// Öneri modelini ayarla
-    ///
-    /// `PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config`
-    ///
-    /// Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
-    ///
-    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn update_config(&self, catalog_id: &str, body: &UpdateRecommendationConfigDto) -> Result<RecommendationConfig> {
-        let mut op = Operation::new("PUT", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config");
-        op.path_param("catalogId", catalog_id);
-        op.json(body)?;
-        self.client.execute(op, &self.opts)
-    }
-
-    /// Önerileri yeniden hesapla
-    ///
-    /// `POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute`
-    ///
-    /// İş kuyruğa alınır; ilerleme `status` alanından izlenir.
-    ///
-    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn compute(&self, catalog_id: &str) -> Result<RecommendationConfig> {
-        let mut op = Operation::new("POST", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute");
-        op.path_param("catalogId", catalog_id);
         self.client.execute(op, &self.opts)
     }
 }
@@ -6440,6 +6360,111 @@ impl<'a> PromoCodeListsService<'a> {
     }
 }
 
+/// `recommendations` kaynağı.
+/// `Client::recommendations()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct RecommendationsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `RecommendationsService::list` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct RecommendationsListParams {
+    pub limit: Option<i64>,
+    pub user_id: Option<String>,
+    pub external_id: Option<String>,
+    pub item_id: Option<String>,
+    pub category: Option<String>,
+}
+
+impl RecommendationsListParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.user_id {
+            op.query("user_id", v);
+        }
+        if let Some(v) = &self.external_id {
+            op.query("external_id", v);
+        }
+        if let Some(v) = &self.item_id {
+            op.query("item_id", v);
+        }
+        if let Some(v) = &self.category {
+            op.query("category", v);
+        }
+    }
+}
+
+impl<'a> RecommendationsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Ürün önerileri
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations`
+    ///
+    /// Stokta olmayan ve kullanıcının satın aldığı ürünler çıkmaz. Sonuç yetmezse yedek kaynakla tamamlanır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self, catalog_id: &str, strategy: &str, params: Option<&RecommendationsListParams>) -> Result<Recommendations> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations");
+        op.path_param("catalogId", catalog_id);
+        op.query("strategy", strategy);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öneri modeli
+    ///
+    /// `GET /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get_config(&self, catalog_id: &str) -> Result<RecommendationConfig> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config");
+        op.path_param("catalogId", catalog_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Öneri modelini ayarla
+    ///
+    /// `PUT /v1/apps/{appId}/catalogs/{catalogId}/recommendations/config`
+    ///
+    /// Model açıksa öneriler kayıttan sonra yeniden hesaplanır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_config(&self, catalog_id: &str, body: &UpdateRecommendationConfigDto) -> Result<RecommendationConfig> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/config");
+        op.path_param("catalogId", catalog_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Önerileri yeniden hesapla
+    ///
+    /// `POST /v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute`
+    ///
+    /// İş kuyruğa alınır; ilerleme `status` alanından izlenir.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn compute(&self, catalog_id: &str) -> Result<RecommendationConfig> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/catalogs/{catalogId}/recommendations/compute");
+        op.path_param("catalogId", catalog_id);
+        self.client.execute(op, &self.opts)
+    }
+}
+
 /// `reverseEtl` kaynağı.
 /// `Client::reverse_etl()` ile alınır.
 #[derive(Debug, Clone)]
@@ -7041,15 +7066,15 @@ pub struct WalletService<'a> {
     opts: RequestOptions,
 }
 
-/// `WalletService::passes` için isteğe bağlı sorgu parametreleri.
+/// `WalletService::list_passes` için isteğe bağlı sorgu parametreleri.
 #[derive(Debug, Clone, Default, PartialEq)]
-pub struct WalletPassesParams {
+pub struct WalletListPassesParams {
     pub template_id: Option<String>,
     pub limit: Option<i64>,
     pub cursor: Option<String>,
 }
 
-impl WalletPassesParams {
+impl WalletListPassesParams {
     fn append_query(&self, op: &mut Operation) {
         if let Some(v) = &self.template_id {
             op.query("template_id", v);
@@ -7081,7 +7106,7 @@ impl<'a> WalletService<'a> {
     /// Kimlik bilgisi geri okunamaz, yalnızca durum döner.
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn config(&self) -> Result<WalletConfig> {
+    pub fn get_config(&self) -> Result<WalletConfig> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/config");
         self.client.execute(op, &self.opts)
     }
@@ -7102,7 +7127,7 @@ impl<'a> WalletService<'a> {
     /// `GET /v1/apps/{appId}/wallet/templates`
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn templates(&self) -> Result<WalletTemplateList> {
+    pub fn list_templates(&self) -> Result<WalletTemplateList> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/templates");
         self.client.execute(op, &self.opts)
     }
@@ -7123,7 +7148,7 @@ impl<'a> WalletService<'a> {
     /// `GET /v1/apps/{appId}/wallet/templates/{id}`
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn template(&self, id: &str) -> Result<WalletTemplate> {
+    pub fn get_template(&self, id: &str) -> Result<WalletTemplate> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/templates/{id}");
         op.path_param("id", id);
         self.client.execute(op, &self.opts)
@@ -7150,7 +7175,7 @@ impl<'a> WalletService<'a> {
     /// Verilmiş kartı olan şablon silinemez, arşivlenir.
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn remove_template(&self, id: &str) -> Result<()> {
+    pub fn delete_template(&self, id: &str) -> Result<()> {
         let mut op = Operation::new("DELETE", "/v1/apps/{appId}/wallet/templates/{id}");
         op.path_param("id", id);
         self.client.execute_empty(op, &self.opts)
@@ -7161,7 +7186,7 @@ impl<'a> WalletService<'a> {
     /// `GET /v1/apps/{appId}/wallet/passes`
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn passes(&self, params: Option<&WalletPassesParams>) -> Result<WalletPassPage> {
+    pub fn list_passes(&self, params: Option<&WalletListPassesParams>) -> Result<WalletPassPage> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/passes");
         if let Some(p) = params {
             p.append_query(&mut op);
@@ -7176,7 +7201,7 @@ impl<'a> WalletService<'a> {
     /// Kullanıcılı kart şablon başına tektir; tekrar istek aynı kartı döndürür.
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn issue(&self, body: &IssueWalletPassDto) -> Result<WalletPass> {
+    pub fn issue_pass(&self, body: &IssueWalletPassDto) -> Result<WalletPass> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/wallet/passes");
         op.json(body)?;
         self.client.execute(op, &self.opts)
@@ -7187,7 +7212,7 @@ impl<'a> WalletService<'a> {
     /// `GET /v1/apps/{appId}/wallet/passes/{id}`
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn pass(&self, id: &str) -> Result<WalletPass> {
+    pub fn get_pass(&self, id: &str) -> Result<WalletPass> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/wallet/passes/{id}");
         op.path_param("id", id);
         self.client.execute(op, &self.opts)

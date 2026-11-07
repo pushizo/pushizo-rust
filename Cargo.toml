@@ -1,6 +1,6 @@
 [package]
 name = "pushizo"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 rust-version = "1.71"
 description = "Official Rust server SDK for the Pushizo API: push, email, SMS and in-app messaging, users, segments, campaigns and webhook signature verification"
