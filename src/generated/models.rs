@@ -2269,6 +2269,9 @@ pub struct CampaignStats {
     #[serde(rename = "goals", deserialize_with = "crate::de::null_default")]
     pub goals: Vec<CampaignStatsGoalsItem>,
     /// Zorunlu.
+    #[serde(rename = "cards")]
+    pub cards: Option<CampaignStatsCards>,
+    /// Zorunlu.
     #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
     pub channels: Vec<CampaignStatsChannelsItem>,
     /// Zorunlu.
@@ -2312,6 +2315,30 @@ pub struct CampaignStats2 {
     pub unsubscribed: Option<i64>,
     #[serde(rename = "sms_segments", skip_serializing_if = "Option::is_none")]
     pub sms_segments: Option<i64>,
+}
+
+/// `CampaignStatsCards` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignStatsCards {
+    /// Zorunlu.
+    #[serde(rename = "created", deserialize_with = "crate::de::null_default")]
+    pub created: i64,
+    /// Zorunlu.
+    #[serde(rename = "viewed", deserialize_with = "crate::de::null_default")]
+    pub viewed: i64,
+    /// Zorunlu.
+    #[serde(rename = "clicked", deserialize_with = "crate::de::null_default")]
+    pub clicked: i64,
+    /// Zorunlu.
+    #[serde(rename = "dismissed", deserialize_with = "crate::de::null_default")]
+    pub dismissed: i64,
+    /// Zorunlu.
+    #[serde(rename = "view_rate")]
+    pub view_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "click_rate")]
+    pub click_rate: Option<f64>,
 }
 
 /// `CampaignStatsChannelsItem` şeması.
