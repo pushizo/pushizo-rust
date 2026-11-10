@@ -268,6 +268,11 @@ impl Client {
         WebCampaignsService::new(self)
     }
 
+    /// `webPersonalizations` kaynağı.
+    pub fn web_personalizations(&self) -> WebPersonalizationsService<'_> {
+        WebPersonalizationsService::new(self)
+    }
+
     /// `whatsapp` kaynağı.
     pub fn whatsapp(&self) -> WhatsappService<'_> {
         WhatsappService::new(self)
@@ -7597,6 +7602,150 @@ impl<'a> WebCampaignsService<'a> {
     pub fn status(&self, campaign_id: &str, body: &WebCampaignStatusDto) -> Result<WebCampaign> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/web-campaigns/{campaignId}/status");
         op.path_param("campaignId", campaign_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `webPersonalizations` kaynağı.
+/// `Client::web_personalizations()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct WebPersonalizationsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `WebPersonalizationsService::list` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct WebPersonalizationsListParams {
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+    /// Değerler: `"draft"`, `"active"`, `"paused"`, `"archived"`.
+    pub status: Option<String>,
+}
+
+impl WebPersonalizationsListParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+        if let Some(v) = &self.status {
+            op.query("status", v);
+        }
+    }
+}
+
+/// `WebPersonalizationsService::report` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct WebPersonalizationsReportParams {
+    pub days: Option<i64>,
+}
+
+impl WebPersonalizationsReportParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.days {
+            op.query("days", v);
+        }
+    }
+}
+
+impl<'a> WebPersonalizationsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Web kişiselleştirme deneyimleri
+    ///
+    /// `GET /v1/apps/{appId}/web-personalizations`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self, params: Option<&WebPersonalizationsListParams>) -> Result<WebPersonalizationPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/web-personalizations");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// `list` sonuçlarını `next_cursor` ile tüm sayfalar boyunca tek tek döndürür.
+    /// Hata olursa yineleyici `Err` verir ve durur.
+    pub fn list_all(&self, params: Option<&WebPersonalizationsListParams>) -> Paginator<'a, WebPersonalization> {
+        let service = self.clone();
+        let mut p = params.cloned().unwrap_or_default();
+        Paginator::new(move |cursor| {
+            if let Some(c) = cursor {
+                p.cursor = Some(c);
+            }
+            let page = service.list(Some(&p))?;
+            Ok((page.data, page.next_cursor, page.has_more))
+        })
+    }
+
+    /// Kişiselleştirme deneyimi oluştur (taslak)
+    ///
+    /// `POST /v1/apps/{appId}/web-personalizations`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateWebPersonalizationDto) -> Result<WebPersonalization> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/web-personalizations");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kişiselleştirme deneyimi detayı ve istatistikleri
+    ///
+    /// `GET /v1/apps/{appId}/web-personalizations/{personalizationId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, personalization_id: &str) -> Result<WebPersonalization> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/web-personalizations/{personalizationId}");
+        op.path_param("personalizationId", personalization_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kişiselleştirme deneyimini düzenle
+    ///
+    /// `PATCH /v1/apps/{appId}/web-personalizations/{personalizationId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update(&self, personalization_id: &str, body: &UpdateWebPersonalizationDto) -> Result<WebPersonalization> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/web-personalizations/{personalizationId}");
+        op.path_param("personalizationId", personalization_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Günlük seri
+    ///
+    /// `GET /v1/apps/{appId}/web-personalizations/{personalizationId}/report`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn report(&self, personalization_id: &str, params: Option<&WebPersonalizationsReportParams>) -> Result<WebPersonalizationReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/web-personalizations/{personalizationId}/report");
+        op.path_param("personalizationId", personalization_id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Yayınla / duraklat / arşivle
+    ///
+    /// `POST /v1/apps/{appId}/web-personalizations/{personalizationId}/status`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn status(&self, personalization_id: &str, body: &WebPersonalizationStatusDto) -> Result<WebPersonalization> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/web-personalizations/{personalizationId}/status");
+        op.path_param("personalizationId", personalization_id);
         op.json(body)?;
         self.client.execute(op, &self.opts)
     }

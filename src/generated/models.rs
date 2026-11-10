@@ -6138,6 +6138,115 @@ pub struct CreateWebhookDtoFiltersConditionsItem {
     pub value: Option<serde_json::Value>,
 }
 
+/// `CreateWebPersonalizationDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "changes", skip_serializing_if = "Option::is_none")]
+    pub changes: Option<Vec<serde_json::Value>>,
+    #[serde(rename = "variants", skip_serializing_if = "Option::is_none")]
+    pub variants: Option<Vec<CreateWebPersonalizationDtoVariantsItem>>,
+    #[serde(rename = "conditions", skip_serializing_if = "Option::is_none")]
+    pub conditions: Option<CreateWebPersonalizationDtoConditions>,
+    #[serde(rename = "targeting", skip_serializing_if = "Option::is_none")]
+    pub targeting: Option<CreateWebPersonalizationDtoTargeting>,
+    #[serde(rename = "goal", skip_serializing_if = "Option::is_none")]
+    pub goal: Option<serde_json::Value>,
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    #[serde(rename = "start_at", skip_serializing_if = "Option::is_none")]
+    pub start_at: Option<String>,
+    #[serde(rename = "end_at", skip_serializing_if = "Option::is_none")]
+    pub end_at: Option<String>,
+}
+
+/// `CreateWebPersonalizationDtoConditions` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDtoConditions {
+    #[serde(rename = "url_rules", skip_serializing_if = "Option::is_none")]
+    pub url_rules: Option<Vec<CreateWebPersonalizationDtoConditionsUrlRulesItem>>,
+    #[serde(rename = "utm_rules", skip_serializing_if = "Option::is_none")]
+    pub utm_rules: Option<Vec<CreateWebPersonalizationDtoConditionsUtmRulesItem>>,
+    #[serde(rename = "visits", skip_serializing_if = "Option::is_none")]
+    pub visits: Option<CreateWebPersonalizationDtoConditionsVisits>,
+}
+
+/// `CreateWebPersonalizationDtoConditionsUrlRulesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDtoConditionsUrlRulesItem {
+    /// Zorunlu. Değerler: `"equals"`, `"contains"`, `"starts_with"`, `"not_contains"`, `"matches"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+}
+
+/// `CreateWebPersonalizationDtoConditionsUtmRulesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDtoConditionsUtmRulesItem {
+    /// Zorunlu. Değerler: `"utm_source"`, `"utm_medium"`, `"utm_campaign"`, `"utm_term"`, `"utm_content"`.
+    #[serde(rename = "param", deserialize_with = "crate::de::null_default")]
+    pub param: String,
+    /// Zorunlu. Değerler: `"equals"`, `"contains"`, `"exists"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// `CreateWebPersonalizationDtoConditionsVisits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDtoConditionsVisits {
+    /// Zorunlu. Değerler: `"gte"`, `"lte"`, `"eq"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: i64,
+}
+
+/// `CreateWebPersonalizationDtoTargeting` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDtoTargeting {
+    #[serde(rename = "included_segments", skip_serializing_if = "Option::is_none")]
+    pub included_segments: Option<Vec<String>>,
+    #[serde(rename = "excluded_segments", skip_serializing_if = "Option::is_none")]
+    pub excluded_segments: Option<Vec<String>>,
+    /// Değerler: `"all"`, `"new"`, `"returning"`.
+    #[serde(rename = "visitor", skip_serializing_if = "Option::is_none")]
+    pub visitor: Option<String>,
+    /// Değerler: `"desktop"`, `"mobile"`, `"tablet"`.
+    #[serde(rename = "devices", skip_serializing_if = "Option::is_none")]
+    pub devices: Option<Vec<String>>,
+}
+
+/// `CreateWebPersonalizationDtoVariantsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWebPersonalizationDtoVariantsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "weight_percent", deserialize_with = "crate::de::null_default")]
+    pub weight_percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "changes", deserialize_with = "crate::de::null_default")]
+    pub changes: Vec<serde_json::Value>,
+}
+
 /// `DataFeed` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -15527,6 +15636,114 @@ pub struct UpdateWebhookDtoFiltersConditionsItem {
     pub value: Option<serde_json::Value>,
 }
 
+/// `UpdateWebPersonalizationDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "changes", skip_serializing_if = "Option::is_none")]
+    pub changes: Option<Vec<serde_json::Value>>,
+    #[serde(rename = "variants", skip_serializing_if = "Option::is_none")]
+    pub variants: Option<Vec<UpdateWebPersonalizationDtoVariantsItem>>,
+    #[serde(rename = "conditions", skip_serializing_if = "Option::is_none")]
+    pub conditions: Option<UpdateWebPersonalizationDtoConditions>,
+    #[serde(rename = "targeting", skip_serializing_if = "Option::is_none")]
+    pub targeting: Option<UpdateWebPersonalizationDtoTargeting>,
+    #[serde(rename = "goal", skip_serializing_if = "Option::is_none")]
+    pub goal: Option<serde_json::Value>,
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    #[serde(rename = "start_at", skip_serializing_if = "Option::is_none")]
+    pub start_at: Option<String>,
+    #[serde(rename = "end_at", skip_serializing_if = "Option::is_none")]
+    pub end_at: Option<String>,
+}
+
+/// `UpdateWebPersonalizationDtoConditions` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDtoConditions {
+    #[serde(rename = "url_rules", skip_serializing_if = "Option::is_none")]
+    pub url_rules: Option<Vec<UpdateWebPersonalizationDtoConditionsUrlRulesItem>>,
+    #[serde(rename = "utm_rules", skip_serializing_if = "Option::is_none")]
+    pub utm_rules: Option<Vec<UpdateWebPersonalizationDtoConditionsUtmRulesItem>>,
+    #[serde(rename = "visits", skip_serializing_if = "Option::is_none")]
+    pub visits: Option<UpdateWebPersonalizationDtoConditionsVisits>,
+}
+
+/// `UpdateWebPersonalizationDtoConditionsUrlRulesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDtoConditionsUrlRulesItem {
+    /// Zorunlu. Değerler: `"equals"`, `"contains"`, `"starts_with"`, `"not_contains"`, `"matches"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+}
+
+/// `UpdateWebPersonalizationDtoConditionsUtmRulesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDtoConditionsUtmRulesItem {
+    /// Zorunlu. Değerler: `"utm_source"`, `"utm_medium"`, `"utm_campaign"`, `"utm_term"`, `"utm_content"`.
+    #[serde(rename = "param", deserialize_with = "crate::de::null_default")]
+    pub param: String,
+    /// Zorunlu. Değerler: `"equals"`, `"contains"`, `"exists"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// `UpdateWebPersonalizationDtoConditionsVisits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDtoConditionsVisits {
+    /// Zorunlu. Değerler: `"gte"`, `"lte"`, `"eq"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: i64,
+}
+
+/// `UpdateWebPersonalizationDtoTargeting` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDtoTargeting {
+    #[serde(rename = "included_segments", skip_serializing_if = "Option::is_none")]
+    pub included_segments: Option<Vec<String>>,
+    #[serde(rename = "excluded_segments", skip_serializing_if = "Option::is_none")]
+    pub excluded_segments: Option<Vec<String>>,
+    /// Değerler: `"all"`, `"new"`, `"returning"`.
+    #[serde(rename = "visitor", skip_serializing_if = "Option::is_none")]
+    pub visitor: Option<String>,
+    /// Değerler: `"desktop"`, `"mobile"`, `"tablet"`.
+    #[serde(rename = "devices", skip_serializing_if = "Option::is_none")]
+    pub devices: Option<Vec<String>>,
+}
+
+/// `UpdateWebPersonalizationDtoVariantsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWebPersonalizationDtoVariantsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "weight_percent", deserialize_with = "crate::de::null_default")]
+    pub weight_percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "changes", deserialize_with = "crate::de::null_default")]
+    pub changes: Vec<serde_json::Value>,
+}
+
 /// `UpsertCatalogItemsDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -17591,6 +17808,285 @@ pub struct WebhookWithSecretFiltersConditionsItem {
     pub op: String,
     #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
     pub value: Option<serde_json::Value>,
+}
+
+/// `WebPersonalization` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalization {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"draft"`, `"active"`, `"paused"`, `"archived"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "priority", deserialize_with = "crate::de::null_default")]
+    pub priority: i64,
+    /// Zorunlu.
+    #[serde(rename = "changes", deserialize_with = "crate::de::null_default")]
+    pub changes: Vec<serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "variants", deserialize_with = "crate::de::null_default")]
+    pub variants: Vec<WebPersonalizationVariantsItem>,
+    /// Zorunlu.
+    #[serde(rename = "ab_test", deserialize_with = "crate::de::null_default")]
+    pub ab_test: WebPersonalizationAbTest,
+    /// Zorunlu.
+    #[serde(rename = "conditions", deserialize_with = "crate::de::null_default")]
+    pub conditions: WebPersonalizationConditions,
+    /// Zorunlu.
+    #[serde(rename = "targeting", deserialize_with = "crate::de::null_default")]
+    pub targeting: WebPersonalizationTargeting,
+    /// Zorunlu.
+    #[serde(rename = "goal")]
+    pub goal: Option<serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "start_at")]
+    pub start_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "end_at")]
+    pub end_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "stats", deserialize_with = "crate::de::null_default")]
+    pub stats: WebPersonalizationStats,
+    /// Zorunlu.
+    #[serde(rename = "variant_stats", deserialize_with = "crate::de::null_default")]
+    pub variant_stats: Vec<WebPersonalizationVariantStatsItem>,
+    /// Zorunlu.
+    #[serde(rename = "variant_significance")]
+    pub variant_significance: Option<WebPersonalizationVariantSignificance>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `WebPersonalizationAbTest` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationAbTest {
+    /// Zorunlu.
+    #[serde(rename = "winner_variant_id")]
+    pub winner_variant_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "decided_at")]
+    pub decided_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "decided_by")]
+    pub decided_by: Option<String>,
+}
+
+/// `WebPersonalizationConditions` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationConditions {
+    #[serde(rename = "url_rules", skip_serializing_if = "Option::is_none")]
+    pub url_rules: Option<Vec<WebPersonalizationConditionsUrlRulesItem>>,
+    #[serde(rename = "utm_rules", skip_serializing_if = "Option::is_none")]
+    pub utm_rules: Option<Vec<WebPersonalizationConditionsUtmRulesItem>>,
+    #[serde(rename = "visits", skip_serializing_if = "Option::is_none")]
+    pub visits: Option<WebPersonalizationConditionsVisits>,
+}
+
+/// `WebPersonalizationConditionsUrlRulesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationConditionsUrlRulesItem {
+    /// Zorunlu. Değerler: `"equals"`, `"contains"`, `"starts_with"`, `"not_contains"`, `"matches"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+}
+
+/// `WebPersonalizationConditionsUtmRulesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationConditionsUtmRulesItem {
+    /// Zorunlu. Değerler: `"utm_source"`, `"utm_medium"`, `"utm_campaign"`, `"utm_term"`, `"utm_content"`.
+    #[serde(rename = "param", deserialize_with = "crate::de::null_default")]
+    pub param: String,
+    /// Zorunlu. Değerler: `"equals"`, `"contains"`, `"exists"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    #[serde(rename = "value", skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+/// `WebPersonalizationConditionsVisits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationConditionsVisits {
+    /// Zorunlu. Değerler: `"gte"`, `"lte"`, `"eq"`.
+    #[serde(rename = "op", deserialize_with = "crate::de::null_default")]
+    pub op: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: i64,
+}
+
+/// `WebPersonalizationPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationPage {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<WebPersonalization>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `WebPersonalizationReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationReport {
+    /// Zorunlu.
+    #[serde(rename = "personalization_id", deserialize_with = "crate::de::null_default")]
+    pub personalization_id: String,
+    /// Zorunlu.
+    #[serde(rename = "days", deserialize_with = "crate::de::null_default")]
+    pub days: i64,
+    /// Zorunlu.
+    #[serde(rename = "daily", deserialize_with = "crate::de::null_default")]
+    pub daily: Vec<WebPersonalizationReportDailyItem>,
+    /// Zorunlu.
+    #[serde(rename = "totals", deserialize_with = "crate::de::null_default")]
+    pub totals: WebPersonalizationReportTotals,
+}
+
+/// `WebPersonalizationReportDailyItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationReportDailyItem {
+    /// Zorunlu.
+    #[serde(rename = "date", deserialize_with = "crate::de::null_default")]
+    pub date: String,
+    /// Zorunlu.
+    #[serde(rename = "visitors", deserialize_with = "crate::de::null_default")]
+    pub visitors: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversions", deserialize_with = "crate::de::null_default")]
+    pub conversions: i64,
+}
+
+/// `WebPersonalizationReportTotals` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationReportTotals {
+    /// Zorunlu.
+    #[serde(rename = "visitors", deserialize_with = "crate::de::null_default")]
+    pub visitors: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversions", deserialize_with = "crate::de::null_default")]
+    pub conversions: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
+    pub conversion_rate: f64,
+}
+
+/// `WebPersonalizationStats` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationStats {
+    /// Zorunlu.
+    #[serde(rename = "visitors", deserialize_with = "crate::de::null_default")]
+    pub visitors: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversions", deserialize_with = "crate::de::null_default")]
+    pub conversions: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
+    pub conversion_rate: f64,
+}
+
+/// `WebPersonalizationStatusDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationStatusDto {
+    /// Zorunlu. Değerler: `"draft"`, `"active"`, `"paused"`, `"archived"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+}
+
+/// `WebPersonalizationTargeting` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationTargeting {
+    #[serde(rename = "included_segments", skip_serializing_if = "Option::is_none")]
+    pub included_segments: Option<Vec<String>>,
+    #[serde(rename = "excluded_segments", skip_serializing_if = "Option::is_none")]
+    pub excluded_segments: Option<Vec<String>>,
+    /// Değerler: `"all"`, `"new"`, `"returning"`.
+    #[serde(rename = "visitor", skip_serializing_if = "Option::is_none")]
+    pub visitor: Option<String>,
+    /// Değerler: `"desktop"`, `"mobile"`, `"tablet"`.
+    #[serde(rename = "devices", skip_serializing_if = "Option::is_none")]
+    pub devices: Option<Vec<String>>,
+}
+
+/// `WebPersonalizationVariantSignificance` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationVariantSignificance {
+    /// Zorunlu.
+    #[serde(rename = "leader")]
+    pub leader: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "p_value", deserialize_with = "crate::de::null_default")]
+    pub p_value: f64,
+    /// Zorunlu.
+    #[serde(rename = "significant", deserialize_with = "crate::de::null_default")]
+    pub significant: bool,
+}
+
+/// `WebPersonalizationVariantsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationVariantsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "weight_percent", deserialize_with = "crate::de::null_default")]
+    pub weight_percent: i64,
+    /// Zorunlu.
+    #[serde(rename = "changes", deserialize_with = "crate::de::null_default")]
+    pub changes: Vec<serde_json::Value>,
+}
+
+/// `WebPersonalizationVariantStatsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationVariantStatsItem {
+    /// Zorunlu.
+    #[serde(rename = "visitors", deserialize_with = "crate::de::null_default")]
+    pub visitors: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversions", deserialize_with = "crate::de::null_default")]
+    pub conversions: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
+    pub conversion_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "variant_id", deserialize_with = "crate::de::null_default")]
+    pub variant_id: String,
 }
 
 /// `WhatsAppTemplateList` şeması.
