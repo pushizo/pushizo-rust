@@ -1371,6 +1371,8 @@ pub struct AppSettings {
     pub ip_capture: Option<String>,
     #[serde(rename = "ipRetentionDays", skip_serializing_if = "Option::is_none")]
     pub ip_retention_days: Option<i64>,
+    #[serde(rename = "adaptiveFrequency", skip_serializing_if = "Option::is_none")]
+    pub adaptive_frequency: Option<AppSettingsAdaptiveFrequency>,
     #[serde(rename = "allowedOrigins", skip_serializing_if = "Option::is_none")]
     pub allowed_origins: Option<Vec<String>>,
     #[serde(rename = "campaignApprovalRequired", skip_serializing_if = "Option::is_none")]
@@ -1381,6 +1383,21 @@ pub struct AppSettings {
     pub onboarding: Option<AppSettingsOnboarding>,
     #[serde(rename = "sdkSetup", skip_serializing_if = "Option::is_none")]
     pub sdk_setup: Option<AppSettingsSdkSetup>,
+}
+
+/// `AppSettingsAdaptiveFrequency` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AppSettingsAdaptiveFrequency {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "min", deserialize_with = "crate::de::null_default")]
+    pub min: i64,
+    /// Zorunlu.
+    #[serde(rename = "max", deserialize_with = "crate::de::null_default")]
+    pub max: i64,
 }
 
 /// `AppSettingsAndroidChannelsItem` şeması.
@@ -13642,6 +13659,8 @@ pub struct UpdateAppDtoSettings {
     pub ip_capture: Option<String>,
     #[serde(rename = "ipRetentionDays", skip_serializing_if = "Option::is_none")]
     pub ip_retention_days: Option<i64>,
+    #[serde(rename = "adaptiveFrequency", skip_serializing_if = "Option::is_none")]
+    pub adaptive_frequency: Option<UpdateAppDtoSettingsAdaptiveFrequency>,
     #[serde(rename = "allowedOrigins", skip_serializing_if = "Option::is_none")]
     pub allowed_origins: Option<Vec<String>>,
     #[serde(rename = "campaignApprovalRequired", skip_serializing_if = "Option::is_none")]
@@ -13652,6 +13671,21 @@ pub struct UpdateAppDtoSettings {
     pub onboarding: Option<UpdateAppDtoSettingsOnboarding>,
     #[serde(rename = "sdkSetup", skip_serializing_if = "Option::is_none")]
     pub sdk_setup: Option<UpdateAppDtoSettingsSdkSetup>,
+}
+
+/// `UpdateAppDtoSettingsAdaptiveFrequency` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAppDtoSettingsAdaptiveFrequency {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "min", deserialize_with = "crate::de::null_default")]
+    pub min: i64,
+    /// Zorunlu.
+    #[serde(rename = "max", deserialize_with = "crate::de::null_default")]
+    pub max: i64,
 }
 
 /// `UpdateAppDtoSettingsAndroidChannelsItem` şeması.
@@ -15656,6 +15690,12 @@ pub struct User {
     /// Zorunlu.
     #[serde(rename = "last_ip_at")]
     pub last_ip_at: Option<String>,
+    /// Zorunlu. Değerler: `"positive"`, `"negative"`, `"neutral"`.
+    #[serde(rename = "last_sentiment")]
+    pub last_sentiment: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_sentiment_at")]
+    pub last_sentiment_at: Option<String>,
     /// Zorunlu.
     #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
     pub created_at: String,
@@ -15710,6 +15750,12 @@ pub struct UserDetail {
     /// Zorunlu.
     #[serde(rename = "last_ip_at")]
     pub last_ip_at: Option<String>,
+    /// Zorunlu. Değerler: `"positive"`, `"negative"`, `"neutral"`.
+    #[serde(rename = "last_sentiment")]
+    pub last_sentiment: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_sentiment_at")]
+    pub last_sentiment_at: Option<String>,
     /// Zorunlu.
     #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
     pub created_at: String,
@@ -15782,6 +15828,33 @@ pub struct UserExportDerived {
     /// Zorunlu.
     #[serde(rename = "recommendations", deserialize_with = "crate::de::null_default")]
     pub recommendations: Vec<UserExportDerivedRecommendationsItem>,
+    /// Zorunlu.
+    #[serde(rename = "affinities", deserialize_with = "crate::de::null_default")]
+    pub affinities: Vec<UserExportDerivedAffinitiesItem>,
+    /// Zorunlu.
+    #[serde(rename = "frequency_cap")]
+    pub frequency_cap: Option<UserExportDerivedFrequencyCap>,
+}
+
+/// `UserExportDerivedAffinitiesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedAffinitiesItem {
+    /// Zorunlu.
+    #[serde(rename = "attribute", deserialize_with = "crate::de::null_default")]
+    pub attribute: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+    /// Zorunlu.
+    #[serde(rename = "score", deserialize_with = "crate::de::null_default")]
+    pub score: f64,
+    /// Zorunlu.
+    #[serde(rename = "rank", deserialize_with = "crate::de::null_default")]
+    pub rank: f64,
+    /// Zorunlu.
+    #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
+    pub computed_at: String,
 }
 
 /// `UserExportDerivedChannelScoresItem` şeması.
@@ -15827,6 +15900,21 @@ pub struct UserExportDerivedDecisionsItem {
     /// Zorunlu.
     #[serde(rename = "rewarded_at")]
     pub rewarded_at: Option<String>,
+}
+
+/// `UserExportDerivedFrequencyCap` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedFrequencyCap {
+    /// Zorunlu.
+    #[serde(rename = "weekly_cap", deserialize_with = "crate::de::null_default")]
+    pub weekly_cap: f64,
+    /// Zorunlu.
+    #[serde(rename = "engagement", deserialize_with = "crate::de::null_default")]
+    pub engagement: f64,
+    /// Zorunlu.
+    #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
+    pub computed_at: String,
 }
 
 /// `UserExportDerivedPredictionsItem` şeması.
