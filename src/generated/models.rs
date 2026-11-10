@@ -4953,6 +4953,8 @@ pub struct CreateNotificationDto {
     pub add_to_inbox: Option<bool>,
     #[serde(rename = "inbox_ttl", skip_serializing_if = "Option::is_none")]
     pub inbox_ttl: Option<i64>,
+    #[serde(rename = "content_card", skip_serializing_if = "Option::is_none")]
+    pub content_card: Option<CreateNotificationDtoContentCard>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
@@ -5002,6 +5004,21 @@ pub struct CreateNotificationDtoButtonsItem {
     pub icon: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+/// `CreateNotificationDtoContentCard` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateNotificationDtoContentCard {
+    /// Zorunlu. Değerler: `"classic"`, `"captioned_image"`, `"image_only"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    #[serde(rename = "pinned", skip_serializing_if = "Option::is_none")]
+    pub pinned: Option<bool>,
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    #[serde(rename = "button_text", skip_serializing_if = "Option::is_none")]
+    pub button_text: Option<std::collections::HashMap<String, String>>,
 }
 
 /// `CreateNotificationDtoIosCarouselItem` şeması.
@@ -5473,6 +5490,8 @@ pub struct CreateTemplateDtoContent {
     pub add_to_inbox: Option<bool>,
     #[serde(rename = "inbox_ttl", skip_serializing_if = "Option::is_none")]
     pub inbox_ttl: Option<i64>,
+    #[serde(rename = "content_card", skip_serializing_if = "Option::is_none")]
+    pub content_card: Option<CreateTemplateDtoContentContentCard>,
     #[serde(rename = "thread_id", skip_serializing_if = "Option::is_none")]
     pub thread_id: Option<String>,
     #[serde(rename = "ios_relevance_score", skip_serializing_if = "Option::is_none")]
@@ -5545,6 +5564,21 @@ pub struct CreateTemplateDtoContentButtonsItem {
     pub icon: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+/// `CreateTemplateDtoContentContentCard` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateTemplateDtoContentContentCard {
+    /// Zorunlu. Değerler: `"classic"`, `"captioned_image"`, `"image_only"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    #[serde(rename = "pinned", skip_serializing_if = "Option::is_none")]
+    pub pinned: Option<bool>,
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    #[serde(rename = "button_text", skip_serializing_if = "Option::is_none")]
+    pub button_text: Option<std::collections::HashMap<String, String>>,
 }
 
 /// `CreateTemplateDtoContentIosCarouselItem` şeması.
@@ -11539,6 +11573,8 @@ pub struct RenderTemplateDtoContent {
     pub add_to_inbox: Option<bool>,
     #[serde(rename = "inbox_ttl", skip_serializing_if = "Option::is_none")]
     pub inbox_ttl: Option<i64>,
+    #[serde(rename = "content_card", skip_serializing_if = "Option::is_none")]
+    pub content_card: Option<RenderTemplateDtoContentContentCard>,
     #[serde(rename = "thread_id", skip_serializing_if = "Option::is_none")]
     pub thread_id: Option<String>,
     #[serde(rename = "ios_relevance_score", skip_serializing_if = "Option::is_none")]
@@ -11611,6 +11647,21 @@ pub struct RenderTemplateDtoContentButtonsItem {
     pub icon: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+/// `RenderTemplateDtoContentContentCard` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RenderTemplateDtoContentContentCard {
+    /// Zorunlu. Değerler: `"classic"`, `"captioned_image"`, `"image_only"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    #[serde(rename = "pinned", skip_serializing_if = "Option::is_none")]
+    pub pinned: Option<bool>,
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    #[serde(rename = "button_text", skip_serializing_if = "Option::is_none")]
+    pub button_text: Option<std::collections::HashMap<String, String>>,
 }
 
 /// `RenderTemplateDtoContentIosCarouselItem` şeması.
@@ -14784,6 +14835,8 @@ pub struct UpdateTemplateDtoContent {
     pub add_to_inbox: Option<bool>,
     #[serde(rename = "inbox_ttl", skip_serializing_if = "Option::is_none")]
     pub inbox_ttl: Option<i64>,
+    #[serde(rename = "content_card", skip_serializing_if = "Option::is_none")]
+    pub content_card: Option<UpdateTemplateDtoContentContentCard>,
     #[serde(rename = "thread_id", skip_serializing_if = "Option::is_none")]
     pub thread_id: Option<String>,
     #[serde(rename = "ios_relevance_score", skip_serializing_if = "Option::is_none")]
@@ -14856,6 +14909,21 @@ pub struct UpdateTemplateDtoContentButtonsItem {
     pub icon: Option<String>,
     #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+}
+
+/// `UpdateTemplateDtoContentContentCard` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateTemplateDtoContentContentCard {
+    /// Zorunlu. Değerler: `"classic"`, `"captioned_image"`, `"image_only"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    #[serde(rename = "pinned", skip_serializing_if = "Option::is_none")]
+    pub pinned: Option<bool>,
+    #[serde(rename = "priority", skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    #[serde(rename = "button_text", skip_serializing_if = "Option::is_none")]
+    pub button_text: Option<std::collections::HashMap<String, String>>,
 }
 
 /// `UpdateTemplateDtoContentIosCarouselItem` şeması.
