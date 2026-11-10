@@ -1366,6 +1366,11 @@ pub struct AppSettings {
     pub default_ttl_seconds: Option<i64>,
     #[serde(rename = "identityVerificationRequired", skip_serializing_if = "Option::is_none")]
     pub identity_verification_required: Option<bool>,
+    /// Değerler: `"off"`, `"full"`, `"masked"`.
+    #[serde(rename = "ipCapture", skip_serializing_if = "Option::is_none")]
+    pub ip_capture: Option<String>,
+    #[serde(rename = "ipRetentionDays", skip_serializing_if = "Option::is_none")]
+    pub ip_retention_days: Option<i64>,
     #[serde(rename = "allowedOrigins", skip_serializing_if = "Option::is_none")]
     pub allowed_origins: Option<Vec<String>>,
     #[serde(rename = "campaignApprovalRequired", skip_serializing_if = "Option::is_none")]
@@ -1805,6 +1810,9 @@ pub struct Campaign {
     #[serde(rename = "category")]
     pub category: Option<String>,
     /// Zorunlu.
+    #[serde(rename = "goals", deserialize_with = "crate::de::null_default")]
+    pub goals: CampaignGoals,
+    /// Zorunlu.
     #[serde(rename = "ab_test", deserialize_with = "crate::de::null_default")]
     pub ab_test: CampaignAbTest,
     /// Zorunlu.
@@ -1971,6 +1979,9 @@ pub struct CampaignDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    /// Değerler: `"low"`, `"normal"`, `"high"`.
+    #[serde(rename = "frequency_priority", skip_serializing_if = "Option::is_none")]
+    pub frequency_priority: Option<String>,
     #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
     pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
@@ -2021,6 +2032,16 @@ pub struct CampaignEmailRisk {
     pub bounce_rate_30d: Option<f64>,
 }
 
+/// `CampaignGoals` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignGoals {
+    #[serde(rename = "primary", skip_serializing_if = "Option::is_none")]
+    pub primary: Option<String>,
+    #[serde(rename = "secondary", skip_serializing_if = "Option::is_none")]
+    pub secondary: Option<Vec<String>>,
+}
+
 /// `CampaignPage` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -2068,6 +2089,9 @@ pub struct CampaignsCreateBody {
     /// Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
     #[serde(rename = "category", skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
+    /// Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    #[serde(rename = "goals", skip_serializing_if = "Option::is_none")]
+    pub goals: Option<CampaignsCreateBodyGoals>,
     #[serde(rename = "ab_test", skip_serializing_if = "Option::is_none")]
     pub ab_test: Option<CampaignsCreateBodyAbTest>,
     /// A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
@@ -2163,12 +2187,25 @@ pub struct CampaignsCreateBodyDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    /// Değerler: `"low"`, `"normal"`, `"high"`.
+    #[serde(rename = "frequency_priority", skip_serializing_if = "Option::is_none")]
+    pub frequency_priority: Option<String>,
     #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
     pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
     pub one_per_user: Option<bool>,
+}
+
+/// Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignsCreateBodyGoals {
+    #[serde(rename = "primary", skip_serializing_if = "Option::is_none")]
+    pub primary: Option<String>,
+    #[serde(rename = "secondary", skip_serializing_if = "Option::is_none")]
+    pub secondary: Option<Vec<String>>,
 }
 
 /// `CampaignsCreateBodyRecurrence` şeması.
@@ -2211,6 +2248,9 @@ pub struct CampaignStats {
     /// Zorunlu.
     #[serde(rename = "rates", deserialize_with = "crate::de::null_default")]
     pub rates: CampaignStatsRates,
+    /// Zorunlu.
+    #[serde(rename = "goals", deserialize_with = "crate::de::null_default")]
+    pub goals: Vec<CampaignStatsGoalsItem>,
     /// Zorunlu.
     #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
     pub channels: Vec<CampaignStatsChannelsItem>,
@@ -2293,6 +2333,24 @@ pub struct CampaignStatsErrorsItem {
     pub count: i64,
 }
 
+/// `CampaignStatsGoalsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignStatsGoalsItem {
+    /// Zorunlu.
+    #[serde(rename = "event", deserialize_with = "crate::de::null_default")]
+    pub event: String,
+    /// Zorunlu.
+    #[serde(rename = "primary", deserialize_with = "crate::de::null_default")]
+    pub primary: bool,
+    /// Zorunlu.
+    #[serde(rename = "converted", deserialize_with = "crate::de::null_default")]
+    pub converted: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate")]
+    pub conversion_rate: Option<f64>,
+}
+
 /// `CampaignStatsHourlyItem` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -2354,6 +2412,9 @@ pub struct CampaignsUpdateBody {
     /// Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
     #[serde(rename = "category", skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
+    /// Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    #[serde(rename = "goals", skip_serializing_if = "Option::is_none")]
+    pub goals: Option<CampaignsUpdateBodyGoals>,
     #[serde(rename = "ab_test", skip_serializing_if = "Option::is_none")]
     pub ab_test: Option<CampaignsUpdateBodyAbTest>,
     /// A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
@@ -2449,12 +2510,25 @@ pub struct CampaignsUpdateBodyDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    /// Değerler: `"low"`, `"normal"`, `"high"`.
+    #[serde(rename = "frequency_priority", skip_serializing_if = "Option::is_none")]
+    pub frequency_priority: Option<String>,
     #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
     pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
     pub one_per_user: Option<bool>,
+}
+
+/// Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignsUpdateBodyGoals {
+    #[serde(rename = "primary", skip_serializing_if = "Option::is_none")]
+    pub primary: Option<String>,
+    #[serde(rename = "secondary", skip_serializing_if = "Option::is_none")]
+    pub secondary: Option<Vec<String>>,
 }
 
 /// `CampaignsUpdateBodyRecurrence` şeması.
@@ -2639,6 +2713,27 @@ pub struct CampaignVariantStatsVariantsItem {
     /// Zorunlu.
     #[serde(rename = "click_rate", deserialize_with = "crate::de::null_default")]
     pub click_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
+    pub conversion_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "goals", deserialize_with = "crate::de::null_default")]
+    pub goals: Vec<CampaignVariantStatsVariantsItemGoalsItem>,
+}
+
+/// `CampaignVariantStatsVariantsItemGoalsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignVariantStatsVariantsItemGoalsItem {
+    /// Zorunlu.
+    #[serde(rename = "event", deserialize_with = "crate::de::null_default")]
+    pub event: String,
+    /// Zorunlu.
+    #[serde(rename = "primary", deserialize_with = "crate::de::null_default")]
+    pub primary: bool,
+    /// Zorunlu.
+    #[serde(rename = "converted", deserialize_with = "crate::de::null_default")]
+    pub converted: i64,
     /// Zorunlu.
     #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
     pub conversion_rate: f64,
@@ -9739,6 +9834,9 @@ pub struct McpCreateCampaignDraftBody {
     /// Tercih kategorisi anahtarı; kapalı kullanıcılar bastırılır
     #[serde(rename = "category", skip_serializing_if = "Option::is_none")]
     pub category: Option<String>,
+    /// Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+    #[serde(rename = "goals", skip_serializing_if = "Option::is_none")]
+    pub goals: Option<McpCreateCampaignDraftBodyGoals>,
     #[serde(rename = "ab_test", skip_serializing_if = "Option::is_none")]
     pub ab_test: Option<McpCreateCampaignDraftBodyAbTest>,
     /// A/B varyantları (ağırlıklar toplamı 100; en fazla bir is_control)
@@ -9834,12 +9932,25 @@ pub struct McpCreateCampaignDraftBodyDelivery {
     pub collapse_id: Option<String>,
     #[serde(rename = "frequency_cap_exempt", skip_serializing_if = "Option::is_none")]
     pub frequency_cap_exempt: Option<bool>,
+    /// Değerler: `"low"`, `"normal"`, `"high"`.
+    #[serde(rename = "frequency_priority", skip_serializing_if = "Option::is_none")]
+    pub frequency_priority: Option<String>,
     #[serde(rename = "global_control_exempt", skip_serializing_if = "Option::is_none")]
     pub global_control_exempt: Option<bool>,
     #[serde(rename = "quiet_hours_exempt", skip_serializing_if = "Option::is_none")]
     pub quiet_hours_exempt: Option<bool>,
     #[serde(rename = "one_per_user", skip_serializing_if = "Option::is_none")]
     pub one_per_user: Option<bool>,
+}
+
+/// Dönüşüm hedefleri (ADR-0080): birincil A/B kazananını belirler; olaylar dönüşüm olayı olarak tanımlı olmalı.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct McpCreateCampaignDraftBodyGoals {
+    #[serde(rename = "primary", skip_serializing_if = "Option::is_none")]
+    pub primary: Option<String>,
+    #[serde(rename = "secondary", skip_serializing_if = "Option::is_none")]
+    pub secondary: Option<Vec<String>>,
 }
 
 /// `McpCreateCampaignDraftBodyRecurrence` şeması.
@@ -13317,6 +13428,108 @@ pub struct TriggerRunDtoAlias {
     pub value: String,
 }
 
+/// `UninstallReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UninstallReport {
+    /// Zorunlu.
+    #[serde(rename = "from", deserialize_with = "crate::de::null_default")]
+    pub from: String,
+    /// Zorunlu.
+    #[serde(rename = "to", deserialize_with = "crate::de::null_default")]
+    pub to: String,
+    /// Zorunlu.
+    #[serde(rename = "totals", deserialize_with = "crate::de::null_default")]
+    pub totals: UninstallReportTotals,
+    /// Zorunlu.
+    #[serde(rename = "previous")]
+    pub previous: Option<UninstallReportPrevious>,
+    /// Zorunlu.
+    #[serde(rename = "rows", deserialize_with = "crate::de::null_default")]
+    pub rows: Vec<UninstallReportRowsItem>,
+    /// Zorunlu.
+    #[serde(rename = "by_channel", deserialize_with = "crate::de::null_default")]
+    pub by_channel: Vec<UninstallReportByChannelItem>,
+    /// Zorunlu.
+    #[serde(rename = "last_messages", deserialize_with = "crate::de::null_default")]
+    pub last_messages: Vec<UninstallReportLastMessagesItem>,
+}
+
+/// `UninstallReportByChannelItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UninstallReportByChannelItem {
+    /// Zorunlu.
+    #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
+    pub channel: String,
+    /// Zorunlu.
+    #[serde(rename = "uninstalls", deserialize_with = "crate::de::null_default")]
+    pub uninstalls: i64,
+    /// Zorunlu.
+    #[serde(rename = "active", deserialize_with = "crate::de::null_default")]
+    pub active: i64,
+}
+
+/// `UninstallReportLastMessagesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UninstallReportLastMessagesItem {
+    /// Zorunlu.
+    #[serde(rename = "campaign_id")]
+    pub campaign_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "name")]
+    pub name: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu.
+    #[serde(rename = "uninstalls", deserialize_with = "crate::de::null_default")]
+    pub uninstalls: i64,
+}
+
+/// `UninstallReportPrevious` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UninstallReportPrevious {
+    /// Zorunlu.
+    #[serde(rename = "uninstalls", deserialize_with = "crate::de::null_default")]
+    pub uninstalls: i64,
+    /// Zorunlu.
+    #[serde(rename = "active", deserialize_with = "crate::de::null_default")]
+    pub active: i64,
+    /// Zorunlu.
+    #[serde(rename = "rate")]
+    pub rate: Option<f64>,
+}
+
+/// `UninstallReportRowsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UninstallReportRowsItem {
+    /// Zorunlu.
+    #[serde(rename = "date", deserialize_with = "crate::de::null_default")]
+    pub date: String,
+    /// Zorunlu.
+    #[serde(rename = "uninstalls", deserialize_with = "crate::de::null_default")]
+    pub uninstalls: i64,
+}
+
+/// `UninstallReportTotals` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UninstallReportTotals {
+    /// Zorunlu.
+    #[serde(rename = "uninstalls", deserialize_with = "crate::de::null_default")]
+    pub uninstalls: i64,
+    /// Zorunlu.
+    #[serde(rename = "active", deserialize_with = "crate::de::null_default")]
+    pub active: i64,
+    /// Zorunlu.
+    #[serde(rename = "rate")]
+    pub rate: Option<f64>,
+}
+
 /// `UpdateAdAudienceDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -13424,6 +13637,11 @@ pub struct UpdateAppDtoSettings {
     pub default_ttl_seconds: Option<i64>,
     #[serde(rename = "identityVerificationRequired", skip_serializing_if = "Option::is_none")]
     pub identity_verification_required: Option<bool>,
+    /// Değerler: `"off"`, `"full"`, `"masked"`.
+    #[serde(rename = "ipCapture", skip_serializing_if = "Option::is_none")]
+    pub ip_capture: Option<String>,
+    #[serde(rename = "ipRetentionDays", skip_serializing_if = "Option::is_none")]
+    pub ip_retention_days: Option<i64>,
     #[serde(rename = "allowedOrigins", skip_serializing_if = "Option::is_none")]
     pub allowed_origins: Option<Vec<String>>,
     #[serde(rename = "campaignApprovalRequired", skip_serializing_if = "Option::is_none")]
@@ -15433,6 +15651,12 @@ pub struct User {
     #[serde(rename = "merged_into")]
     pub merged_into: Option<String>,
     /// Zorunlu.
+    #[serde(rename = "last_ip")]
+    pub last_ip: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_ip_at")]
+    pub last_ip_at: Option<String>,
+    /// Zorunlu.
     #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
     pub created_at: String,
     /// Zorunlu.
@@ -15480,6 +15704,12 @@ pub struct UserDetail {
     /// Zorunlu.
     #[serde(rename = "merged_into")]
     pub merged_into: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_ip")]
+    pub last_ip: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_ip_at")]
+    pub last_ip_at: Option<String>,
     /// Zorunlu.
     #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
     pub created_at: String,

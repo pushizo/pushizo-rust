@@ -508,6 +508,7 @@ pub struct UsersListParams {
     /// Değerler: `"last_active_at"`, `"-last_active_at"`.
     pub sort: Option<String>,
     pub q: Option<String>,
+    pub ip: Option<String>,
     pub tag: Option<String>,
     pub last_active_after: Option<String>,
     pub last_active_before: Option<String>,
@@ -526,6 +527,9 @@ impl UsersListParams {
         }
         if let Some(v) = &self.q {
             op.query("q", v);
+        }
+        if let Some(v) = &self.ip {
+            op.query("ip", v);
         }
         if let Some(v) = &self.tag {
             op.query("tag", v);
@@ -2558,6 +2562,34 @@ impl AnalyticsSubscriptionsParams {
     }
 }
 
+/// `AnalyticsService::uninstall_report` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct AnalyticsUninstallReportParams {
+    pub from: Option<String>,
+    pub to: Option<String>,
+    /// Değerler: `"true"`, `"false"`.
+    pub compare: Option<String>,
+    /// Değerler: `"json"`, `"csv"`.
+    pub format: Option<String>,
+}
+
+impl AnalyticsUninstallReportParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.from {
+            op.query("from", v);
+        }
+        if let Some(v) = &self.to {
+            op.query("to", v);
+        }
+        if let Some(v) = &self.compare {
+            op.query("compare", v);
+        }
+        if let Some(v) = &self.format {
+            op.query("format", v);
+        }
+    }
+}
+
 /// `AnalyticsService::events` için isteğe bağlı sorgu parametreleri.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct AnalyticsEventsParams {
@@ -2746,6 +2778,21 @@ impl<'a> AnalyticsService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn subscriptions(&self, params: Option<&AnalyticsSubscriptionsParams>) -> Result<SubscriptionsReport> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/subscriptions");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Uygulama kaldırma raporu
+    ///
+    /// `GET /v1/apps/{appId}/analytics/uninstalls`
+    ///
+    /// Mobil push sağlayıcısının "cihaz kayıtlı değil" yanıtından sayılır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn uninstall_report(&self, params: Option<&AnalyticsUninstallReportParams>) -> Result<UninstallReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/uninstalls");
         if let Some(p) = params {
             p.append_query(&mut op);
         }
