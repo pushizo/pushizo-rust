@@ -1503,10 +1503,10 @@ pub struct AppSettingsOnboarding {
     pub completed_at: Option<String>,
     #[serde(rename = "version", skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
-    /// Değerler: `"ios"`, `"android"`, `"huawei"`, `"web"`.
+    /// Değerler: `"ios"`, `"android"`, `"huawei"`, `"web"`, `"amazon"`, `"windows"`, `"email"`, `"sms"`.
     #[serde(rename = "platforms", skip_serializing_if = "Option::is_none")]
     pub platforms: Option<Vec<String>>,
-    /// Değerler: `"native"`, `"flutter"`, `"react-native"`, `"unity"`, `"capacitor"`, `"cordova"`, `"maui"`.
+    /// Değerler: `"native"`, `"flutter"`, `"react-native"`, `"expo"`, `"kmp"`, `"unity"`, `"capacitor"`, `"cordova"`, `"maui"`.
     #[serde(rename = "framework", skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
     /// Değerler: `"code"`, `"wordpress"`.
@@ -13978,10 +13978,10 @@ pub struct UpdateAppDtoSettingsOnboarding {
     pub completed_at: Option<String>,
     #[serde(rename = "version", skip_serializing_if = "Option::is_none")]
     pub version: Option<i64>,
-    /// Değerler: `"ios"`, `"android"`, `"huawei"`, `"web"`.
+    /// Değerler: `"ios"`, `"android"`, `"huawei"`, `"web"`, `"amazon"`, `"windows"`, `"email"`, `"sms"`.
     #[serde(rename = "platforms", skip_serializing_if = "Option::is_none")]
     pub platforms: Option<Vec<String>>,
-    /// Değerler: `"native"`, `"flutter"`, `"react-native"`, `"unity"`, `"capacitor"`, `"cordova"`, `"maui"`.
+    /// Değerler: `"native"`, `"flutter"`, `"react-native"`, `"expo"`, `"kmp"`, `"unity"`, `"capacitor"`, `"cordova"`, `"maui"`.
     #[serde(rename = "framework", skip_serializing_if = "Option::is_none")]
     pub framework: Option<String>,
     /// Değerler: `"code"`, `"wordpress"`.
