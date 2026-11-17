@@ -2667,6 +2667,34 @@ impl AnalyticsUninstallReportParams {
     }
 }
 
+/// `AnalyticsService::android_delivery_report` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct AnalyticsAndroidDeliveryReportParams {
+    pub from: Option<String>,
+    pub to: Option<String>,
+    /// Değerler: `"true"`, `"false"`.
+    pub compare: Option<String>,
+    /// Değerler: `"json"`, `"csv"`.
+    pub format: Option<String>,
+}
+
+impl AnalyticsAndroidDeliveryReportParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.from {
+            op.query("from", v);
+        }
+        if let Some(v) = &self.to {
+            op.query("to", v);
+        }
+        if let Some(v) = &self.compare {
+            op.query("compare", v);
+        }
+        if let Some(v) = &self.format {
+            op.query("format", v);
+        }
+    }
+}
+
 /// `AnalyticsService::events` için isteğe bağlı sorgu parametreleri.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct AnalyticsEventsParams {
@@ -2870,6 +2898,21 @@ impl<'a> AnalyticsService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn uninstall_report(&self, params: Option<&AnalyticsUninstallReportParams>) -> Result<UninstallReport> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/uninstalls");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Android teslimat sağlığı raporu
+    ///
+    /// `GET /v1/apps/{appId}/analytics/android-delivery`
+    ///
+    /// Üretici ve ROM bazında gönderildi, teslim alındı, açıldı sayıları ile gönderimden cihaza ulaşmaya kadar geçen süre. Teslim alındı cihazdaki SDK alındısından, kısıt özeti SDK teşhisinden hesaplanır.
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn android_delivery_report(&self, params: Option<&AnalyticsAndroidDeliveryReportParams>) -> Result<AndroidDeliveryReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/android-delivery");
         if let Some(p) = params {
             p.append_query(&mut op);
         }

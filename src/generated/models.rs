@@ -737,6 +737,35 @@ pub struct AddSubscriptionDtoDevice {
     /// Değerler: `"alert"`, `"voip"`, `"app_clip"`.
     #[serde(rename = "push_kind", skip_serializing_if = "Option::is_none")]
     pub push_kind: Option<String>,
+    #[serde(rename = "manufacturer", skip_serializing_if = "Option::is_none")]
+    pub manufacturer: Option<String>,
+    #[serde(rename = "brand", skip_serializing_if = "Option::is_none")]
+    pub brand: Option<String>,
+    #[serde(rename = "rom", skip_serializing_if = "Option::is_none")]
+    pub rom: Option<String>,
+    #[serde(rename = "rom_version", skip_serializing_if = "Option::is_none")]
+    pub rom_version: Option<String>,
+    #[serde(rename = "delivery", skip_serializing_if = "Option::is_none")]
+    pub delivery: Option<AddSubscriptionDtoDeviceDelivery>,
+}
+
+/// `AddSubscriptionDtoDeviceDelivery` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AddSubscriptionDtoDeviceDelivery {
+    #[serde(rename = "battery_optimization_exempt", skip_serializing_if = "Option::is_none")]
+    pub battery_optimization_exempt: Option<bool>,
+    #[serde(rename = "background_restricted", skip_serializing_if = "Option::is_none")]
+    pub background_restricted: Option<bool>,
+    #[serde(rename = "channel_blocked", skip_serializing_if = "Option::is_none")]
+    pub channel_blocked: Option<bool>,
+    #[serde(rename = "power_save_mode", skip_serializing_if = "Option::is_none")]
+    pub power_save_mode: Option<bool>,
+    #[serde(rename = "data_saver", skip_serializing_if = "Option::is_none")]
+    pub data_saver: Option<bool>,
+    /// Değerler: `"exempted"`, `"active"`, `"working_set"`, `"frequent"`, `"rare"`, `"restricted"`.
+    #[serde(rename = "standby_bucket", skip_serializing_if = "Option::is_none")]
+    pub standby_bucket: Option<String>,
 }
 
 /// `AddSubscriptionDtoOptIn` şeması.
@@ -1093,6 +1122,252 @@ pub struct AdSpendReportTotals {
     /// Zorunlu.
     #[serde(rename = "roas")]
     pub roas: Option<f64>,
+}
+
+/// `AndroidDeliveryReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReport {
+    /// Zorunlu.
+    #[serde(rename = "from", deserialize_with = "crate::de::null_default")]
+    pub from: String,
+    /// Zorunlu.
+    #[serde(rename = "to", deserialize_with = "crate::de::null_default")]
+    pub to: String,
+    /// Zorunlu.
+    #[serde(rename = "devices", deserialize_with = "crate::de::null_default")]
+    pub devices: AndroidDeliveryReportDevices,
+    /// Zorunlu.
+    #[serde(rename = "totals", deserialize_with = "crate::de::null_default")]
+    pub totals: AndroidDeliveryReportTotals,
+    /// Zorunlu.
+    #[serde(rename = "previous")]
+    pub previous: Option<AndroidDeliveryReportPrevious>,
+    /// Zorunlu.
+    #[serde(rename = "deprioritized", deserialize_with = "crate::de::null_default")]
+    pub deprioritized: i64,
+    /// Zorunlu.
+    #[serde(rename = "aggressive", deserialize_with = "crate::de::null_default")]
+    pub aggressive: AndroidDeliveryReportAggressive,
+    /// Zorunlu.
+    #[serde(rename = "others", deserialize_with = "crate::de::null_default")]
+    pub others: AndroidDeliveryReportOthers,
+    /// Zorunlu.
+    #[serde(rename = "vendors", deserialize_with = "crate::de::null_default")]
+    pub vendors: Vec<AndroidDeliveryReportVendorsItem>,
+    /// Zorunlu.
+    #[serde(rename = "roms", deserialize_with = "crate::de::null_default")]
+    pub roms: Vec<AndroidDeliveryReportRomsItem>,
+    /// Zorunlu. Değerler: `"upgrade_sdk"`, `"vendor_guidance"`, `"background_restricted"`, `"battery_exemption"`, `"deprioritized"`, `"notifications_blocked"`.
+    #[serde(rename = "recommendations", deserialize_with = "crate::de::null_default")]
+    pub recommendations: Vec<String>,
+}
+
+/// `AndroidDeliveryReportAggressive` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportAggressive {
+    /// Zorunlu.
+    #[serde(rename = "sent", deserialize_with = "crate::de::null_default")]
+    pub sent: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivered", deserialize_with = "crate::de::null_default")]
+    pub delivered: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivery_rate")]
+    pub delivery_rate: Option<f64>,
+}
+
+/// `AndroidDeliveryReportDevices` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportDevices {
+    /// Zorunlu.
+    #[serde(rename = "total", deserialize_with = "crate::de::null_default")]
+    pub total: i64,
+    /// Zorunlu.
+    #[serde(rename = "reporting", deserialize_with = "crate::de::null_default")]
+    pub reporting: i64,
+    /// Zorunlu.
+    #[serde(rename = "reporting_rate")]
+    pub reporting_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "restricted", deserialize_with = "crate::de::null_default")]
+    pub restricted: i64,
+    /// Zorunlu.
+    #[serde(rename = "restricted_rate")]
+    pub restricted_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "background_restricted", deserialize_with = "crate::de::null_default")]
+    pub background_restricted: i64,
+    /// Zorunlu.
+    #[serde(rename = "battery_optimized", deserialize_with = "crate::de::null_default")]
+    pub battery_optimized: i64,
+    /// Zorunlu.
+    #[serde(rename = "low_standby_bucket", deserialize_with = "crate::de::null_default")]
+    pub low_standby_bucket: i64,
+    /// Zorunlu.
+    #[serde(rename = "power_save", deserialize_with = "crate::de::null_default")]
+    pub power_save: i64,
+    /// Zorunlu.
+    #[serde(rename = "data_saver", deserialize_with = "crate::de::null_default")]
+    pub data_saver: i64,
+    /// Zorunlu.
+    #[serde(rename = "channel_blocked", deserialize_with = "crate::de::null_default")]
+    pub channel_blocked: i64,
+    /// Zorunlu.
+    #[serde(rename = "notifications_blocked", deserialize_with = "crate::de::null_default")]
+    pub notifications_blocked: i64,
+    /// Zorunlu.
+    #[serde(rename = "aggressive_vendor", deserialize_with = "crate::de::null_default")]
+    pub aggressive_vendor: i64,
+    /// Zorunlu.
+    #[serde(rename = "aggressive_vendor_rate")]
+    pub aggressive_vendor_rate: Option<f64>,
+}
+
+/// `AndroidDeliveryReportOthers` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportOthers {
+    /// Zorunlu.
+    #[serde(rename = "sent", deserialize_with = "crate::de::null_default")]
+    pub sent: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivered", deserialize_with = "crate::de::null_default")]
+    pub delivered: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivery_rate")]
+    pub delivery_rate: Option<f64>,
+}
+
+/// `AndroidDeliveryReportPrevious` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportPrevious {
+    /// Zorunlu.
+    #[serde(rename = "sent", deserialize_with = "crate::de::null_default")]
+    pub sent: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivered", deserialize_with = "crate::de::null_default")]
+    pub delivered: i64,
+    /// Zorunlu.
+    #[serde(rename = "opened", deserialize_with = "crate::de::null_default")]
+    pub opened: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivery_rate")]
+    pub delivery_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "open_rate")]
+    pub open_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "median_delay_seconds")]
+    pub median_delay_seconds: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "p90_delay_seconds")]
+    pub p90_delay_seconds: Option<i64>,
+}
+
+/// `AndroidDeliveryReportRomsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportRomsItem {
+    /// Zorunlu.
+    #[serde(rename = "rom", deserialize_with = "crate::de::null_default")]
+    pub rom: String,
+    /// Zorunlu.
+    #[serde(rename = "devices", deserialize_with = "crate::de::null_default")]
+    pub devices: i64,
+    /// Zorunlu.
+    #[serde(rename = "restricted", deserialize_with = "crate::de::null_default")]
+    pub restricted: i64,
+    /// Zorunlu.
+    #[serde(rename = "sent", deserialize_with = "crate::de::null_default")]
+    pub sent: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivered", deserialize_with = "crate::de::null_default")]
+    pub delivered: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivery_rate")]
+    pub delivery_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "median_delay_seconds")]
+    pub median_delay_seconds: Option<i64>,
+}
+
+/// `AndroidDeliveryReportTotals` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportTotals {
+    /// Zorunlu.
+    #[serde(rename = "sent", deserialize_with = "crate::de::null_default")]
+    pub sent: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivered", deserialize_with = "crate::de::null_default")]
+    pub delivered: i64,
+    /// Zorunlu.
+    #[serde(rename = "opened", deserialize_with = "crate::de::null_default")]
+    pub opened: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivery_rate")]
+    pub delivery_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "open_rate")]
+    pub open_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "median_delay_seconds")]
+    pub median_delay_seconds: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "p90_delay_seconds")]
+    pub p90_delay_seconds: Option<i64>,
+}
+
+/// `AndroidDeliveryReportVendorsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AndroidDeliveryReportVendorsItem {
+    /// Zorunlu.
+    #[serde(rename = "vendor", deserialize_with = "crate::de::null_default")]
+    pub vendor: String,
+    /// Zorunlu.
+    #[serde(rename = "aggressive", deserialize_with = "crate::de::null_default")]
+    pub aggressive: bool,
+    /// Zorunlu.
+    #[serde(rename = "devices", deserialize_with = "crate::de::null_default")]
+    pub devices: i64,
+    /// Zorunlu.
+    #[serde(rename = "reporting", deserialize_with = "crate::de::null_default")]
+    pub reporting: i64,
+    /// Zorunlu.
+    #[serde(rename = "restricted", deserialize_with = "crate::de::null_default")]
+    pub restricted: i64,
+    /// Zorunlu.
+    #[serde(rename = "battery_optimized", deserialize_with = "crate::de::null_default")]
+    pub battery_optimized: i64,
+    /// Zorunlu.
+    #[serde(rename = "sent", deserialize_with = "crate::de::null_default")]
+    pub sent: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivered", deserialize_with = "crate::de::null_default")]
+    pub delivered: i64,
+    /// Zorunlu.
+    #[serde(rename = "opened", deserialize_with = "crate::de::null_default")]
+    pub opened: i64,
+    /// Zorunlu.
+    #[serde(rename = "delivery_rate")]
+    pub delivery_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "open_rate")]
+    pub open_rate: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "median_delay_seconds")]
+    pub median_delay_seconds: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "p90_delay_seconds")]
+    pub p90_delay_seconds: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "deprioritized", deserialize_with = "crate::de::null_default")]
+    pub deprioritized: i64,
 }
 
 /// `ApiEventsDto` şeması.
@@ -11107,6 +11382,35 @@ pub struct PatchSubscriptionDtoDevice {
     /// Değerler: `"alert"`, `"voip"`, `"app_clip"`.
     #[serde(rename = "push_kind", skip_serializing_if = "Option::is_none")]
     pub push_kind: Option<String>,
+    #[serde(rename = "manufacturer", skip_serializing_if = "Option::is_none")]
+    pub manufacturer: Option<String>,
+    #[serde(rename = "brand", skip_serializing_if = "Option::is_none")]
+    pub brand: Option<String>,
+    #[serde(rename = "rom", skip_serializing_if = "Option::is_none")]
+    pub rom: Option<String>,
+    #[serde(rename = "rom_version", skip_serializing_if = "Option::is_none")]
+    pub rom_version: Option<String>,
+    #[serde(rename = "delivery", skip_serializing_if = "Option::is_none")]
+    pub delivery: Option<PatchSubscriptionDtoDeviceDelivery>,
+}
+
+/// `PatchSubscriptionDtoDeviceDelivery` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PatchSubscriptionDtoDeviceDelivery {
+    #[serde(rename = "battery_optimization_exempt", skip_serializing_if = "Option::is_none")]
+    pub battery_optimization_exempt: Option<bool>,
+    #[serde(rename = "background_restricted", skip_serializing_if = "Option::is_none")]
+    pub background_restricted: Option<bool>,
+    #[serde(rename = "channel_blocked", skip_serializing_if = "Option::is_none")]
+    pub channel_blocked: Option<bool>,
+    #[serde(rename = "power_save_mode", skip_serializing_if = "Option::is_none")]
+    pub power_save_mode: Option<bool>,
+    #[serde(rename = "data_saver", skip_serializing_if = "Option::is_none")]
+    pub data_saver: Option<bool>,
+    /// Değerler: `"exempted"`, `"active"`, `"working_set"`, `"frequent"`, `"rare"`, `"restricted"`.
+    #[serde(rename = "standby_bucket", skip_serializing_if = "Option::is_none")]
+    pub standby_bucket: Option<String>,
 }
 
 /// `PatchUserDto` şeması.
@@ -13305,6 +13609,35 @@ pub struct SubscriptionDevice {
     /// Değerler: `"alert"`, `"voip"`, `"app_clip"`.
     #[serde(rename = "push_kind", skip_serializing_if = "Option::is_none")]
     pub push_kind: Option<String>,
+    #[serde(rename = "manufacturer", skip_serializing_if = "Option::is_none")]
+    pub manufacturer: Option<String>,
+    #[serde(rename = "brand", skip_serializing_if = "Option::is_none")]
+    pub brand: Option<String>,
+    #[serde(rename = "rom", skip_serializing_if = "Option::is_none")]
+    pub rom: Option<String>,
+    #[serde(rename = "rom_version", skip_serializing_if = "Option::is_none")]
+    pub rom_version: Option<String>,
+    #[serde(rename = "delivery", skip_serializing_if = "Option::is_none")]
+    pub delivery: Option<SubscriptionDeviceDelivery>,
+}
+
+/// `SubscriptionDeviceDelivery` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SubscriptionDeviceDelivery {
+    #[serde(rename = "battery_optimization_exempt", skip_serializing_if = "Option::is_none")]
+    pub battery_optimization_exempt: Option<bool>,
+    #[serde(rename = "background_restricted", skip_serializing_if = "Option::is_none")]
+    pub background_restricted: Option<bool>,
+    #[serde(rename = "channel_blocked", skip_serializing_if = "Option::is_none")]
+    pub channel_blocked: Option<bool>,
+    #[serde(rename = "power_save_mode", skip_serializing_if = "Option::is_none")]
+    pub power_save_mode: Option<bool>,
+    #[serde(rename = "data_saver", skip_serializing_if = "Option::is_none")]
+    pub data_saver: Option<bool>,
+    /// Değerler: `"exempted"`, `"active"`, `"working_set"`, `"frequent"`, `"rare"`, `"restricted"`.
+    #[serde(rename = "standby_bucket", skip_serializing_if = "Option::is_none")]
+    pub standby_bucket: Option<String>,
 }
 
 /// `SubscriptionLocation` şeması.
