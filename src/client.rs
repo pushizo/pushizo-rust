@@ -13,7 +13,7 @@ use crate::error::{codes, Error, Result};
 use crate::multipart::{random_hex, Multipart};
 
 /// SDK sürümü (`User-Agent` başlığında gönderilir).
-pub const VERSION: &str = "0.2.0";
+pub const VERSION: &str = "0.3.0";
 
 /// Varsayılan API adresi; yerel geliştirmede `ClientBuilder::base_url("http://localhost:4000")`.
 pub const DEFAULT_BASE_URL: &str = "https://api.pushizo.com";
