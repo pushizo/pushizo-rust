@@ -16170,6 +16170,9 @@ pub struct UserExportDerived {
     /// Zorunlu.
     #[serde(rename = "frequency_cap")]
     pub frequency_cap: Option<UserExportDerivedFrequencyCap>,
+    /// Zorunlu.
+    #[serde(rename = "companies", deserialize_with = "crate::de::null_default")]
+    pub companies: Vec<UserExportDerivedCompaniesItem>,
 }
 
 /// `UserExportDerivedAffinitiesItem` şeması.
@@ -16215,6 +16218,27 @@ pub struct UserExportDerivedChannelScoresItem {
     /// Zorunlu.
     #[serde(rename = "computed_at", deserialize_with = "crate::de::null_default")]
     pub computed_at: String,
+}
+
+/// `UserExportDerivedCompaniesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserExportDerivedCompaniesItem {
+    /// Zorunlu.
+    #[serde(rename = "company_id", deserialize_with = "crate::de::null_default")]
+    pub company_id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id", deserialize_with = "crate::de::null_default")]
+    pub external_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name")]
+    pub name: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "role", deserialize_with = "crate::de::null_default")]
+    pub role: String,
+    /// Zorunlu.
+    #[serde(rename = "joined_at", deserialize_with = "crate::de::null_default")]
+    pub joined_at: String,
 }
 
 /// `UserExportDerivedDecisionsItem` şeması.
