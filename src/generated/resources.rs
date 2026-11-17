@@ -243,6 +243,11 @@ impl Client {
         RfmService::new(self)
     }
 
+    /// `siteSearch` kaynağı.
+    pub fn site_search(&self) -> SiteSearchService<'_> {
+        SiteSearchService::new(self)
+    }
+
     /// `smsKeywords` kaynağı.
     pub fn sms_keywords(&self) -> SmsKeywordsService<'_> {
         SmsKeywordsService::new(self)
@@ -6943,6 +6948,205 @@ impl<'a> RfmService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn users(&self, params: Option<&RfmUsersParams>) -> Result<RfmUsersPage> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/rfm/users");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `siteSearch` kaynağı.
+/// `Client::site_search()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct SiteSearchService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `SiteSearchService::documents` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct SiteSearchDocumentsParams {
+    pub source_id: Option<String>,
+    pub q: Option<String>,
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+}
+
+impl SiteSearchDocumentsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.source_id {
+            op.query("source_id", v);
+        }
+        if let Some(v) = &self.q {
+            op.query("q", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+    }
+}
+
+/// `SiteSearchService::report` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct SiteSearchReportParams {
+    pub days: Option<i64>,
+}
+
+impl SiteSearchReportParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.days {
+            op.query("days", v);
+        }
+    }
+}
+
+impl<'a> SiteSearchService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Site araması ayarları, dizin durumu ve AI kullanımı
+    ///
+    /// `GET /v1/apps/{appId}/site-search`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn overview(&self) -> Result<SiteSearchOverview> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/site-search");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Site araması ayarlarını güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/site-search/settings`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_settings(&self, body: &UpdateSiteSearchSettingsDto) -> Result<SiteSearchOverview> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/site-search/settings");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Arama kaynakları
+    ///
+    /// `GET /v1/apps/{appId}/site-search/sources`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn sources(&self) -> Result<SiteSearchSourceList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/site-search/sources");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Arama kaynağı ekle
+    ///
+    /// `POST /v1/apps/{appId}/site-search/sources`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_source(&self, body: &CreateSiteSearchSourceDto) -> Result<SiteSearchSource> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/site-search/sources");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Arama kaynağını düzenle
+    ///
+    /// `PATCH /v1/apps/{appId}/site-search/sources/{sourceId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_source(&self, source_id: &str, body: &UpdateSiteSearchSourceDto) -> Result<SiteSearchSource> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/site-search/sources/{sourceId}");
+        op.path_param("sourceId", source_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Arama kaynağını ve sayfalarını sil
+    ///
+    /// `DELETE /v1/apps/{appId}/site-search/sources/{sourceId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn remove_source(&self, source_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/site-search/sources/{sourceId}");
+        op.path_param("sourceId", source_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kaynağı şimdi yeniden tara
+    ///
+    /// `POST /v1/apps/{appId}/site-search/sources/{sourceId}/crawl`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn crawl(&self, source_id: &str) -> Result<SiteSearchCrawlRequest> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/site-search/sources/{sourceId}/crawl");
+        op.path_param("sourceId", source_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Dizindeki belgeler
+    ///
+    /// `GET /v1/apps/{appId}/site-search/documents`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn documents(&self, params: Option<&SiteSearchDocumentsParams>) -> Result<SiteSearchDocumentPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/site-search/documents");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// `documents` sonuçlarını `next_cursor` ile tüm sayfalar boyunca tek tek döndürür.
+    /// Hata olursa yineleyici `Err` verir ve durur.
+    pub fn documents_all(&self, params: Option<&SiteSearchDocumentsParams>) -> Paginator<'a, SiteSearchDocument> {
+        let service = self.clone();
+        let mut p = params.cloned().unwrap_or_default();
+        Paginator::new(move |cursor| {
+            if let Some(c) = cursor {
+                p.cursor = Some(c);
+            }
+            let page = service.documents(Some(&p))?;
+            Ok((page.data, page.next_cursor, page.has_more))
+        })
+    }
+
+    /// Belgeyi dizine yükle veya değiştir (anahtar app içinde tekildir)
+    ///
+    /// `PUT /v1/apps/{appId}/site-search/documents/{documentKey}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn put_document(&self, document_key: &str, body: &PutSiteSearchDocumentDto) -> Result<SiteSearchDocumentResult> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/site-search/documents/{documentKey}");
+        op.path_param("documentKey", document_key);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Belgeyi dizinden sil (belge kimliği veya anahtarı)
+    ///
+    /// `DELETE /v1/apps/{appId}/site-search/documents/{documentKey}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn remove_document(&self, document_key: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/site-search/documents/{documentKey}");
+        op.path_param("documentKey", document_key);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Arama raporu
+    ///
+    /// `GET /v1/apps/{appId}/site-search/report`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn report(&self, params: Option<&SiteSearchReportParams>) -> Result<SiteSearchReport> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/site-search/report");
         if let Some(p) = params {
             p.append_query(&mut op);
         }
