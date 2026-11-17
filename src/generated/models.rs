@@ -12503,6 +12503,9 @@ pub struct Segment {
     /// Zorunlu.
     #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
     pub updated_at: String,
+    /// Zorunlu.
+    #[serde(rename = "sql")]
+    pub sql: Option<SegmentSql>,
 }
 
 /// `SegmentCampaigns` şeması.
@@ -12662,6 +12665,27 @@ pub struct SegmentsPreviewBodyDefinition {
     pub any: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
     #[serde(rename = "none", skip_serializing_if = "Option::is_none")]
     pub none: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+}
+
+/// `SegmentSql` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SegmentSql {
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "refresh_interval_minutes")]
+    pub refresh_interval_minutes: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "refreshed_at")]
+    pub refreshed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "member_count")]
+    pub member_count: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
 }
 
 /// `SegmentsUpdateBody` şeması.
