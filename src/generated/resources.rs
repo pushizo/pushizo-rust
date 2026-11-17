@@ -1305,12 +1305,17 @@ impl CampaignsListParams {
 pub struct CampaignsScheduleParams {
     /// Değerler: `"true"`, `"false"`.
     pub force: Option<String>,
+    /// Değerler: `"true"`, `"false"`.
+    pub preflight_ack: Option<String>,
 }
 
 impl CampaignsScheduleParams {
     fn append_query(&self, op: &mut Operation) {
         if let Some(v) = &self.force {
             op.query("force", v);
+        }
+        if let Some(v) = &self.preflight_ack {
+            op.query("preflight_ack", v);
         }
     }
 }
@@ -1320,12 +1325,52 @@ impl CampaignsScheduleParams {
 pub struct CampaignsSendParams {
     /// Değerler: `"true"`, `"false"`.
     pub force: Option<String>,
+    /// Değerler: `"true"`, `"false"`.
+    pub preflight_ack: Option<String>,
 }
 
 impl CampaignsSendParams {
     fn append_query(&self, op: &mut Operation) {
         if let Some(v) = &self.force {
             op.query("force", v);
+        }
+        if let Some(v) = &self.preflight_ack {
+            op.query("preflight_ack", v);
+        }
+    }
+}
+
+/// `CampaignsService::preflight` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct CampaignsPreflightParams {
+    /// Değerler: `"true"`, `"false"`.
+    pub check_links: Option<String>,
+}
+
+impl CampaignsPreflightParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.check_links {
+            op.query("check_links", v);
+        }
+    }
+}
+
+/// `CampaignsService::approve` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct CampaignsApproveParams {
+    /// Değerler: `"true"`, `"false"`.
+    pub force: Option<String>,
+    /// Değerler: `"true"`, `"false"`.
+    pub preflight_ack: Option<String>,
+}
+
+impl CampaignsApproveParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.force {
+            op.query("force", v);
+        }
+        if let Some(v) = &self.preflight_ack {
+            op.query("preflight_ack", v);
         }
     }
 }
@@ -1465,6 +1510,20 @@ impl<'a> CampaignsService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Yayın öncesi denetim raporu (marka, yasaklı ifade, bağlantı, kişiselleştirme, KVKK/İYS)
+    ///
+    /// `POST /v1/apps/{appId}/campaigns/{campaignId}/preflight`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn preflight(&self, campaign_id: &str, params: Option<&CampaignsPreflightParams>) -> Result<CampaignPreflightReport> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/campaigns/{campaignId}/preflight");
+        op.path_param("campaignId", campaign_id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
     /// E-posta liste riski (tahmini geçersiz oranı, 7/30 gün bounce oranı)
     ///
     /// `GET /v1/apps/{appId}/campaigns/{campaignId}/email-risk`
@@ -1525,9 +1584,12 @@ impl<'a> CampaignsService<'a> {
     /// `POST /v1/apps/{appId}/campaigns/{campaignId}/approve`
     ///
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
-    pub fn approve(&self, campaign_id: &str) -> Result<Campaign> {
+    pub fn approve(&self, campaign_id: &str, params: Option<&CampaignsApproveParams>) -> Result<Campaign> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/campaigns/{campaignId}/approve");
         op.path_param("campaignId", campaign_id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
         self.client.execute(op, &self.opts)
     }
 

@@ -1898,6 +1898,9 @@ pub struct Campaign {
     /// Zorunlu.
     #[serde(rename = "estimated_recipients")]
     pub estimated_recipients: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "preflight")]
+    pub preflight: Option<CampaignPreflight>,
 }
 
 /// `CampaignAbTest` şeması.
@@ -2072,6 +2075,101 @@ pub struct CampaignPage {
     /// Zorunlu.
     #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
     pub has_more: bool,
+}
+
+/// `CampaignPreflight` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignPreflight {
+    /// Zorunlu.
+    #[serde(rename = "checked_at", deserialize_with = "crate::de::null_default")]
+    pub checked_at: String,
+    /// Zorunlu.
+    #[serde(rename = "summary", deserialize_with = "crate::de::null_default")]
+    pub summary: CampaignPreflightSummary,
+    /// Zorunlu.
+    #[serde(rename = "codes", deserialize_with = "crate::de::null_default")]
+    pub codes: Vec<String>,
+    #[serde(rename = "acknowledged_by", skip_serializing_if = "Option::is_none")]
+    pub acknowledged_by: Option<String>,
+    #[serde(rename = "acknowledged_at", skip_serializing_if = "Option::is_none")]
+    pub acknowledged_at: Option<String>,
+}
+
+/// `CampaignPreflightReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignPreflightReport {
+    /// Zorunlu.
+    #[serde(rename = "campaign_id", deserialize_with = "crate::de::null_default")]
+    pub campaign_id: String,
+    /// Zorunlu.
+    #[serde(rename = "checked_at", deserialize_with = "crate::de::null_default")]
+    pub checked_at: String,
+    /// Zorunlu.
+    #[serde(rename = "links_checked", deserialize_with = "crate::de::null_default")]
+    pub links_checked: bool,
+    /// Zorunlu.
+    #[serde(rename = "summary", deserialize_with = "crate::de::null_default")]
+    pub summary: CampaignPreflightReportSummary,
+    /// Zorunlu.
+    #[serde(rename = "findings", deserialize_with = "crate::de::null_default")]
+    pub findings: Vec<CampaignPreflightReportFindingsItem>,
+}
+
+/// `CampaignPreflightReportFindingsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignPreflightReportFindingsItem {
+    /// Zorunlu. Değerler: `"brand_name_casing"`, `"off_brand_color"`, `"off_brand_font"`, `"banned_phrase"`, `"phishing_term"`, `"link_invalid"`, `"link_insecure_http"`, `"link_unsafe_host"`, `"link_shortener"`, `"link_missing_utm"`, `"link_broken"`, `"link_unreachable"`, `"liquid_syntax_error"`, `"liquid_missing_default"`, `"liquid_unknown_variable"`, `"liquid_undefined_property"`, `"commercial_no_category"`, `"iys_sms_filter_informational"`, `"sms_missing_opt_out"`, `"email_missing_postal_address"`, `"send_time_outside_hours"`.
+    #[serde(rename = "code", deserialize_with = "crate::de::null_default")]
+    pub code: String,
+    /// Zorunlu. Değerler: `"brand"`, `"content"`, `"links"`, `"personalization"`, `"compliance"`.
+    #[serde(rename = "category", deserialize_with = "crate::de::null_default")]
+    pub category: String,
+    /// Zorunlu. Değerler: `"critical"`, `"warning"`, `"info"`.
+    #[serde(rename = "severity", deserialize_with = "crate::de::null_default")]
+    pub severity: String,
+    #[serde(rename = "field", skip_serializing_if = "Option::is_none")]
+    pub field: Option<String>,
+    #[serde(rename = "params", skip_serializing_if = "Option::is_none")]
+    pub params: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+/// `CampaignPreflightReportSummary` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignPreflightReportSummary {
+    /// Zorunlu.
+    #[serde(rename = "critical", deserialize_with = "crate::de::null_default")]
+    pub critical: i64,
+    /// Zorunlu.
+    #[serde(rename = "warning", deserialize_with = "crate::de::null_default")]
+    pub warning: i64,
+    /// Zorunlu.
+    #[serde(rename = "info", deserialize_with = "crate::de::null_default")]
+    pub info: i64,
+    /// Zorunlu.
+    #[serde(rename = "blocked", deserialize_with = "crate::de::null_default")]
+    pub blocked: bool,
+}
+
+/// `CampaignPreflightSummary` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CampaignPreflightSummary {
+    /// Zorunlu.
+    #[serde(rename = "critical", deserialize_with = "crate::de::null_default")]
+    pub critical: i64,
+    /// Zorunlu.
+    #[serde(rename = "warning", deserialize_with = "crate::de::null_default")]
+    pub warning: i64,
+    /// Zorunlu.
+    #[serde(rename = "info", deserialize_with = "crate::de::null_default")]
+    pub info: i64,
+    /// Zorunlu.
+    #[serde(rename = "blocked", deserialize_with = "crate::de::null_default")]
+    pub blocked: bool,
 }
 
 /// `CampaignRecurrence` şeması.
