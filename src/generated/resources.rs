@@ -263,6 +263,11 @@ impl Client {
         WarehouseExportsService::new(self)
     }
 
+    /// `warehouseSegments` kaynağı.
+    pub fn warehouse_segments(&self) -> WarehouseSegmentsService<'_> {
+        WarehouseSegmentsService::new(self)
+    }
+
     /// `webCampaigns` kaynağı.
     pub fn web_campaigns(&self) -> WebCampaignsService<'_> {
         WebCampaignsService::new(self)
@@ -7458,6 +7463,215 @@ impl<'a> WarehouseExportsService<'a> {
                 p.cursor = Some(c);
             }
             let page = service.runs(&export_id, Some(&p))?;
+            Ok((page.data, page.next_cursor, page.has_more))
+        })
+    }
+}
+
+/// `warehouseSegments` kaynağı.
+/// `Client::warehouse_segments()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct WarehouseSegmentsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `WarehouseSegmentsService::runs` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct WarehouseSegmentsRunsParams {
+    pub segment_id: Option<String>,
+    pub connection_id: Option<String>,
+    /// Değerler: `"ok"`, `"rejected"`, `"timeout"`, `"failed"`.
+    pub status: Option<String>,
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+}
+
+impl WarehouseSegmentsRunsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.segment_id {
+            op.query("segment_id", v);
+        }
+        if let Some(v) = &self.connection_id {
+            op.query("connection_id", v);
+        }
+        if let Some(v) = &self.status {
+            op.query("status", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+    }
+}
+
+impl<'a> WarehouseSegmentsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Ambar segmenti seçenekleri ve sınırlar
+    ///
+    /// `GET /v1/apps/{appId}/warehouse-segments/options`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn options(&self) -> Result<WarehouseSegmentOptions> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/warehouse-segments/options");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar bağlantıları
+    ///
+    /// `GET /v1/apps/{appId}/warehouse-segments/connections`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list_connections(&self) -> Result<WarehouseSegmentConnectionList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/warehouse-segments/connections");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar bağlantısı oluştur
+    ///
+    /// `POST /v1/apps/{appId}/warehouse-segments/connections`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_connection(&self, body: &CreateWarehouseConnectionDto) -> Result<WarehouseSegmentConnection> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/warehouse-segments/connections");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar bağlantısı detayı
+    ///
+    /// `GET /v1/apps/{appId}/warehouse-segments/connections/{connectionId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get_connection(&self, connection_id: &str) -> Result<WarehouseSegmentConnection> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}");
+        op.path_param("connectionId", connection_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar bağlantısını güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/warehouse-segments/connections/{connectionId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_connection(&self, connection_id: &str, body: &UpdateWarehouseConnectionDto) -> Result<WarehouseSegmentConnection> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}");
+        op.path_param("connectionId", connection_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar bağlantısını sil
+    ///
+    /// `DELETE /v1/apps/{appId}/warehouse-segments/connections/{connectionId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn remove_connection(&self, connection_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}");
+        op.path_param("connectionId", connection_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar bağlantısını dene
+    ///
+    /// `POST /v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn test_connection(&self, connection_id: &str) -> Result<WarehouseSegmentConnectionTest> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/warehouse-segments/connections/{connectionId}/test");
+        op.path_param("connectionId", connection_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar sorgusunu önizle (dry-run veya örnek)
+    ///
+    /// `POST /v1/apps/{appId}/warehouse-segments/preview`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn preview(&self, body: &PreviewWarehouseQueryDto) -> Result<WarehouseSegmentPreview> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/warehouse-segments/preview");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar segmentleri
+    ///
+    /// `GET /v1/apps/{appId}/warehouse-segments/segments`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list_segments(&self) -> Result<WarehouseSegmentList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/warehouse-segments/segments");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar segmenti oluştur
+    ///
+    /// `POST /v1/apps/{appId}/warehouse-segments/segments`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_segment(&self, body: &CreateWarehouseSegmentDto) -> Result<Segment> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/warehouse-segments/segments");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar segmentini güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/warehouse-segments/segments/{segmentId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_segment(&self, segment_id: &str, body: &UpdateWarehouseSegmentDto) -> Result<Segment> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}");
+        op.path_param("segmentId", segment_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar segmentini yenileme kuyruğuna al
+    ///
+    /// `POST /v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn refresh(&self, segment_id: &str) -> Result<Segment> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/warehouse-segments/segments/{segmentId}/refresh");
+        op.path_param("segmentId", segment_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Ambar sorgu kaydı
+    ///
+    /// `GET /v1/apps/{appId}/warehouse-segments/runs`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn runs(&self, params: Option<&WarehouseSegmentsRunsParams>) -> Result<WarehouseSegmentRunList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/warehouse-segments/runs");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// `runs` sonuçlarını `next_cursor` ile tüm sayfalar boyunca tek tek döndürür.
+    /// Hata olursa yineleyici `Err` verir ve durur.
+    pub fn runs_all(&self, params: Option<&WarehouseSegmentsRunsParams>) -> Paginator<'a, WarehouseSegmentRunListDataItem> {
+        let service = self.clone();
+        let mut p = params.cloned().unwrap_or_default();
+        Paginator::new(move |cursor| {
+            if let Some(c) = cursor {
+                p.cursor = Some(c);
+            }
+            let page = service.runs(Some(&p))?;
             Ok((page.data, page.next_cursor, page.has_more))
         })
     }

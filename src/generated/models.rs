@@ -5832,6 +5832,66 @@ pub struct CreateWalletTemplateDtoDesignFieldsItem {
     pub section: Option<String>,
 }
 
+/// `CreateWarehouseConnectionDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWarehouseConnectionDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"bigquery"`, `"snowflake"`, `"databricks"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    /// Zorunlu.
+    #[serde(rename = "config", deserialize_with = "crate::de::null_default")]
+    pub config: std::collections::HashMap<String, serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "credentials", deserialize_with = "crate::de::null_default")]
+    pub credentials: std::collections::HashMap<String, serde_json::Value>,
+}
+
+/// `CreateWarehouseSegmentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWarehouseSegmentDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "connection_id", deserialize_with = "crate::de::null_default")]
+    pub connection_id: String,
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "id_column", deserialize_with = "crate::de::null_default")]
+    pub id_column: String,
+    /// Değerler: `"external_id"`, `"user_id"`.
+    #[serde(rename = "id_type", skip_serializing_if = "Option::is_none")]
+    pub id_type: Option<String>,
+    #[serde(rename = "refresh_interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub refresh_interval_minutes: Option<i64>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<CreateWarehouseSegmentDtoLimits>,
+}
+
+/// `CreateWarehouseSegmentDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateWarehouseSegmentDtoLimits {
+    #[serde(rename = "timeout_seconds", skip_serializing_if = "Option::is_none")]
+    pub timeout_seconds: Option<i64>,
+    #[serde(rename = "max_rows", skip_serializing_if = "Option::is_none")]
+    pub max_rows: Option<i64>,
+    #[serde(rename = "max_bytes_billed", skip_serializing_if = "Option::is_none")]
+    pub max_bytes_billed: Option<i64>,
+    /// Değerler: `"X-Small"`, `"Small"`, `"Medium"`, `"Large"`, `"X-Large"`, `"2X-Large"`, `"3X-Large"`, `"4X-Large"`, `"5X-Large"`, `"6X-Large"`.
+    #[serde(rename = "max_warehouse_size", skip_serializing_if = "Option::is_none")]
+    pub max_warehouse_size: Option<String>,
+}
+
 /// `CreateWarmupPlanDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -11243,6 +11303,44 @@ pub struct PredictionUsersPageDataItem {
     pub bucket: String,
 }
 
+/// `PreviewWarehouseQueryDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PreviewWarehouseQueryDto {
+    /// Zorunlu.
+    #[serde(rename = "connection_id", deserialize_with = "crate::de::null_default")]
+    pub connection_id: String,
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "id_column", deserialize_with = "crate::de::null_default")]
+    pub id_column: String,
+    /// Değerler: `"external_id"`, `"user_id"`.
+    #[serde(rename = "id_type", skip_serializing_if = "Option::is_none")]
+    pub id_type: Option<String>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<PreviewWarehouseQueryDtoLimits>,
+    /// Değerler: `"dry_run"`, `"sample"`.
+    #[serde(rename = "mode", skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
+}
+
+/// `PreviewWarehouseQueryDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PreviewWarehouseQueryDtoLimits {
+    #[serde(rename = "timeout_seconds", skip_serializing_if = "Option::is_none")]
+    pub timeout_seconds: Option<i64>,
+    #[serde(rename = "max_rows", skip_serializing_if = "Option::is_none")]
+    pub max_rows: Option<i64>,
+    #[serde(rename = "max_bytes_billed", skip_serializing_if = "Option::is_none")]
+    pub max_bytes_billed: Option<i64>,
+    /// Değerler: `"X-Small"`, `"Small"`, `"Medium"`, `"Large"`, `"X-Large"`, `"2X-Large"`, `"3X-Large"`, `"4X-Large"`, `"5X-Large"`, `"6X-Large"`.
+    #[serde(rename = "max_warehouse_size", skip_serializing_if = "Option::is_none")]
+    pub max_warehouse_size: Option<String>,
+}
+
 /// `PromoCodeList` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12506,6 +12604,9 @@ pub struct Segment {
     /// Zorunlu.
     #[serde(rename = "sql")]
     pub sql: Option<SegmentSql>,
+    /// Zorunlu.
+    #[serde(rename = "warehouse")]
+    pub warehouse: Option<SegmentWarehouse>,
 }
 
 /// `SegmentCampaigns` şeması.
@@ -12713,6 +12814,66 @@ pub struct SegmentsUpdateBodyDefinition {
     pub any: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
     #[serde(rename = "none", skip_serializing_if = "Option::is_none")]
     pub none: Option<Vec<std::collections::HashMap<String, serde_json::Value>>>,
+}
+
+/// `SegmentWarehouse` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SegmentWarehouse {
+    /// Zorunlu.
+    #[serde(rename = "connection_id")]
+    pub connection_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "id_column", deserialize_with = "crate::de::null_default")]
+    pub id_column: String,
+    /// Zorunlu. Değerler: `"external_id"`, `"user_id"`.
+    #[serde(rename = "id_type", deserialize_with = "crate::de::null_default")]
+    pub id_type: String,
+    /// Zorunlu.
+    #[serde(rename = "limits", deserialize_with = "crate::de::null_default")]
+    pub limits: SegmentWarehouseLimits,
+    /// Zorunlu.
+    #[serde(rename = "refresh_interval_minutes")]
+    pub refresh_interval_minutes: Option<i64>,
+    /// Zorunlu. Değerler: `"queued"`, `"failed"`, `"ok"`, `"never"`.
+    #[serde(rename = "refresh_state", deserialize_with = "crate::de::null_default")]
+    pub refresh_state: String,
+    /// Zorunlu.
+    #[serde(rename = "refresh_requested_at")]
+    pub refresh_requested_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "refreshed_at")]
+    pub refreshed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "member_count")]
+    pub member_count: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "bytes_processed")]
+    pub bytes_processed: Option<f64>,
+}
+
+/// `SegmentWarehouseLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SegmentWarehouseLimits {
+    /// Zorunlu.
+    #[serde(rename = "timeout_seconds", deserialize_with = "crate::de::null_default")]
+    pub timeout_seconds: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_rows", deserialize_with = "crate::de::null_default")]
+    pub max_rows: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_bytes_billed", deserialize_with = "crate::de::null_default")]
+    pub max_bytes_billed: f64,
+    /// Zorunlu. Değerler: `"X-Small"`, `"Small"`, `"Medium"`, `"Large"`, `"X-Large"`, `"2X-Large"`, `"3X-Large"`, `"4X-Large"`, `"5X-Large"`, `"6X-Large"`.
+    #[serde(rename = "max_warehouse_size")]
+    pub max_warehouse_size: Option<String>,
 }
 
 /// `SelectWinnerDto` şeması.
@@ -15360,6 +15521,18 @@ pub struct UpdateWalletTemplateDtoDesignFieldsItem {
     pub section: Option<String>,
 }
 
+/// `UpdateWarehouseConnectionDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWarehouseConnectionDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "config", skip_serializing_if = "Option::is_none")]
+    pub config: Option<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "credentials", skip_serializing_if = "Option::is_none")]
+    pub credentials: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
 /// `UpdateWarehouseExportDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -15378,6 +15551,44 @@ pub struct UpdateWarehouseExportDto {
     pub config: Option<std::collections::HashMap<String, serde_json::Value>>,
     #[serde(rename = "credentials", skip_serializing_if = "Option::is_none")]
     pub credentials: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
+/// `UpdateWarehouseSegmentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWarehouseSegmentDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "connection_id", skip_serializing_if = "Option::is_none")]
+    pub connection_id: Option<String>,
+    #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
+    pub query: Option<String>,
+    #[serde(rename = "id_column", skip_serializing_if = "Option::is_none")]
+    pub id_column: Option<String>,
+    /// Değerler: `"external_id"`, `"user_id"`.
+    #[serde(rename = "id_type", skip_serializing_if = "Option::is_none")]
+    pub id_type: Option<String>,
+    #[serde(rename = "refresh_interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub refresh_interval_minutes: Option<i64>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<UpdateWarehouseSegmentDtoLimits>,
+}
+
+/// `UpdateWarehouseSegmentDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateWarehouseSegmentDtoLimits {
+    #[serde(rename = "timeout_seconds", skip_serializing_if = "Option::is_none")]
+    pub timeout_seconds: Option<i64>,
+    #[serde(rename = "max_rows", skip_serializing_if = "Option::is_none")]
+    pub max_rows: Option<i64>,
+    #[serde(rename = "max_bytes_billed", skip_serializing_if = "Option::is_none")]
+    pub max_bytes_billed: Option<i64>,
+    /// Değerler: `"X-Small"`, `"Small"`, `"Medium"`, `"Large"`, `"X-Large"`, `"2X-Large"`, `"3X-Large"`, `"4X-Large"`, `"5X-Large"`, `"6X-Large"`.
+    #[serde(rename = "max_warehouse_size", skip_serializing_if = "Option::is_none")]
+    pub max_warehouse_size: Option<String>,
 }
 
 /// `UpdateWarmupPlanDto` şeması.
@@ -16967,6 +17178,252 @@ pub struct WarehouseExportRunTablesValueTo {
     /// Zorunlu.
     #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
     pub id: String,
+}
+
+/// `WarehouseSegmentConnection` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentConnection {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"bigquery"`, `"snowflake"`, `"databricks"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    /// Zorunlu.
+    #[serde(rename = "config", deserialize_with = "crate::de::null_default")]
+    pub config: std::collections::HashMap<String, serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "credentials_hint", deserialize_with = "crate::de::null_default")]
+    pub credentials_hint: String,
+    /// Zorunlu.
+    #[serde(rename = "segment_count", deserialize_with = "crate::de::null_default")]
+    pub segment_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "last_tested_at")]
+    pub last_tested_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_test_error")]
+    pub last_test_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `WarehouseSegmentConnectionList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentConnectionList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<WarehouseSegmentConnection>,
+}
+
+/// `WarehouseSegmentConnectionTest` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentConnectionTest {
+    /// Zorunlu.
+    #[serde(rename = "ok", deserialize_with = "crate::de::null_default")]
+    pub ok: bool,
+    /// Zorunlu.
+    #[serde(rename = "error")]
+    pub error: Option<WarehouseSegmentConnectionTestError>,
+}
+
+/// `WarehouseSegmentConnectionTestError` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentConnectionTestError {
+    /// Zorunlu.
+    #[serde(rename = "code", deserialize_with = "crate::de::null_default")]
+    pub code: String,
+    /// Zorunlu.
+    #[serde(rename = "message", deserialize_with = "crate::de::null_default")]
+    pub message: String,
+}
+
+/// `WarehouseSegmentList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<Segment>,
+}
+
+/// `WarehouseSegmentOptions` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentOptions {
+    /// Zorunlu. Değerler: `"bigquery"`, `"snowflake"`, `"databricks"`.
+    #[serde(rename = "types", deserialize_with = "crate::de::null_default")]
+    pub types: Vec<String>,
+    /// Zorunlu. Değerler: `"external_id"`, `"user_id"`.
+    #[serde(rename = "id_types", deserialize_with = "crate::de::null_default")]
+    pub id_types: Vec<String>,
+    /// Zorunlu. Değerler: `"X-Small"`, `"Small"`, `"Medium"`, `"Large"`, `"X-Large"`, `"2X-Large"`, `"3X-Large"`, `"4X-Large"`, `"5X-Large"`, `"6X-Large"`.
+    #[serde(rename = "snowflake_warehouse_sizes", deserialize_with = "crate::de::null_default")]
+    pub snowflake_warehouse_sizes: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "refresh_intervals", deserialize_with = "crate::de::null_default")]
+    pub refresh_intervals: Vec<i64>,
+    /// Zorunlu.
+    #[serde(rename = "limits", deserialize_with = "crate::de::null_default")]
+    pub limits: WarehouseSegmentOptionsLimits,
+}
+
+/// `WarehouseSegmentOptionsLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentOptionsLimits {
+    /// Zorunlu.
+    #[serde(rename = "query_max", deserialize_with = "crate::de::null_default")]
+    pub query_max: i64,
+    /// Zorunlu.
+    #[serde(rename = "timeout_default_seconds", deserialize_with = "crate::de::null_default")]
+    pub timeout_default_seconds: i64,
+    /// Zorunlu.
+    #[serde(rename = "timeout_min_seconds", deserialize_with = "crate::de::null_default")]
+    pub timeout_min_seconds: i64,
+    /// Zorunlu.
+    #[serde(rename = "timeout_max_seconds", deserialize_with = "crate::de::null_default")]
+    pub timeout_max_seconds: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_rows_default", deserialize_with = "crate::de::null_default")]
+    pub max_rows_default: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_rows_max", deserialize_with = "crate::de::null_default")]
+    pub max_rows_max: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_bytes_billed_default", deserialize_with = "crate::de::null_default")]
+    pub max_bytes_billed_default: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_bytes_billed_min", deserialize_with = "crate::de::null_default")]
+    pub max_bytes_billed_min: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_bytes_billed_max", deserialize_with = "crate::de::null_default")]
+    pub max_bytes_billed_max: i64,
+    /// Zorunlu.
+    #[serde(rename = "preview_sample", deserialize_with = "crate::de::null_default")]
+    pub preview_sample: i64,
+    /// Zorunlu.
+    #[serde(rename = "connections_per_app", deserialize_with = "crate::de::null_default")]
+    pub connections_per_app: i64,
+}
+
+/// `WarehouseSegmentPreview` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentPreview {
+    /// Zorunlu.
+    #[serde(rename = "run_id", deserialize_with = "crate::de::null_default")]
+    pub run_id: String,
+    /// Zorunlu. Değerler: `"dry_run"`, `"sample"`.
+    #[serde(rename = "mode", deserialize_with = "crate::de::null_default")]
+    pub mode: String,
+    /// Zorunlu.
+    #[serde(rename = "estimated_bytes")]
+    pub estimated_bytes: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "max_bytes_billed")]
+    pub max_bytes_billed: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "within_limit", deserialize_with = "crate::de::null_default")]
+    pub within_limit: bool,
+    /// Zorunlu.
+    #[serde(rename = "sample")]
+    pub sample: Option<Vec<String>>,
+    /// Zorunlu.
+    #[serde(rename = "sample_truncated", deserialize_with = "crate::de::null_default")]
+    pub sample_truncated: bool,
+    /// Zorunlu.
+    #[serde(rename = "sample_matched")]
+    pub sample_matched: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "duration_ms", deserialize_with = "crate::de::null_default")]
+    pub duration_ms: i64,
+}
+
+/// `WarehouseSegmentRunList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentRunList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<WarehouseSegmentRunListDataItem>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `WarehouseSegmentRunListDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WarehouseSegmentRunListDataItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "segment_id")]
+    pub segment_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "connection_id")]
+    pub connection_id: Option<String>,
+    /// Zorunlu. Değerler: `"bigquery"`, `"snowflake"`, `"databricks"`.
+    #[serde(rename = "warehouse_type", deserialize_with = "crate::de::null_default")]
+    pub warehouse_type: String,
+    /// Zorunlu. Değerler: `"panel"`, `"api"`, `"schedule"`.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu.
+    #[serde(rename = "actor_id")]
+    pub actor_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "query_hash", deserialize_with = "crate::de::null_default")]
+    pub query_hash: String,
+    /// Zorunlu. Değerler: `"ok"`, `"rejected"`, `"timeout"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu. Değerler: `"empty"`, `"too_long"`, `"syntax"`, `"multiple_statements"`, `"not_select"`, `"forbidden_relation"`, `"forbidden_function"`, `"forbidden_construct"`, `"forbidden_type"`.
+    #[serde(rename = "reason")]
+    pub reason: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error")]
+    pub error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "row_count", deserialize_with = "crate::de::null_default")]
+    pub row_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "matched_count")]
+    pub matched_count: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "bytes_processed")]
+    pub bytes_processed: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "truncated", deserialize_with = "crate::de::null_default")]
+    pub truncated: bool,
+    /// Zorunlu.
+    #[serde(rename = "duration_ms", deserialize_with = "crate::de::null_default")]
+    pub duration_ms: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
 }
 
 /// `WarehouseTables` şeması.
