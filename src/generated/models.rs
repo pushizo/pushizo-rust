@@ -5463,6 +5463,28 @@ pub struct CreateSavedReportDtoDefinitionSort {
     pub direction: Option<String>,
 }
 
+/// `CreateSiteSearchSourceDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateSiteSearchSourceDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"sitemap"`, `"urls"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[serde(rename = "urls", skip_serializing_if = "Option::is_none")]
+    pub urls: Option<Vec<String>>,
+    #[serde(rename = "max_pages", skip_serializing_if = "Option::is_none")]
+    pub max_pages: Option<i64>,
+    #[serde(rename = "refresh_hours", skip_serializing_if = "Option::is_none")]
+    pub refresh_hours: Option<i64>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+}
+
 /// `CreateSuppressionDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -11708,6 +11730,23 @@ pub struct PublicSurveyResponseDto {
     pub external_id: Option<String>,
 }
 
+/// `PutSiteSearchDocumentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PutSiteSearchDocumentDto {
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(rename = "content", skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    #[serde(rename = "html", skip_serializing_if = "Option::is_none")]
+    pub html: Option<String>,
+    #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+}
+
 /// `RecommendationConfig` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -13075,6 +13114,357 @@ pub struct SetPreferencesDtoPreferencesItem {
     /// Zorunlu.
     #[serde(rename = "opted_in", deserialize_with = "crate::de::null_default")]
     pub opted_in: bool,
+}
+
+/// `SiteSearchCrawlRequest` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchCrawlRequest {
+    /// Zorunlu.
+    #[serde(rename = "queued", deserialize_with = "crate::de::null_default")]
+    pub queued: bool,
+    /// Zorunlu.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: SiteSearchSource,
+}
+
+/// `SiteSearchDocument` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchDocument {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "key", deserialize_with = "crate::de::null_default")]
+    pub key: String,
+    /// Zorunlu.
+    #[serde(rename = "source_id")]
+    pub source_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    /// Zorunlu.
+    #[serde(rename = "title", deserialize_with = "crate::de::null_default")]
+    pub title: String,
+    /// Zorunlu.
+    #[serde(rename = "language")]
+    pub language: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "chunks", deserialize_with = "crate::de::null_default")]
+    pub chunks: i64,
+    /// Zorunlu.
+    #[serde(rename = "chars", deserialize_with = "crate::de::null_default")]
+    pub chars: i64,
+    /// Zorunlu.
+    #[serde(rename = "indexed_at", deserialize_with = "crate::de::null_default")]
+    pub indexed_at: String,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+}
+
+/// `SiteSearchDocumentPage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchDocumentPage {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<SiteSearchDocument>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `SiteSearchDocumentResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchDocumentResult {
+    /// Zorunlu. Değerler: `"created"`, `"updated"`, `"unchanged"`.
+    #[serde(rename = "outcome", deserialize_with = "crate::de::null_default")]
+    pub outcome: String,
+    /// Zorunlu.
+    #[serde(rename = "document", deserialize_with = "crate::de::null_default")]
+    pub document: SiteSearchDocument,
+}
+
+/// `SiteSearchOverview` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchOverview {
+    /// Zorunlu.
+    #[serde(rename = "settings", deserialize_with = "crate::de::null_default")]
+    pub settings: SiteSearchOverviewSettings,
+    /// Zorunlu.
+    #[serde(rename = "index", deserialize_with = "crate::de::null_default")]
+    pub index: SiteSearchOverviewIndex,
+    /// Zorunlu.
+    #[serde(rename = "usage", deserialize_with = "crate::de::null_default")]
+    pub usage: SiteSearchOverviewUsage,
+    /// Zorunlu.
+    #[serde(rename = "ai", deserialize_with = "crate::de::null_default")]
+    pub ai: SiteSearchOverviewAi,
+}
+
+/// `SiteSearchOverviewAi` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchOverviewAi {
+    /// Zorunlu.
+    #[serde(rename = "available", deserialize_with = "crate::de::null_default")]
+    pub available: bool,
+    /// Zorunlu. Değerler: `"disabled"`, `"unavailable"`, `"cap_reached"`.
+    #[serde(rename = "reason")]
+    pub reason: Option<String>,
+}
+
+/// `SiteSearchOverviewIndex` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchOverviewIndex {
+    /// Zorunlu.
+    #[serde(rename = "documents", deserialize_with = "crate::de::null_default")]
+    pub documents: i64,
+    /// Zorunlu.
+    #[serde(rename = "chunks", deserialize_with = "crate::de::null_default")]
+    pub chunks: i64,
+    /// Zorunlu.
+    #[serde(rename = "sources", deserialize_with = "crate::de::null_default")]
+    pub sources: i64,
+    /// Zorunlu.
+    #[serde(rename = "last_indexed_at")]
+    pub last_indexed_at: Option<String>,
+}
+
+/// `SiteSearchOverviewSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchOverviewSettings {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "ai_answers", deserialize_with = "crate::de::null_default")]
+    pub ai_answers: bool,
+    /// Zorunlu.
+    #[serde(rename = "allowed_origins", deserialize_with = "crate::de::null_default")]
+    pub allowed_origins: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "language", deserialize_with = "crate::de::null_default")]
+    pub language: String,
+    /// Zorunlu.
+    #[serde(rename = "text_search_config", deserialize_with = "crate::de::null_default")]
+    pub text_search_config: String,
+    /// Zorunlu.
+    #[serde(rename = "monthly_token_cap", deserialize_with = "crate::de::null_default")]
+    pub monthly_token_cap: i64,
+    /// Zorunlu.
+    #[serde(rename = "query_retention_days", deserialize_with = "crate::de::null_default")]
+    pub query_retention_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "updated_at")]
+    pub updated_at: Option<String>,
+}
+
+/// `SiteSearchOverviewUsage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchOverviewUsage {
+    /// Zorunlu.
+    #[serde(rename = "tokens_this_month", deserialize_with = "crate::de::null_default")]
+    pub tokens_this_month: i64,
+    /// Zorunlu.
+    #[serde(rename = "monthly_token_cap", deserialize_with = "crate::de::null_default")]
+    pub monthly_token_cap: i64,
+    /// Zorunlu.
+    #[serde(rename = "period_start", deserialize_with = "crate::de::null_default")]
+    pub period_start: String,
+}
+
+/// `SiteSearchReport` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchReport {
+    /// Zorunlu.
+    #[serde(rename = "period_days", deserialize_with = "crate::de::null_default")]
+    pub period_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "searches", deserialize_with = "crate::de::null_default")]
+    pub searches: i64,
+    /// Zorunlu.
+    #[serde(rename = "zero_results", deserialize_with = "crate::de::null_default")]
+    pub zero_results: i64,
+    /// Zorunlu.
+    #[serde(rename = "click_through_rate", deserialize_with = "crate::de::null_default")]
+    pub click_through_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "answers_requested", deserialize_with = "crate::de::null_default")]
+    pub answers_requested: i64,
+    /// Zorunlu.
+    #[serde(rename = "answered", deserialize_with = "crate::de::null_default")]
+    pub answered: i64,
+    /// Zorunlu.
+    #[serde(rename = "not_found", deserialize_with = "crate::de::null_default")]
+    pub not_found: i64,
+    /// Zorunlu.
+    #[serde(rename = "answer_fallbacks", deserialize_with = "crate::de::null_default")]
+    pub answer_fallbacks: i64,
+    /// Zorunlu.
+    #[serde(rename = "tokens", deserialize_with = "crate::de::null_default")]
+    pub tokens: i64,
+    /// Zorunlu.
+    #[serde(rename = "top_queries", deserialize_with = "crate::de::null_default")]
+    pub top_queries: Vec<SiteSearchReportTopQueriesItem>,
+    /// Zorunlu.
+    #[serde(rename = "zero_result_queries", deserialize_with = "crate::de::null_default")]
+    pub zero_result_queries: Vec<SiteSearchReportZeroResultQueriesItem>,
+    /// Zorunlu.
+    #[serde(rename = "daily", deserialize_with = "crate::de::null_default")]
+    pub daily: Vec<SiteSearchReportDailyItem>,
+}
+
+/// `SiteSearchReportDailyItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchReportDailyItem {
+    /// Zorunlu.
+    #[serde(rename = "date", deserialize_with = "crate::de::null_default")]
+    pub date: String,
+    /// Zorunlu.
+    #[serde(rename = "searches", deserialize_with = "crate::de::null_default")]
+    pub searches: i64,
+    /// Zorunlu.
+    #[serde(rename = "zero_results", deserialize_with = "crate::de::null_default")]
+    pub zero_results: i64,
+    /// Zorunlu.
+    #[serde(rename = "answered", deserialize_with = "crate::de::null_default")]
+    pub answered: i64,
+}
+
+/// `SiteSearchReportTopQueriesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchReportTopQueriesItem {
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "searches", deserialize_with = "crate::de::null_default")]
+    pub searches: i64,
+    /// Zorunlu.
+    #[serde(rename = "clicks", deserialize_with = "crate::de::null_default")]
+    pub clicks: i64,
+    /// Zorunlu.
+    #[serde(rename = "avg_results", deserialize_with = "crate::de::null_default")]
+    pub avg_results: f64,
+}
+
+/// `SiteSearchReportZeroResultQueriesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchReportZeroResultQueriesItem {
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "searches", deserialize_with = "crate::de::null_default")]
+    pub searches: i64,
+}
+
+/// `SiteSearchSource` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchSource {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"sitemap"`, `"urls"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu.
+    #[serde(rename = "url")]
+    pub url: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "urls", deserialize_with = "crate::de::null_default")]
+    pub urls: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "max_pages", deserialize_with = "crate::de::null_default")]
+    pub max_pages: i64,
+    /// Zorunlu.
+    #[serde(rename = "refresh_hours")]
+    pub refresh_hours: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"idle"`, `"queued"`, `"crawling"`, `"ok"`, `"partial"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "documents", deserialize_with = "crate::de::null_default")]
+    pub documents: i64,
+    /// Zorunlu.
+    #[serde(rename = "crawl_requested_at")]
+    pub crawl_requested_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_crawled_at")]
+    pub last_crawled_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "next_crawl_at")]
+    pub next_crawl_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "stats", deserialize_with = "crate::de::null_default")]
+    pub stats: SiteSearchSourceStats,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `SiteSearchSourceList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchSourceList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<SiteSearchSource>,
+}
+
+/// `SiteSearchSourceStats` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SiteSearchSourceStats {
+    /// Zorunlu.
+    #[serde(rename = "pages_found", deserialize_with = "crate::de::null_default")]
+    pub pages_found: i64,
+    /// Zorunlu.
+    #[serde(rename = "pages_indexed", deserialize_with = "crate::de::null_default")]
+    pub pages_indexed: i64,
+    /// Zorunlu.
+    #[serde(rename = "pages_unchanged", deserialize_with = "crate::de::null_default")]
+    pub pages_unchanged: i64,
+    /// Zorunlu.
+    #[serde(rename = "pages_skipped", deserialize_with = "crate::de::null_default")]
+    pub pages_skipped: i64,
+    /// Zorunlu.
+    #[serde(rename = "pages_failed", deserialize_with = "crate::de::null_default")]
+    pub pages_failed: i64,
+    /// Zorunlu.
+    #[serde(rename = "pages_removed", deserialize_with = "crate::de::null_default")]
+    pub pages_removed: i64,
+    /// Zorunlu.
+    #[serde(rename = "duration_ms", deserialize_with = "crate::de::null_default")]
+    pub duration_ms: i64,
 }
 
 /// `SmsKeyword` şeması.
@@ -15220,6 +15610,45 @@ pub struct UpdateSavedReportDtoDefinitionSort {
     /// Değerler: `"asc"`, `"desc"`.
     #[serde(rename = "direction", skip_serializing_if = "Option::is_none")]
     pub direction: Option<String>,
+}
+
+/// `UpdateSiteSearchSettingsDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSiteSearchSettingsDto {
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    #[serde(rename = "ai_answers", skip_serializing_if = "Option::is_none")]
+    pub ai_answers: Option<bool>,
+    #[serde(rename = "allowed_origins", skip_serializing_if = "Option::is_none")]
+    pub allowed_origins: Option<Vec<String>>,
+    #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    #[serde(rename = "monthly_token_cap", skip_serializing_if = "Option::is_none")]
+    pub monthly_token_cap: Option<i64>,
+    #[serde(rename = "query_retention_days", skip_serializing_if = "Option::is_none")]
+    pub query_retention_days: Option<i64>,
+}
+
+/// `UpdateSiteSearchSourceDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSiteSearchSourceDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// Değerler: `"sitemap"`, `"urls"`.
+    #[serde(rename = "kind", skip_serializing_if = "Option::is_none")]
+    pub kind: Option<String>,
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    #[serde(rename = "urls", skip_serializing_if = "Option::is_none")]
+    pub urls: Option<Vec<String>>,
+    #[serde(rename = "max_pages", skip_serializing_if = "Option::is_none")]
+    pub max_pages: Option<i64>,
+    #[serde(rename = "refresh_hours", skip_serializing_if = "Option::is_none")]
+    pub refresh_hours: Option<i64>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
 }
 
 /// `UpdateTemplateDto` şeması.
