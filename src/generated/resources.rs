@@ -268,6 +268,11 @@ impl Client {
         RfmService::new(self)
     }
 
+    /// `sdkErrors` kaynağı.
+    pub fn sdk_errors(&self) -> SdkErrorsService<'_> {
+        SdkErrorsService::new(self)
+    }
+
     /// `siteSearch` kaynağı.
     pub fn site_search(&self) -> SiteSearchService<'_> {
         SiteSearchService::new(self)
@@ -286,6 +291,11 @@ impl Client {
     /// `surveys` kaynağı.
     pub fn surveys(&self) -> SurveysService<'_> {
         SurveysService::new(self)
+    }
+
+    /// `trace` kaynağı.
+    pub fn trace(&self) -> TraceService<'_> {
+        TraceService::new(self)
     }
 
     /// `verify` kaynağı.
@@ -593,6 +603,34 @@ impl UsersListParams {
     }
 }
 
+/// `UsersService::user_events` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct UsersUserEventsParams {
+    pub limit: Option<i64>,
+}
+
+impl UsersUserEventsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+    }
+}
+
+/// `UsersService::user_messages` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct UsersUserMessagesParams {
+    pub limit: Option<i64>,
+}
+
+impl UsersUserMessagesParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+    }
+}
+
 impl<'a> UsersService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -744,6 +782,48 @@ impl<'a> UsersService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Kullanıcının olay ve teslimat zaman çizelgesi (en yeni 40 kayıt)
+    ///
+    /// `GET /v1/apps/{appId}/users/by/{label}/{value}/timeline`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn timeline(&self, label: &str, value: &str) -> Result<UserTimeline> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/users/by/{label}/{value}/timeline");
+        op.path_param("label", label);
+        op.path_param("value", value);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kullanıcının son olayları
+    ///
+    /// `GET /v1/apps/{appId}/users/by/{label}/{value}/events`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn user_events(&self, label: &str, value: &str, params: Option<&UsersUserEventsParams>) -> Result<EventList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/users/by/{label}/{value}/events");
+        op.path_param("label", label);
+        op.path_param("value", value);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kullanıcının son mesajları (teslimatlar, en yeni önce)
+    ///
+    /// `GET /v1/apps/{appId}/users/by/{label}/{value}/messages`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn user_messages(&self, label: &str, value: &str, params: Option<&UsersUserMessagesParams>) -> Result<UserMessageList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/users/by/{label}/{value}/messages");
+        op.path_param("label", label);
+        op.path_param("value", value);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
     /// Kullanıcıya abonelik ekle
     ///
     /// `POST /v1/apps/{appId}/users/by/{label}/{value}/subscriptions`
@@ -812,6 +892,43 @@ pub struct SubscriptionsService<'a> {
     opts: RequestOptions,
 }
 
+/// `SubscriptionsService::list_subscriptions` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct SubscriptionsListSubscriptionsParams {
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
+    pub channel: Option<String>,
+    /// Değerler: `"subscribed"`, `"unsubscribed"`, `"invalid"`, `"pending"`.
+    pub status: Option<String>,
+    /// Değerler: `"true"`, `"false"`.
+    pub test_device: Option<String>,
+    pub since: Option<String>,
+}
+
+impl SubscriptionsListSubscriptionsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+        if let Some(v) = &self.channel {
+            op.query("channel", v);
+        }
+        if let Some(v) = &self.status {
+            op.query("status", v);
+        }
+        if let Some(v) = &self.test_device {
+            op.query("test_device", v);
+        }
+        if let Some(v) = &self.since {
+            op.query("since", v);
+        }
+    }
+}
+
 impl<'a> SubscriptionsService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -821,6 +938,44 @@ impl<'a> SubscriptionsService<'a> {
     pub fn with_options(mut self, opts: RequestOptions) -> Self {
         self.opts = opts;
         self
+    }
+
+    /// Abonelik listesi (kanal/durum/test cihazı filtreleri; token yalnızca son 8 karakter)
+    ///
+    /// `GET /v1/apps/{appId}/subscriptions`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list_subscriptions(&self, params: Option<&SubscriptionsListSubscriptionsParams>) -> Result<SubscriptionList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/subscriptions");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// `list_subscriptions` sonuçlarını `next_cursor` ile tüm sayfalar boyunca tek tek döndürür.
+    /// Hata olursa yineleyici `Err` verir ve durur.
+    pub fn list_subscriptions_all(&self, params: Option<&SubscriptionsListSubscriptionsParams>) -> Paginator<'a, Subscription> {
+        let service = self.clone();
+        let mut p = params.cloned().unwrap_or_default();
+        Paginator::new(move |cursor| {
+            if let Some(c) = cursor {
+                p.cursor = Some(c);
+            }
+            let page = service.list_subscriptions(Some(&p))?;
+            Ok((page.data, page.next_cursor, page.has_more))
+        })
+    }
+
+    /// Toplu temizlik: geçersiz (veya abonelikten çıkmış) kayıtları sil
+    ///
+    /// `POST /v1/apps/{appId}/subscriptions/cleanup`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn cleanup_subscriptions(&self, body: &PublicCleanupSubscriptionsDto) -> Result<CleanupResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/subscriptions/cleanup");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
     }
 
     /// Abonelik detayı
@@ -920,6 +1075,28 @@ impl EventsListDefinitionsParams {
     }
 }
 
+/// `EventsService::recent` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct EventsRecentParams {
+    pub name: Option<String>,
+    pub limit: Option<i64>,
+    pub since: Option<String>,
+}
+
+impl EventsRecentParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.name {
+            op.query("name", v);
+        }
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.since {
+            op.query("since", v);
+        }
+    }
+}
+
 impl<'a> EventsService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -989,6 +1166,19 @@ impl<'a> EventsService<'a> {
         let mut op = Operation::new("PATCH", "/v1/apps/{appId}/events/definitions/{name}");
         op.path_param("name", name);
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Son olaylar (kullanıcı kimliği ve özelliklerle; ad ve zaman filtresi)
+    ///
+    /// `GET /v1/apps/{appId}/events/recent`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn recent(&self, params: Option<&EventsRecentParams>) -> Result<RecentEvents> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/events/recent");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
         self.client.execute(op, &self.opts)
     }
 }
@@ -2001,6 +2191,84 @@ impl<'a> InboxService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Takım oluştur (üyeler yanıt rolüne sahip org üyeleri)
+    ///
+    /// `POST /v1/apps/{appId}/inbox/teams`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_team(&self, body: &TeamInputDto) -> Result<InboxTeam> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/inbox/teams");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Takımı güncelle
+    ///
+    /// `PATCH /v1/apps/{appId}/inbox/teams/{teamId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_team(&self, team_id: &str, body: &TeamUpdateDto) -> Result<InboxTeam> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/inbox/teams/{teamId}");
+        op.path_param("teamId", team_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Takımı sil (konuşmaların takım ataması kalkar)
+    ///
+    /// `DELETE /v1/apps/{appId}/inbox/teams/{teamId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete_team(&self, team_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/inbox/teams/{teamId}");
+        op.path_param("teamId", team_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Atama kuralları (sırayla değerlendirilir)
+    ///
+    /// `GET /v1/apps/{appId}/inbox/assignment-rules`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn rules(&self) -> Result<AssignmentRuleList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/inbox/assignment-rules");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Atama kuralı oluştur (kanal/dil/etiket koşulu; round-robin, en az yük veya yalnızca takım)
+    ///
+    /// `POST /v1/apps/{appId}/inbox/assignment-rules`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create_rule(&self, body: &AssignmentRuleInputDto) -> Result<AssignmentRule> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/inbox/assignment-rules");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Atama kuralını güncelle (sıra dahil)
+    ///
+    /// `PATCH /v1/apps/{appId}/inbox/assignment-rules/{ruleId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_rule(&self, rule_id: &str, body: &AssignmentRuleUpdateDto) -> Result<AssignmentRule> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}");
+        op.path_param("ruleId", rule_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Atama kuralını sil
+    ///
+    /// `DELETE /v1/apps/{appId}/inbox/assignment-rules/{ruleId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delete_rule(&self, rule_id: &str) -> Result<OkModel> {
+        let mut op = Operation::new("DELETE", "/v1/apps/{appId}/inbox/assignment-rules/{ruleId}");
+        op.path_param("ruleId", rule_id);
+        self.client.execute(op, &self.opts)
+    }
+
     /// Temsilciler ve varlık durumu
     ///
     /// `GET /v1/apps/{appId}/inbox/agents`
@@ -2008,6 +2276,18 @@ impl<'a> InboxService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn agents(&self) -> Result<InboxAgentList> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/inbox/agents");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Temsilci yönlendirme profili: eşzamanlı konuşma sınırı ve diller
+    ///
+    /// `PATCH /v1/apps/{appId}/inbox/agents/{accountId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_agent(&self, account_id: &str, body: &AgentUpdateDto) -> Result<InboxAgent> {
+        let mut op = Operation::new("PATCH", "/v1/apps/{appId}/inbox/agents/{accountId}");
+        op.path_param("accountId", account_id);
+        op.json(body)?;
         self.client.execute(op, &self.opts)
     }
 
@@ -2450,6 +2730,16 @@ impl<'a> WebhooksService<'a> {
         self
     }
 
+    /// Abone olunabilecek olay türleri
+    ///
+    /// `GET /v1/apps/{appId}/webhooks/event-types`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn event_types(&self) -> Result<WebhookEventTypes> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/webhooks/event-types");
+        self.client.execute(op, &self.opts)
+    }
+
     /// Webhook endpoint'leri
     ///
     /// `GET /v1/apps/{appId}/webhooks`
@@ -2567,6 +2857,29 @@ impl<'a> WebhooksService<'a> {
         })
     }
 
+    /// Başarısız/ölü teslimleri toplu yeniden gönder (en fazla 1000)
+    ///
+    /// `POST /v1/apps/{appId}/webhooks/{webhookId}/replay`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn bulk_replay(&self, webhook_id: &str, body: &BulkReplayDto) -> Result<WebhookBulkReplayResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/webhooks/{webhookId}/replay");
+        op.path_param("webhookId", webhook_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Teslim detayı (gövde dahil)
+    ///
+    /// `GET /v1/apps/{appId}/webhooks/deliveries/{deliveryId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn delivery(&self, delivery_id: &str) -> Result<WebhookDeliveryDetail> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/webhooks/deliveries/{deliveryId}");
+        op.path_param("deliveryId", delivery_id);
+        self.client.execute(op, &self.opts)
+    }
+
     /// Teslimi yeniden gönder (aynı olay kimliğiyle)
     ///
     /// `POST /v1/apps/{appId}/webhooks/deliveries/{deliveryId}/replay`
@@ -2605,6 +2918,26 @@ impl<'a> ChannelsService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn list(&self) -> Result<ChannelList> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/channels");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kanal özeti (yalnız sağlayıcı ve durum; yapılandırma ayrıntısı dönmez)
+    ///
+    /// `GET /v1/apps/{appId}/channels/status`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn status(&self) -> Result<ChannelStatusList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/channels/status");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Gönderici alan adı SPF/DKIM/DMARC doğrulaması
+    ///
+    /// `POST /v1/apps/{appId}/channels/email/verify-dns`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn verify_dns(&self) -> Result<ChannelsVerifyDnsResponse> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/channels/email/verify-dns");
         self.client.execute(op, &self.opts)
     }
 
@@ -2933,6 +3266,16 @@ impl<'a> AnalyticsService<'a> {
     pub fn with_options(mut self, opts: RequestOptions) -> Self {
         self.opts = opts;
         self
+    }
+
+    /// Son 14 gün oturum hacmi ve tekil kullanıcı (günlük toplamlar)
+    ///
+    /// `GET /v1/apps/{appId}/analytics/sessions`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn sessions(&self) -> Result<SessionVolume> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/analytics/sessions");
+        self.client.execute(op, &self.opts)
     }
 
     /// Genel bakış KPI
@@ -3341,6 +3684,38 @@ impl OrganizationAuditLogsParams {
     }
 }
 
+/// `OrganizationService::request_logs` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct OrganizationRequestLogsParams {
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+    pub app_id: Option<String>,
+    /// Değerler: `"2xx"`, `"4xx"`, `"5xx"`.
+    pub status_class: Option<String>,
+    /// Değerler: `"GET"`, `"POST"`, `"PUT"`, `"PATCH"`, `"DELETE"`.
+    pub method: Option<String>,
+}
+
+impl OrganizationRequestLogsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+        if let Some(v) = &self.app_id {
+            op.query("app_id", v);
+        }
+        if let Some(v) = &self.status_class {
+            op.query("status_class", v);
+        }
+        if let Some(v) = &self.method {
+            op.query("method", v);
+        }
+    }
+}
+
 /// `OrganizationService::usage` için isteğe bağlı sorgu parametreleri.
 #[derive(Debug, Clone, Default, PartialEq)]
 pub struct OrganizationUsageParams {
@@ -3403,6 +3778,31 @@ impl<'a> OrganizationService<'a> {
                 p.cursor = Some(c);
             }
             let page = service.audit_logs(Some(&p))?;
+            Ok((page.data, page.next_cursor, page.has_more))
+        })
+    }
+
+    /// Public API istek logları (org geneli admin anahtarı; son 7 gün, cursor)
+    ///
+    /// `GET /v1/organization/logs`
+    pub fn request_logs(&self, params: Option<&OrganizationRequestLogsParams>) -> Result<RequestLogPage> {
+        let mut op = Operation::new("GET", "/v1/organization/logs");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// `request_logs` sonuçlarını `next_cursor` ile tüm sayfalar boyunca tek tek döndürür.
+    /// Hata olursa yineleyici `Err` verir ve durur.
+    pub fn request_logs_all(&self, params: Option<&OrganizationRequestLogsParams>) -> Paginator<'a, RequestLog> {
+        let service = self.clone();
+        let mut p = params.cloned().unwrap_or_default();
+        Paginator::new(move |cursor| {
+            if let Some(c) = cursor {
+                p.cursor = Some(c);
+            }
+            let page = service.request_logs(Some(&p))?;
             Ok((page.data, page.next_cursor, page.has_more))
         })
     }
@@ -3651,6 +4051,16 @@ impl<'a> AdsService<'a> {
         self
     }
 
+    /// Reklam platformları (etkin/mock, tanımlayıcılar, lookalike desteği)
+    ///
+    /// `GET /v1/apps/{appId}/ads/platforms`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn platforms(&self) -> Result<AdPlatformList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/ads/platforms");
+        self.client.execute(op, &self.opts)
+    }
+
     /// Bağlı reklam hesapları
     ///
     /// `GET /v1/apps/{appId}/ads/accounts`
@@ -3773,6 +4183,17 @@ impl<'a> AdsService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Reklam kampanyası oluştur: kampanya + reklam seti (Pushizo kitlesi) + kreatif/reklam
+    ///
+    /// `POST /v1/apps/{appId}/ads/campaigns`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateAdCampaignDto) -> Result<AdCampaignCreated> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/ads/campaigns");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
     /// Kampanya / reklam seti / reklam ayrıntısı
     ///
     /// `GET /v1/apps/{appId}/ads/campaigns/{entityId}`
@@ -3793,6 +4214,91 @@ impl<'a> AdsService<'a> {
         let mut op = Operation::new("PATCH", "/v1/apps/{appId}/ads/campaigns/{entityId}");
         op.path_param("entityId", entity_id);
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kreatif önizlemesi (platform önizleme bağlantısı + kreatif özeti)
+    ///
+    /// `GET /v1/apps/{appId}/ads/campaigns/{entityId}/preview`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn preview(&self, entity_id: &str) -> Result<AdCampaignPreview> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/ads/campaigns/{entityId}/preview");
+        op.path_param("entityId", entity_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Meta: hesabın tanıtabildiği Facebook sayfaları
+    ///
+    /// `GET /v1/apps/{appId}/ads/accounts/{accountId}/pages`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn pages(&self, account_id: &str) -> Result<AdPageList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/ads/accounts/{accountId}/pages");
+        op.path_param("accountId", account_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Yüklenen kreatif görselleri
+    ///
+    /// `GET /v1/apps/{appId}/ads/creatives`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn creatives(&self) -> Result<AdsCreativesResponse> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/ads/creatives");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Kreatif görsel yükle (multipart `file`: PNG/JPEG, en çok 5 MB)
+    ///
+    /// `POST /v1/apps/{appId}/ads/creatives`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn upload(&self) -> Result<AdCreative> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/ads/creatives");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Raporlama para birimi (org) ve atribüsyon varsayılanları (app)
+    ///
+    /// `GET /v1/apps/{appId}/ads/settings`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn settings(&self) -> Result<AdReportingSettings> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/ads/settings");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Raporlama para birimi ve atribüsyon varsayılanlarını güncelle
+    ///
+    /// `PUT /v1/apps/{appId}/ads/settings`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn update_settings(&self, body: &AdReportingSettingsInputDto) -> Result<AdReportingSettings> {
+        let mut op = Operation::new("PUT", "/v1/apps/{appId}/ads/settings");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Platform test aracına sentetik test olayı gönder
+    ///
+    /// `POST /v1/apps/{appId}/ads/conversions-api/configs/{configId}/test`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn test_capi(&self, config_id: &str) -> Result<AdCapiTestResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/ads/conversions-api/configs/{configId}/test");
+        op.path_param("configId", config_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Başarısız teslimi yeniden dene
+    ///
+    /// `POST /v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn retry_capi(&self, delivery_id: &str) -> Result<AdCapiDelivery> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/ads/conversions-api/deliveries/{deliveryId}/retry");
+        op.path_param("deliveryId", delivery_id);
         self.client.execute(op, &self.opts)
     }
 
@@ -5126,6 +5632,17 @@ impl<'a> ConversationsService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Kişi profili: özellikler, etiketler, abonelikler (maskeli), son olaylar, diğer konuşmalar
+    ///
+    /// `GET /v1/apps/{appId}/conversations/{conversationId}/contact`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn contact(&self, conversation_id: &str) -> Result<ConversationContact> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/conversations/{conversationId}/contact");
+        op.path_param("conversationId", conversation_id);
+        self.client.execute(op, &self.opts)
+    }
+
     /// Konuşma mesajları (yeniden eskiye; `after_seq` ile eskiden yeniye; giden mesaj durumu teslimattan veya okundu işaretçisinden)
     ///
     /// `GET /v1/apps/{appId}/conversations/{conversationId}/messages`
@@ -5897,6 +6414,34 @@ impl EmailDeliverabilityUsageParams {
     }
 }
 
+/// `EmailDeliverabilityService::insights` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct EmailDeliverabilityInsightsParams {
+    pub days: Option<i64>,
+}
+
+impl EmailDeliverabilityInsightsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.days {
+            op.query("days", v);
+        }
+    }
+}
+
+/// `EmailDeliverabilityService::bounces` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct EmailDeliverabilityBouncesParams {
+    pub days: Option<i64>,
+}
+
+impl EmailDeliverabilityBouncesParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.days {
+            op.query("days", v);
+        }
+    }
+}
+
 impl<'a> EmailDeliverabilityService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -6003,6 +6548,76 @@ impl<'a> EmailDeliverabilityService<'a> {
     pub fn usage(&self, plan_id: &str, params: Option<&EmailDeliverabilityUsageParams>) -> Result<EmailWarmupUsage> {
         let mut op = Operation::new("GET", "/v1/apps/{appId}/email-deliverability/warmup-plans/{planId}/usage");
         op.path_param("planId", plan_id);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Liste temizliği durumu: e-posta aboneliklerinin denetim dağılımı ve son doğrulama çalıştırması
+    ///
+    /// `GET /v1/apps/{appId}/email-deliverability/hygiene`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn hygiene(&self) -> Result<EmailHygieneStatus> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/email-deliverability/hygiene");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Listeyi doğrula: tüm e-posta aboneliklerini toplu, hız sınırlı doğrula (etkin çalıştırma varsa o döner)
+    ///
+    /// `POST /v1/apps/{appId}/email-deliverability/hygiene-runs`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn start_hygiene(&self, body: &std::collections::HashMap<String, serde_json::Value>) -> Result<EmailHygieneStart> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/email-deliverability/hygiene-runs");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Liste doğrulama çalıştırması (ilerleme ve özet)
+    ///
+    /// `GET /v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn hygiene_run(&self, run_id: &str) -> Result<EmailHygieneRun> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}");
+        op.path_param("runId", run_id);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Doğrulamada geçersiz bulunan adresleri bastır (abonelik invalid + suppression list)
+    ///
+    /// `POST /v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn suppress_hygiene(&self, run_id: &str, body: &std::collections::HashMap<String, serde_json::Value>) -> Result<EmailHygieneSuppress> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/email-deliverability/hygiene-runs/{runId}/suppress");
+        op.path_param("runId", run_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Posta sağlayıcısı bazında (Gmail, Outlook, Yahoo, diğer) teslim, açılma, tıklama, bounce ve şikâyet sayıları
+    ///
+    /// `GET /v1/apps/{appId}/email-deliverability/insights`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn insights(&self, params: Option<&EmailDeliverabilityInsightsParams>) -> Result<EmailProviderInsights> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/email-deliverability/insights");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// E-posta bounce eğilimi (%2 hedef), tür/neden dağılımı ve en çok bounce alan alıcı alan adları
+    ///
+    /// `GET /v1/apps/{appId}/email-deliverability/bounces`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn bounces(&self, params: Option<&EmailDeliverabilityBouncesParams>) -> Result<EmailBounceStats> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/email-deliverability/bounces");
         if let Some(p) = params {
             p.append_query(&mut op);
         }
@@ -6538,6 +7153,20 @@ impl IntegrationsSamplesParams {
     }
 }
 
+/// `IntegrationsService::runs` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct IntegrationsRunsParams {
+    pub limit: Option<i64>,
+}
+
+impl IntegrationsRunsParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+    }
+}
+
 impl<'a> IntegrationsService<'a> {
     pub(crate) fn new(client: &'a Client) -> Self {
         Self { client, opts: RequestOptions::default() }
@@ -6570,6 +7199,16 @@ impl<'a> IntegrationsService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// Zapier REST Hook abonelikleri
+    ///
+    /// `GET /v1/apps/{appId}/integrations/zapier/hooks`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn hooks(&self) -> Result<ZapierHookList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/integrations/zapier/hooks");
+        self.client.execute(op, &self.opts)
+    }
+
     /// REST Hook aboneliğini sil (Zap kapatıldı)
     ///
     /// `DELETE /v1/apps/{appId}/integrations/zapier/hooks/{hookId}`
@@ -6592,6 +7231,63 @@ impl<'a> IntegrationsService<'a> {
         if let Some(p) = params {
             p.append_query(&mut op);
         }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bağlı entegrasyonlar ve katalog
+    ///
+    /// `GET /v1/apps/{appId}/integrations`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self) -> Result<IntegrationList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/integrations");
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Entegrasyon ayrıntısı (kimlik bilgisi maskeli)
+    ///
+    /// `GET /v1/apps/{appId}/integrations/{type}`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn get(&self, r#type: &str) -> Result<Integration> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/integrations/{type}");
+        op.path_param("type", r#type);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Son çalışmalar (senkron, olay gönderimi, gelen istekler, test)
+    ///
+    /// `GET /v1/apps/{appId}/integrations/{type}/runs`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn runs(&self, r#type: &str, params: Option<&IntegrationsRunsParams>) -> Result<IntegrationRunList> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/integrations/{type}/runs");
+        op.path_param("type", r#type);
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Bağlantı testi
+    ///
+    /// `POST /v1/apps/{appId}/integrations/{type}/test`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn test(&self, r#type: &str) -> Result<IntegrationTestResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/integrations/{type}/test");
+        op.path_param("type", r#type);
+        self.client.execute(op, &self.opts)
+    }
+
+    /// Cohort senkronunu şimdi çalıştır (worker en geç 1 dk içinde)
+    ///
+    /// `POST /v1/apps/{appId}/integrations/{type}/sync`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn sync(&self, r#type: &str) -> Result<IntegrationSyncResult> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/integrations/{type}/sync");
+        op.path_param("type", r#type);
         self.client.execute(op, &self.opts)
     }
 }
@@ -8100,6 +8796,80 @@ impl<'a> RfmService<'a> {
     }
 }
 
+/// `sdkErrors` kaynağı.
+/// `Client::sdk_errors()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct SdkErrorsService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+/// `SdkErrorsService::list` için isteğe bağlı sorgu parametreleri.
+#[derive(Debug, Clone, Default, PartialEq)]
+pub struct SdkErrorsListParams {
+    pub limit: Option<i64>,
+    pub cursor: Option<String>,
+    pub platform: Option<String>,
+    /// Değerler: `"error"`, `"warning"`.
+    pub level: Option<String>,
+}
+
+impl SdkErrorsListParams {
+    fn append_query(&self, op: &mut Operation) {
+        if let Some(v) = &self.limit {
+            op.query("limit", v);
+        }
+        if let Some(v) = &self.cursor {
+            op.query("cursor", v);
+        }
+        if let Some(v) = &self.platform {
+            op.query("platform", v);
+        }
+        if let Some(v) = &self.level {
+            op.query("level", v);
+        }
+    }
+}
+
+impl<'a> SdkErrorsService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// SDK hata raporları (son 7 gün, cursor)
+    ///
+    /// `GET /v1/apps/{appId}/sdk-errors`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn list(&self, params: Option<&SdkErrorsListParams>) -> Result<SdkErrorPage> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/sdk-errors");
+        if let Some(p) = params {
+            p.append_query(&mut op);
+        }
+        self.client.execute(op, &self.opts)
+    }
+
+    /// `list` sonuçlarını `next_cursor` ile tüm sayfalar boyunca tek tek döndürür.
+    /// Hata olursa yineleyici `Err` verir ve durur.
+    pub fn list_all(&self, params: Option<&SdkErrorsListParams>) -> Paginator<'a, SdkErrorPageDataItem> {
+        let service = self.clone();
+        let mut p = params.cloned().unwrap_or_default();
+        Paginator::new(move |cursor| {
+            if let Some(c) = cursor {
+                p.cursor = Some(c);
+            }
+            let page = service.list(Some(&p))?;
+            Ok((page.data, page.next_cursor, page.has_more))
+        })
+    }
+}
+
 /// `siteSearch` kaynağı.
 /// `Client::site_search()` ile alınır.
 #[derive(Debug, Clone)]
@@ -8669,6 +9439,18 @@ impl<'a> SurveysService<'a> {
         self.client.execute(op, &self.opts)
     }
 
+    /// In-app dağıtımı: anketi HTML in-app mesajına dönüştür (oluştur/güncelle, isteğe bağlı yayınla)
+    ///
+    /// `POST /v1/apps/{appId}/surveys/{surveyId}/distribute/in-app`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn distribute(&self, survey_id: &str, body: &SurveyInAppDto) -> Result<Survey> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/surveys/{surveyId}/distribute/in-app");
+        op.path_param("surveyId", survey_id);
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+
     /// NPS / CSAT raporu
     ///
     /// `GET /v1/apps/{appId}/surveys/{surveyId}/report`
@@ -8721,6 +9503,37 @@ impl<'a> SurveysService<'a> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/surveys/{surveyId}/responses");
         op.path_param("surveyId", survey_id);
         op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `trace` kaynağı.
+/// `Client::trace()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct TraceService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+impl<'a> TraceService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Mesaj izleme: msg_/dlv_/sub_ ID, external_id veya token son 8 karakteri
+    ///
+    /// `GET /v1/apps/{appId}/trace`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn trace(&self, q: &str) -> Result<TraceResult> {
+        let mut op = Operation::new("GET", "/v1/apps/{appId}/trace");
+        op.query("q", q);
         self.client.execute(op, &self.opts)
     }
 }
