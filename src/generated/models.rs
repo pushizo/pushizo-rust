@@ -689,7 +689,7 @@ pub struct AddAliasDto {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct AddSubscriptionDto {
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -1465,7 +1465,7 @@ pub struct AppSettingsFrequencyCapsItem {
     /// Zorunlu.
     #[serde(rename = "window", deserialize_with = "crate::de::null_default")]
     pub window: AppSettingsFrequencyCapsItemWindow,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
 }
@@ -2165,7 +2165,7 @@ pub struct CampaignsCreateBodyAudience {
     /// Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
     #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
     pub filters: Option<CampaignsCreateBodyAudienceFilters>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "test_devices_only", skip_serializing_if = "Option::is_none")]
@@ -2345,7 +2345,7 @@ pub struct CampaignStatsCards {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct CampaignStatsChannelsItem {
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -2515,7 +2515,7 @@ pub struct CampaignsUpdateBodyAudience {
     /// Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
     #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
     pub filters: Option<CampaignsUpdateBodyAudienceFilters>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "test_devices_only", skip_serializing_if = "Option::is_none")]
@@ -2965,10 +2965,10 @@ pub struct CatalogUpsertResult {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct ChannelConfig {
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
-    /// Zorunlu. Değerler: `"apns"`, `"fcm"`, `"hms"`, `"adm"`, `"wns"`, `"webpush"`, `"smtp"`, `"ses"`, `"resend"`, `"twilio"`, `"netgsm"`, `"meta_whatsapp"`, `"google_rbm"`, `"mock"`.
+    /// Zorunlu. Değerler: `"apns"`, `"fcm"`, `"hms"`, `"adm"`, `"wns"`, `"webpush"`, `"smtp"`, `"ses"`, `"resend"`, `"twilio"`, `"netgsm"`, `"meta_whatsapp"`, `"google_rbm"`, `"telegram_bot"`, `"viber_bot"`, `"mock"`.
     #[serde(rename = "provider")]
     pub provider: Option<String>,
     /// Zorunlu. Değerler: `"unconfigured"`, `"active"`, `"invalid"`, `"suspended"`.
@@ -3092,6 +3092,16 @@ pub struct ChannelConfigConfig {
     pub content_sid: Option<String>,
     #[serde(rename = "sms_fallback", skip_serializing_if = "Option::is_none")]
     pub sms_fallback: Option<bool>,
+    #[serde(rename = "telegram_bot_username", skip_serializing_if = "Option::is_none")]
+    pub telegram_bot_username: Option<String>,
+    #[serde(rename = "viber_uri", skip_serializing_if = "Option::is_none")]
+    pub viber_uri: Option<String>,
+    #[serde(rename = "viber_sender_name", skip_serializing_if = "Option::is_none")]
+    pub viber_sender_name: Option<String>,
+    #[serde(rename = "viber_sender_avatar", skip_serializing_if = "Option::is_none")]
+    pub viber_sender_avatar: Option<String>,
+    #[serde(rename = "webhook_registered_at", skip_serializing_if = "Option::is_none")]
+    pub webhook_registered_at: Option<String>,
 }
 
 /// `ChannelConfigDnsCheck` şeması.
@@ -3410,7 +3420,7 @@ pub struct Conversation {
     /// Zorunlu.
     #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
     pub id: String,
-    /// Zorunlu. Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"email"`, `"chat"`.
+    /// Zorunlu. Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`, `"email"`, `"chat"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu. Değerler: `"open"`, `"pending"`, `"resolved"`, `"closed"`.
@@ -4231,7 +4241,7 @@ pub struct CreateCategoryDto {
     pub name: std::collections::HashMap<String, String>,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<std::collections::HashMap<String, String>>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "default_opted_in", skip_serializing_if = "Option::is_none")]
@@ -4382,7 +4392,7 @@ pub struct CreateExportDtoFilters {
     pub campaign_id: Option<String>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<String>,
     #[serde(rename = "segment_id", skip_serializing_if = "Option::is_none")]
@@ -4690,7 +4700,7 @@ pub struct CreateKeywordDto {
     /// Değerler: `"org"`, `"app"`.
     #[serde(rename = "scope", skip_serializing_if = "Option::is_none")]
     pub scope: Option<String>,
-    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     /// Zorunlu.
@@ -4832,6 +4842,21 @@ pub struct CreateLookalikeDto {
     /// Zorunlu.
     #[serde(rename = "ratio", deserialize_with = "crate::de::null_default")]
     pub ratio: f64,
+}
+
+/// `CreateMessengerLinkDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateMessengerLinkDto {
+    /// Zorunlu. Değerler: `"telegram"`, `"viber"`.
+    #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
+    pub channel: String,
+    #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(rename = "external_id", skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    #[serde(rename = "ttl_seconds", skip_serializing_if = "Option::is_none")]
+    pub ttl_seconds: Option<i64>,
 }
 
 /// `CreateNotificationDto` şeması.
@@ -4976,6 +5001,10 @@ pub struct CreateNotificationDto {
     pub rcs_content_variables: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "rcs_fallback_text", skip_serializing_if = "Option::is_none")]
     pub rcs_fallback_text: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "messenger_image_url", skip_serializing_if = "Option::is_none")]
+    pub messenger_image_url: Option<String>,
+    #[serde(rename = "messenger_buttons", skip_serializing_if = "Option::is_none")]
+    pub messenger_buttons: Option<Vec<serde_json::Value>>,
     #[serde(rename = "add_to_inbox", skip_serializing_if = "Option::is_none")]
     pub add_to_inbox: Option<bool>,
     #[serde(rename = "inbox_ttl", skip_serializing_if = "Option::is_none")]
@@ -5095,7 +5124,7 @@ pub struct CreateNotificationDtoTarget {
     pub excluded_segments: Option<Vec<String>>,
     #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
     pub filters: Option<serde_json::Value>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "test_devices_only", skip_serializing_if = "Option::is_none")]
@@ -5340,7 +5369,7 @@ pub struct CreateSavedReportDtoDefinitionSort {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct CreateSuppressionDto {
-    /// Zorunlu. Değerler: `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -5429,7 +5458,7 @@ pub struct CreateTemplateDto {
     /// Zorunlu.
     #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
     pub name: String,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<String>,
     #[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
@@ -5556,6 +5585,10 @@ pub struct CreateTemplateDtoContent {
     pub rcs_content_variables: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "rcs_fallback_text", skip_serializing_if = "Option::is_none")]
     pub rcs_fallback_text: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "messenger_image_url", skip_serializing_if = "Option::is_none")]
+    pub messenger_image_url: Option<String>,
+    #[serde(rename = "messenger_buttons", skip_serializing_if = "Option::is_none")]
+    pub messenger_buttons: Option<Vec<serde_json::Value>>,
     #[serde(rename = "ios_carousel", skip_serializing_if = "Option::is_none")]
     pub ios_carousel: Option<Vec<CreateTemplateDtoContentIosCarouselItem>>,
     #[serde(rename = "android_live_update", skip_serializing_if = "Option::is_none")]
@@ -6636,7 +6669,7 @@ pub struct Delivery {
     /// Zorunlu.
     #[serde(rename = "user_id")]
     pub user_id: Option<String>,
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -7062,7 +7095,7 @@ pub struct EstimateAudienceDtoTarget {
     pub excluded_segments: Option<Vec<String>>,
     #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
     pub filters: Option<serde_json::Value>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "test_devices_only", skip_serializing_if = "Option::is_none")]
@@ -7395,7 +7428,7 @@ pub struct ExportFilters {
     pub campaign_id: Option<String>,
     #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<String>,
     #[serde(rename = "segment_id", skip_serializing_if = "Option::is_none")]
@@ -10080,7 +10113,7 @@ pub struct McpCreateCampaignDraftBodyAudience {
     /// Filtre AST: all/any/none grupları ve { field, op, value } koşulları (docs/plan/05 §5.7).
     #[serde(rename = "filters", skip_serializing_if = "Option::is_none")]
     pub filters: Option<McpCreateCampaignDraftBodyAudienceFilters>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "test_devices_only", skip_serializing_if = "Option::is_none")]
@@ -10602,6 +10635,30 @@ pub struct MessageVariantsItem {
     pub is_control: bool,
 }
 
+/// `MessengerLink` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct MessengerLink {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu. Değerler: `"telegram"`, `"viber"`.
+    #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
+    pub channel: String,
+    /// Zorunlu.
+    #[serde(rename = "user_id", deserialize_with = "crate::de::null_default")]
+    pub user_id: String,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    /// Zorunlu.
+    #[serde(rename = "token", deserialize_with = "crate::de::null_default")]
+    pub token: String,
+    /// Zorunlu.
+    #[serde(rename = "expires_at", deserialize_with = "crate::de::null_default")]
+    pub expires_at: String,
+}
+
 /// `Ok` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -10707,10 +10764,10 @@ pub struct OverviewStats {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct OverviewStatsChannelsItem {
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
-    /// Zorunlu. Değerler: `"apns"`, `"fcm"`, `"hms"`, `"adm"`, `"wns"`, `"webpush"`, `"smtp"`, `"ses"`, `"resend"`, `"twilio"`, `"netgsm"`, `"meta_whatsapp"`, `"google_rbm"`, `"mock"`.
+    /// Zorunlu. Değerler: `"apns"`, `"fcm"`, `"hms"`, `"adm"`, `"wns"`, `"webpush"`, `"smtp"`, `"ses"`, `"resend"`, `"twilio"`, `"netgsm"`, `"meta_whatsapp"`, `"google_rbm"`, `"telegram_bot"`, `"viber_bot"`, `"mock"`.
     #[serde(rename = "provider")]
     pub provider: Option<String>,
     /// Zorunlu. Değerler: `"unconfigured"`, `"active"`, `"invalid"`, `"suspended"`.
@@ -11513,7 +11570,7 @@ pub struct Recommendations {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct RenderPreview {
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -11616,7 +11673,7 @@ pub struct RenderPreviewSms {
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct RenderTemplateDto {
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<String>,
     #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
@@ -11748,6 +11805,10 @@ pub struct RenderTemplateDtoContent {
     pub rcs_content_variables: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "rcs_fallback_text", skip_serializing_if = "Option::is_none")]
     pub rcs_fallback_text: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "messenger_image_url", skip_serializing_if = "Option::is_none")]
+    pub messenger_image_url: Option<String>,
+    #[serde(rename = "messenger_buttons", skip_serializing_if = "Option::is_none")]
+    pub messenger_buttons: Option<Vec<serde_json::Value>>,
     #[serde(rename = "ios_carousel", skip_serializing_if = "Option::is_none")]
     pub ios_carousel: Option<Vec<RenderTemplateDtoContentIosCarouselItem>>,
     #[serde(rename = "android_live_update", skip_serializing_if = "Option::is_none")]
@@ -12725,7 +12786,7 @@ pub struct SetPreferencesDtoPreferencesItem {
     /// Zorunlu.
     #[serde(rename = "category", deserialize_with = "crate::de::null_default")]
     pub category: String,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<String>,
     /// Zorunlu.
@@ -12749,7 +12810,7 @@ pub struct SmsKeyword {
     /// Zorunlu.
     #[serde(rename = "app_id")]
     pub app_id: Option<String>,
-    /// Zorunlu. Değerler: `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
     pub channels: Vec<String>,
     /// Zorunlu.
@@ -12881,7 +12942,7 @@ pub struct Subscription {
     /// Zorunlu.
     #[serde(rename = "user_id")]
     pub user_id: Option<String>,
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -13102,7 +13163,7 @@ pub struct Suppression {
     /// Zorunlu.
     #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
     pub app_id: String,
-    /// Zorunlu. Değerler: `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", deserialize_with = "crate::de::null_default")]
     pub channel: String,
     /// Zorunlu.
@@ -13466,7 +13527,7 @@ pub struct Template {
     /// Zorunlu.
     #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
     pub name: String,
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel")]
     pub channel: Option<String>,
     /// Zorunlu.
@@ -13940,7 +14001,7 @@ pub struct UpdateAppDtoSettingsFrequencyCapsItem {
     /// Zorunlu.
     #[serde(rename = "window", deserialize_with = "crate::de::null_default")]
     pub window: UpdateAppDtoSettingsFrequencyCapsItemWindow,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
 }
@@ -14300,7 +14361,7 @@ pub struct UpdateCategoryDto {
     pub name: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<std::collections::HashMap<String, String>>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "default_opted_in", skip_serializing_if = "Option::is_none")]
@@ -14569,7 +14630,7 @@ pub struct UpdateJourneyDto {
 pub struct UpdateKeywordDto {
     #[serde(rename = "keyword", skip_serializing_if = "Option::is_none")]
     pub keyword: Option<String>,
-    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
     pub channels: Option<Vec<String>>,
     #[serde(rename = "actions", skip_serializing_if = "Option::is_none")]
@@ -14884,7 +14945,7 @@ pub struct UpdateSavedReportDtoDefinitionSort {
 pub struct UpdateTemplateDto {
     #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channel", skip_serializing_if = "Option::is_none")]
     pub channel: Option<String>,
     #[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
@@ -15010,6 +15071,10 @@ pub struct UpdateTemplateDtoContent {
     pub rcs_content_variables: Option<std::collections::HashMap<String, String>>,
     #[serde(rename = "rcs_fallback_text", skip_serializing_if = "Option::is_none")]
     pub rcs_fallback_text: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "messenger_image_url", skip_serializing_if = "Option::is_none")]
+    pub messenger_image_url: Option<String>,
+    #[serde(rename = "messenger_buttons", skip_serializing_if = "Option::is_none")]
+    pub messenger_buttons: Option<Vec<serde_json::Value>>,
     #[serde(rename = "ios_carousel", skip_serializing_if = "Option::is_none")]
     pub ios_carousel: Option<Vec<UpdateTemplateDtoContentIosCarouselItem>>,
     #[serde(rename = "android_live_update", skip_serializing_if = "Option::is_none")]
@@ -16017,7 +16082,7 @@ pub struct User {
     /// Zorunlu.
     #[serde(rename = "subscription_count", deserialize_with = "crate::de::null_default")]
     pub subscription_count: i64,
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
     pub channels: Vec<String>,
 }
@@ -16077,7 +16142,7 @@ pub struct UserDetail {
     /// Zorunlu.
     #[serde(rename = "subscription_count", deserialize_with = "crate::de::null_default")]
     pub subscription_count: i64,
-    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
     pub channels: Vec<String>,
     /// Zorunlu.

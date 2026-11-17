@@ -208,6 +208,11 @@ impl Client {
         McpService::new(self)
     }
 
+    /// `messengerLinks` kaynağı.
+    pub fn messenger_links(&self) -> MessengerLinksService<'_> {
+        MessengerLinksService::new(self)
+    }
+
     /// `predictions` kaynağı.
     pub fn predictions(&self) -> PredictionsService<'_> {
         PredictionsService::new(self)
@@ -1100,7 +1105,7 @@ pub struct TemplatesListParams {
     pub limit: Option<i64>,
     pub cursor: Option<String>,
     pub q: Option<String>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     pub channel: Option<String>,
 }
 
@@ -1269,7 +1274,7 @@ pub struct CampaignsListParams {
     pub status: Option<String>,
     /// Değerler: `"one_time"`, `"scheduled"`, `"recurring"`, `"automated"`, `"transactional"`.
     pub r#type: Option<String>,
-    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     pub channel: Option<String>,
     pub label: Option<String>,
 }
@@ -1782,7 +1787,7 @@ pub struct InboxService<'a> {
 pub struct InboxMetricsParams {
     pub from: Option<String>,
     pub to: Option<String>,
-    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"email"`, `"chat"`.
+    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`, `"email"`, `"chat"`.
     pub channel: Option<String>,
 }
 
@@ -1971,7 +1976,7 @@ pub struct SuppressionsService<'a> {
 pub struct SuppressionsListParams {
     pub limit: Option<i64>,
     pub cursor: Option<String>,
-    /// Değerler: `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`.
+    /// Değerler: `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     pub channel: Option<String>,
     /// Değerler: `"bounce"`, `"complaint"`, `"manual"`, `"unsubscribe_link"`, `"stop"`.
     pub reason: Option<String>,
@@ -4341,7 +4346,7 @@ pub struct ConversationsService<'a> {
 pub struct ConversationsListParams {
     pub limit: Option<i64>,
     pub cursor: Option<String>,
-    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"email"`, `"chat"`.
+    /// Değerler: `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`, `"email"`, `"chat"`.
     pub channel: Option<String>,
     /// Değerler: `"open"`, `"pending"`, `"resolved"`, `"closed"`.
     pub status: Option<String>,
@@ -6094,6 +6099,37 @@ impl<'a> McpService<'a> {
     /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
     pub fn test_send(&self, body: &TestPushDto) -> Result<CreateNotificationResult> {
         let mut op = Operation::new("POST", "/v1/apps/{appId}/mcp/test-sends");
+        op.json(body)?;
+        self.client.execute(op, &self.opts)
+    }
+}
+
+/// `messengerLinks` kaynağı.
+/// `Client::messenger_links()` ile alınır.
+#[derive(Debug, Clone)]
+pub struct MessengerLinksService<'a> {
+    client: &'a Client,
+    opts: RequestOptions,
+}
+
+impl<'a> MessengerLinksService<'a> {
+    pub(crate) fn new(client: &'a Client) -> Self {
+        Self { client, opts: RequestOptions::default() }
+    }
+
+    /// Bu servisten yapılacak çağrıların ayarları (app, Idempotency-Key, başlık, zaman aşımı).
+    pub fn with_options(mut self, opts: RequestOptions) -> Self {
+        self.opts = opts;
+        self
+    }
+
+    /// Telegram/Viber abonelik bağlama derin bağlantısı (tek kullanımlık belirteç; kullanıcı bota yazınca sohbet kimliği bu kullanıcıya abonelik olarak bağlanır)
+    ///
+    /// `POST /v1/apps/{appId}/messenger-links`
+    ///
+    /// App kapsamı istemcinin varsayılan app’i veya `RequestOptions::app_id` değeridir.
+    pub fn create(&self, body: &CreateMessengerLinkDto) -> Result<MessengerLink> {
+        let mut op = Operation::new("POST", "/v1/apps/{appId}/messenger-links");
         op.json(body)?;
         self.client.execute(op, &self.opts)
     }
