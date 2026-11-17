@@ -1124,6 +1124,488 @@ pub struct AdSpendReportTotals {
     pub roas: Option<f64>,
 }
 
+/// `AffinityConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AffinityConfig {
+    /// Zorunlu.
+    #[serde(rename = "configured", deserialize_with = "crate::de::null_default")]
+    pub configured: bool,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "attributes", deserialize_with = "crate::de::null_default")]
+    pub attributes: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "events", deserialize_with = "crate::de::null_default")]
+    pub events: std::collections::HashMap<String, f64>,
+    /// Zorunlu.
+    #[serde(rename = "window_days", deserialize_with = "crate::de::null_default")]
+    pub window_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "half_life_days", deserialize_with = "crate::de::null_default")]
+    pub half_life_days: i64,
+    /// Zorunlu. Değerler: `"idle"`, `"queued"`, `"running"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scored_users", deserialize_with = "crate::de::null_default")]
+    pub scored_users: i64,
+}
+
+/// `AffinityOverview` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AffinityOverview {
+    /// Zorunlu.
+    #[serde(rename = "last_computed_at")]
+    pub last_computed_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "scored_users", deserialize_with = "crate::de::null_default")]
+    pub scored_users: i64,
+    /// Zorunlu.
+    #[serde(rename = "attributes", deserialize_with = "crate::de::null_default")]
+    pub attributes: Vec<AffinityOverviewAttributesItem>,
+}
+
+/// `AffinityOverviewAttributesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AffinityOverviewAttributesItem {
+    /// Zorunlu.
+    #[serde(rename = "attribute", deserialize_with = "crate::de::null_default")]
+    pub attribute: String,
+    /// Zorunlu.
+    #[serde(rename = "values", deserialize_with = "crate::de::null_default")]
+    pub values: Vec<AffinityOverviewAttributesItemValuesItem>,
+}
+
+/// `AffinityOverviewAttributesItemValuesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AffinityOverviewAttributesItemValuesItem {
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+    /// Zorunlu.
+    #[serde(rename = "users", deserialize_with = "crate::de::null_default")]
+    pub users: i64,
+    /// Zorunlu.
+    #[serde(rename = "top_users", deserialize_with = "crate::de::null_default")]
+    pub top_users: i64,
+}
+
+/// `AiAgent` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgent {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"whatsapp"`, `"sms"`, `"rcs"`, `"telegram"`, `"viber"`, `"chat"`.
+    #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
+    pub channels: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "instructions", deserialize_with = "crate::de::null_default")]
+    pub instructions: String,
+    /// Zorunlu.
+    #[serde(rename = "faq", deserialize_with = "crate::de::null_default")]
+    pub faq: Vec<AiAgentFaqItem>,
+    /// Zorunlu.
+    #[serde(rename = "tools", deserialize_with = "crate::de::null_default")]
+    pub tools: Vec<AiAgentToolsItem>,
+    /// Zorunlu.
+    #[serde(rename = "handoff", deserialize_with = "crate::de::null_default")]
+    pub handoff: AiAgentHandoff,
+    /// Zorunlu.
+    #[serde(rename = "limits", deserialize_with = "crate::de::null_default")]
+    pub limits: AiAgentLimits,
+    /// Zorunlu.
+    #[serde(rename = "ai_sentiment", deserialize_with = "crate::de::null_default")]
+    pub ai_sentiment: bool,
+    /// Zorunlu.
+    #[serde(rename = "has_tool_secret", deserialize_with = "crate::de::null_default")]
+    pub has_tool_secret: bool,
+    /// Zorunlu.
+    #[serde(rename = "usage", deserialize_with = "crate::de::null_default")]
+    pub usage: AiAgentUsage,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `AiAgentFaqItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentFaqItem {
+    /// Zorunlu.
+    #[serde(rename = "question", deserialize_with = "crate::de::null_default")]
+    pub question: String,
+    /// Zorunlu.
+    #[serde(rename = "answer", deserialize_with = "crate::de::null_default")]
+    pub answer: String,
+}
+
+/// `AiAgentHandoff` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentHandoff {
+    /// Zorunlu.
+    #[serde(rename = "keywords", deserialize_with = "crate::de::null_default")]
+    pub keywords: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "max_bot_replies", deserialize_with = "crate::de::null_default")]
+    pub max_bot_replies: i64,
+    /// Zorunlu.
+    #[serde(rename = "on_negative_sentiment", deserialize_with = "crate::de::null_default")]
+    pub on_negative_sentiment: bool,
+    /// Zorunlu.
+    #[serde(rename = "message", deserialize_with = "crate::de::null_default")]
+    pub message: String,
+}
+
+/// `AiAgentLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentLimits {
+    /// Zorunlu.
+    #[serde(rename = "monthly_token_cap", deserialize_with = "crate::de::null_default")]
+    pub monthly_token_cap: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_steps", deserialize_with = "crate::de::null_default")]
+    pub max_steps: i64,
+}
+
+/// `AiAgentList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<AiAgent>,
+}
+
+/// `AiAgentMetrics` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentMetrics {
+    /// Zorunlu.
+    #[serde(rename = "period_days", deserialize_with = "crate::de::null_default")]
+    pub period_days: i64,
+    /// Zorunlu.
+    #[serde(rename = "runs", deserialize_with = "crate::de::null_default")]
+    pub runs: i64,
+    /// Zorunlu.
+    #[serde(rename = "replied", deserialize_with = "crate::de::null_default")]
+    pub replied: i64,
+    /// Zorunlu.
+    #[serde(rename = "handed_off", deserialize_with = "crate::de::null_default")]
+    pub handed_off: i64,
+    /// Zorunlu.
+    #[serde(rename = "skipped_cap", deserialize_with = "crate::de::null_default")]
+    pub skipped_cap: i64,
+    /// Zorunlu.
+    #[serde(rename = "failed", deserialize_with = "crate::de::null_default")]
+    pub failed: i64,
+    /// Zorunlu.
+    #[serde(rename = "conversations", deserialize_with = "crate::de::null_default")]
+    pub conversations: i64,
+    /// Zorunlu.
+    #[serde(rename = "resolution_rate", deserialize_with = "crate::de::null_default")]
+    pub resolution_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "avg_steps", deserialize_with = "crate::de::null_default")]
+    pub avg_steps: f64,
+    /// Zorunlu.
+    #[serde(rename = "tool_calls", deserialize_with = "crate::de::null_default")]
+    pub tool_calls: i64,
+    /// Zorunlu.
+    #[serde(rename = "tool_error_rate", deserialize_with = "crate::de::null_default")]
+    pub tool_error_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "tokens", deserialize_with = "crate::de::null_default")]
+    pub tokens: i64,
+    /// Zorunlu.
+    #[serde(rename = "handoff_reasons", deserialize_with = "crate::de::null_default")]
+    pub handoff_reasons: std::collections::HashMap<String, i64>,
+}
+
+/// `AiAgentRunList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentRunList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<AiAgentRunListDataItem>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `AiAgentRunListDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentRunListDataItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "agent_id", deserialize_with = "crate::de::null_default")]
+    pub agent_id: String,
+    /// Zorunlu.
+    #[serde(rename = "conversation_id", deserialize_with = "crate::de::null_default")]
+    pub conversation_id: String,
+    /// Zorunlu. Değerler: `"pending"`, `"replied"`, `"handed_off"`, `"skipped_cap"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "steps", deserialize_with = "crate::de::null_default")]
+    pub steps: Vec<AiAgentRunListDataItemStepsItem>,
+    /// Zorunlu.
+    #[serde(rename = "input_tokens", deserialize_with = "crate::de::null_default")]
+    pub input_tokens: i64,
+    /// Zorunlu.
+    #[serde(rename = "output_tokens", deserialize_with = "crate::de::null_default")]
+    pub output_tokens: i64,
+    /// Zorunlu.
+    #[serde(rename = "handoff_reason")]
+    pub handoff_reason: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error")]
+    pub error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "finished_at")]
+    pub finished_at: Option<String>,
+}
+
+/// `AiAgentRunListDataItemStepsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentRunListDataItemStepsItem {
+    /// Zorunlu. Değerler: `"reply"`, `"tool"`, `"handoff"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    #[serde(rename = "tool", skip_serializing_if = "Option::is_none")]
+    pub tool: Option<String>,
+    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
+    pub status: Option<i64>,
+    #[serde(rename = "ok", skip_serializing_if = "Option::is_none")]
+    pub ok: Option<bool>,
+    #[serde(rename = "duration_ms", skip_serializing_if = "Option::is_none")]
+    pub duration_ms: Option<i64>,
+}
+
+/// `AiAgentToolsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentToolsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    /// Zorunlu.
+    #[serde(rename = "params", deserialize_with = "crate::de::null_default")]
+    pub params: Vec<AiAgentToolsItemParamsItem>,
+}
+
+/// `AiAgentToolsItemParamsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentToolsItemParamsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "required", deserialize_with = "crate::de::null_default")]
+    pub required: bool,
+}
+
+/// `AiAgentUsage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentUsage {
+    /// Zorunlu.
+    #[serde(rename = "tokens_this_month", deserialize_with = "crate::de::null_default")]
+    pub tokens_this_month: i64,
+    /// Zorunlu.
+    #[serde(rename = "period_start", deserialize_with = "crate::de::null_default")]
+    pub period_start: String,
+}
+
+/// `AiAgentWithSecret` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecret {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"whatsapp"`, `"sms"`, `"rcs"`, `"telegram"`, `"viber"`, `"chat"`.
+    #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
+    pub channels: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "instructions", deserialize_with = "crate::de::null_default")]
+    pub instructions: String,
+    /// Zorunlu.
+    #[serde(rename = "faq", deserialize_with = "crate::de::null_default")]
+    pub faq: Vec<AiAgentWithSecretFaqItem>,
+    /// Zorunlu.
+    #[serde(rename = "tools", deserialize_with = "crate::de::null_default")]
+    pub tools: Vec<AiAgentWithSecretToolsItem>,
+    /// Zorunlu.
+    #[serde(rename = "handoff", deserialize_with = "crate::de::null_default")]
+    pub handoff: AiAgentWithSecretHandoff,
+    /// Zorunlu.
+    #[serde(rename = "limits", deserialize_with = "crate::de::null_default")]
+    pub limits: AiAgentWithSecretLimits,
+    /// Zorunlu.
+    #[serde(rename = "ai_sentiment", deserialize_with = "crate::de::null_default")]
+    pub ai_sentiment: bool,
+    /// Zorunlu.
+    #[serde(rename = "has_tool_secret", deserialize_with = "crate::de::null_default")]
+    pub has_tool_secret: bool,
+    /// Zorunlu.
+    #[serde(rename = "usage", deserialize_with = "crate::de::null_default")]
+    pub usage: AiAgentWithSecretUsage,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+    /// Zorunlu.
+    #[serde(rename = "tool_secret")]
+    pub tool_secret: Option<String>,
+}
+
+/// `AiAgentWithSecretFaqItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecretFaqItem {
+    /// Zorunlu.
+    #[serde(rename = "question", deserialize_with = "crate::de::null_default")]
+    pub question: String,
+    /// Zorunlu.
+    #[serde(rename = "answer", deserialize_with = "crate::de::null_default")]
+    pub answer: String,
+}
+
+/// `AiAgentWithSecretHandoff` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecretHandoff {
+    /// Zorunlu.
+    #[serde(rename = "keywords", deserialize_with = "crate::de::null_default")]
+    pub keywords: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "max_bot_replies", deserialize_with = "crate::de::null_default")]
+    pub max_bot_replies: i64,
+    /// Zorunlu.
+    #[serde(rename = "on_negative_sentiment", deserialize_with = "crate::de::null_default")]
+    pub on_negative_sentiment: bool,
+    /// Zorunlu.
+    #[serde(rename = "message", deserialize_with = "crate::de::null_default")]
+    pub message: String,
+}
+
+/// `AiAgentWithSecretLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecretLimits {
+    /// Zorunlu.
+    #[serde(rename = "monthly_token_cap", deserialize_with = "crate::de::null_default")]
+    pub monthly_token_cap: i64,
+    /// Zorunlu.
+    #[serde(rename = "max_steps", deserialize_with = "crate::de::null_default")]
+    pub max_steps: i64,
+}
+
+/// `AiAgentWithSecretToolsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecretToolsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    /// Zorunlu.
+    #[serde(rename = "params", deserialize_with = "crate::de::null_default")]
+    pub params: Vec<AiAgentWithSecretToolsItemParamsItem>,
+}
+
+/// `AiAgentWithSecretToolsItemParamsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecretToolsItemParamsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "required", deserialize_with = "crate::de::null_default")]
+    pub required: bool,
+}
+
+/// `AiAgentWithSecretUsage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct AiAgentWithSecretUsage {
+    /// Zorunlu.
+    #[serde(rename = "tokens_this_month", deserialize_with = "crate::de::null_default")]
+    pub tokens_this_month: i64,
+    /// Zorunlu.
+    #[serde(rename = "period_start", deserialize_with = "crate::de::null_default")]
+    pub period_start: String,
+}
+
 /// `AndroidDeliveryReport` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -2080,6 +2562,36 @@ pub struct AuditPage {
     /// Zorunlu.
     #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
     pub has_more: bool,
+}
+
+/// `BatchMembersDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct BatchMembersDto {
+    /// Zorunlu.
+    #[serde(rename = "members", deserialize_with = "crate::de::null_default")]
+    pub members: Vec<BatchMembersDtoMembersItem>,
+}
+
+/// `BatchMembersDtoMembersItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct BatchMembersDtoMembersItem {
+    #[serde(rename = "user_id", skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+    #[serde(rename = "external_id", skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    #[serde(rename = "role", skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
+}
+
+/// `BatchUpsertCompaniesDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct BatchUpsertCompaniesDto {
+    /// Zorunlu.
+    #[serde(rename = "companies", deserialize_with = "crate::de::null_default")]
+    pub companies: Vec<UpsertCompanyDto>,
 }
 
 /// `Campaign` şeması.
@@ -3717,6 +4229,150 @@ pub struct CheckVerifyDto {
     pub code: String,
 }
 
+/// `Company` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct Company {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id", deserialize_with = "crate::de::null_default")]
+    pub external_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name")]
+    pub name: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "domain")]
+    pub domain: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "properties", deserialize_with = "crate::de::null_default")]
+    pub properties: std::collections::HashMap<String, serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "member_count", deserialize_with = "crate::de::null_default")]
+    pub member_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `CompanyBatchResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyBatchResult {
+    /// Zorunlu.
+    #[serde(rename = "created", deserialize_with = "crate::de::null_default")]
+    pub created: i64,
+    /// Zorunlu.
+    #[serde(rename = "updated", deserialize_with = "crate::de::null_default")]
+    pub updated: i64,
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CompanyBatchResultDataItem>,
+}
+
+/// `CompanyBatchResultDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyBatchResultDataItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id", deserialize_with = "crate::de::null_default")]
+    pub external_id: String,
+    /// Zorunlu.
+    #[serde(rename = "created", deserialize_with = "crate::de::null_default")]
+    pub created: bool,
+}
+
+/// `CompanyList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<Company>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `CompanyMember` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyMember {
+    /// Zorunlu.
+    #[serde(rename = "company_id", deserialize_with = "crate::de::null_default")]
+    pub company_id: String,
+    /// Zorunlu.
+    #[serde(rename = "user_id", deserialize_with = "crate::de::null_default")]
+    pub user_id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id")]
+    pub external_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "role", deserialize_with = "crate::de::null_default")]
+    pub role: String,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `CompanyMemberBatchResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyMemberBatchResult {
+    /// Zorunlu.
+    #[serde(rename = "added", deserialize_with = "crate::de::null_default")]
+    pub added: i64,
+    /// Zorunlu.
+    #[serde(rename = "updated", deserialize_with = "crate::de::null_default")]
+    pub updated: i64,
+    /// Zorunlu.
+    #[serde(rename = "not_found", deserialize_with = "crate::de::null_default")]
+    pub not_found: Vec<CompanyMemberBatchResultNotFoundItem>,
+}
+
+/// `CompanyMemberBatchResultNotFoundItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyMemberBatchResultNotFoundItem {
+    /// Zorunlu.
+    #[serde(rename = "index", deserialize_with = "crate::de::null_default")]
+    pub index: i64,
+    /// Zorunlu.
+    #[serde(rename = "user_id")]
+    pub user_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "external_id")]
+    pub external_id: Option<String>,
+}
+
+/// `CompanyMemberList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CompanyMemberList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CompanyMember>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
 /// `ContentTable` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -4471,6 +5127,98 @@ pub struct CreateAdAudienceDto {
     pub sync_interval_minutes: Option<i64>,
 }
 
+/// `CreateAiAgentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAiAgentDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Değerler: `"whatsapp"`, `"sms"`, `"rcs"`, `"telegram"`, `"viber"`, `"chat"`.
+    #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
+    pub channels: Option<Vec<String>>,
+    #[serde(rename = "instructions", skip_serializing_if = "Option::is_none")]
+    pub instructions: Option<String>,
+    #[serde(rename = "faq", skip_serializing_if = "Option::is_none")]
+    pub faq: Option<Vec<CreateAiAgentDtoFaqItem>>,
+    #[serde(rename = "tools", skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<CreateAiAgentDtoToolsItem>>,
+    #[serde(rename = "handoff", skip_serializing_if = "Option::is_none")]
+    pub handoff: Option<CreateAiAgentDtoHandoff>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<CreateAiAgentDtoLimits>,
+    #[serde(rename = "ai_sentiment", skip_serializing_if = "Option::is_none")]
+    pub ai_sentiment: Option<bool>,
+}
+
+/// `CreateAiAgentDtoFaqItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAiAgentDtoFaqItem {
+    /// Zorunlu.
+    #[serde(rename = "question", deserialize_with = "crate::de::null_default")]
+    pub question: String,
+    /// Zorunlu.
+    #[serde(rename = "answer", deserialize_with = "crate::de::null_default")]
+    pub answer: String,
+}
+
+/// `CreateAiAgentDtoHandoff` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAiAgentDtoHandoff {
+    #[serde(rename = "keywords", skip_serializing_if = "Option::is_none")]
+    pub keywords: Option<Vec<String>>,
+    #[serde(rename = "max_bot_replies", skip_serializing_if = "Option::is_none")]
+    pub max_bot_replies: Option<i64>,
+    #[serde(rename = "on_negative_sentiment", skip_serializing_if = "Option::is_none")]
+    pub on_negative_sentiment: Option<bool>,
+    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// `CreateAiAgentDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAiAgentDtoLimits {
+    #[serde(rename = "monthly_token_cap", skip_serializing_if = "Option::is_none")]
+    pub monthly_token_cap: Option<i64>,
+    #[serde(rename = "max_steps", skip_serializing_if = "Option::is_none")]
+    pub max_steps: Option<i64>,
+}
+
+/// `CreateAiAgentDtoToolsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAiAgentDtoToolsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    #[serde(rename = "params", skip_serializing_if = "Option::is_none")]
+    pub params: Option<Vec<CreateAiAgentDtoToolsItemParamsItem>>,
+}
+
+/// `CreateAiAgentDtoToolsItemParamsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateAiAgentDtoToolsItemParamsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "required", skip_serializing_if = "Option::is_none")]
+    pub required: Option<bool>,
+}
+
 /// `CreateAppApiKeyDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -4623,6 +5371,49 @@ pub struct CreateCategoryDto {
     pub position: Option<i64>,
 }
 
+/// `CreateCustomAgentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateCustomAgentDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    #[serde(rename = "instructions", skip_serializing_if = "Option::is_none")]
+    pub instructions: Option<String>,
+    /// Değerler: `"list_segments"`, `"campaign_performance"`, `"delivery_summary"`, `"create_segment_draft"`, `"create_campaign_draft"`.
+    #[serde(rename = "tools", skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<String>>,
+    #[serde(rename = "schedule", skip_serializing_if = "Option::is_none")]
+    pub schedule: Option<CreateCustomAgentDtoSchedule>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<CreateCustomAgentDtoLimits>,
+}
+
+/// `CreateCustomAgentDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateCustomAgentDtoLimits {
+    #[serde(rename = "max_steps", skip_serializing_if = "Option::is_none")]
+    pub max_steps: Option<i64>,
+    #[serde(rename = "monthly_token_cap", skip_serializing_if = "Option::is_none")]
+    pub monthly_token_cap: Option<i64>,
+}
+
+/// `CreateCustomAgentDtoSchedule` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateCustomAgentDtoSchedule {
+    /// Zorunlu.
+    #[serde(rename = "cron", deserialize_with = "crate::de::null_default")]
+    pub cron: String,
+    #[serde(rename = "timezone", skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
+}
+
 /// `CreatedApiKey` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -4698,6 +5489,111 @@ pub struct CreateDataFeedDto {
     pub timeout_ms: Option<i64>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+}
+
+/// `CreateDataSourceDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateDataSourceDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Değerler: `"signature"`, `"token"`.
+    #[serde(rename = "auth_mode", skip_serializing_if = "Option::is_none")]
+    pub auth_mode: Option<String>,
+    #[serde(rename = "mapping", skip_serializing_if = "Option::is_none")]
+    pub mapping: Option<CreateDataSourceDtoMapping>,
+    #[serde(rename = "config", skip_serializing_if = "Option::is_none")]
+    pub config: Option<CreateDataSourceDtoConfig>,
+    #[serde(rename = "auth_value", skip_serializing_if = "Option::is_none")]
+    pub auth_value: Option<String>,
+    /// Zorunlu. Değerler: `"webhook"`, `"http_pull"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+}
+
+/// `CreateDataSourceDtoConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateDataSourceDtoConfig {
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Değerler: `"GET"`, `"POST"`.
+    #[serde(rename = "method", skip_serializing_if = "Option::is_none")]
+    pub method: Option<String>,
+    #[serde(rename = "headers", skip_serializing_if = "Option::is_none")]
+    pub headers: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "body", skip_serializing_if = "Option::is_none")]
+    pub body: Option<String>,
+    #[serde(rename = "interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub interval_minutes: Option<i64>,
+    #[serde(rename = "auth_header", skip_serializing_if = "Option::is_none")]
+    pub auth_header: Option<String>,
+    #[serde(rename = "next_cursor_path", skip_serializing_if = "Option::is_none")]
+    pub next_cursor_path: Option<String>,
+    #[serde(rename = "cursor_param", skip_serializing_if = "Option::is_none")]
+    pub cursor_param: Option<String>,
+    #[serde(rename = "resume_cursor", skip_serializing_if = "Option::is_none")]
+    pub resume_cursor: Option<bool>,
+}
+
+/// `CreateDataSourceDtoMapping` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateDataSourceDtoMapping {
+    #[serde(rename = "records_path", skip_serializing_if = "Option::is_none")]
+    pub records_path: Option<String>,
+    #[serde(rename = "event_name", skip_serializing_if = "Option::is_none")]
+    pub event_name: Option<String>,
+    #[serde(rename = "event_name_path", skip_serializing_if = "Option::is_none")]
+    pub event_name_path: Option<String>,
+    #[serde(rename = "external_id_path", skip_serializing_if = "Option::is_none")]
+    pub external_id_path: Option<String>,
+    #[serde(rename = "occurred_at_path", skip_serializing_if = "Option::is_none")]
+    pub occurred_at_path: Option<String>,
+    #[serde(rename = "value_path", skip_serializing_if = "Option::is_none")]
+    pub value_path: Option<String>,
+    #[serde(rename = "event_id_path", skip_serializing_if = "Option::is_none")]
+    pub event_id_path: Option<String>,
+    #[serde(rename = "properties_path", skip_serializing_if = "Option::is_none")]
+    pub properties_path: Option<String>,
+    #[serde(rename = "tags_path", skip_serializing_if = "Option::is_none")]
+    pub tags_path: Option<String>,
+}
+
+/// `CreateDataTransformDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateDataTransformDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Zorunlu. Değerler: `"rules"`, `"javascript"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    #[serde(rename = "position", skip_serializing_if = "Option::is_none")]
+    pub position: Option<i64>,
+    #[serde(rename = "rules", skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<serde_json::Value>>,
+    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// Değerler: `"sdk"`, `"api"`, `"import"`, `"system"`, `"webhook_source"`, `"pull_source"`.
+    #[serde(rename = "sources", skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<String>>,
+    #[serde(rename = "event_names", skip_serializing_if = "Option::is_none")]
+    pub event_names: Option<Vec<String>>,
 }
 
 /// `CreateDecisionAgentDto` şeması.
@@ -5119,6 +6015,208 @@ pub struct CreateKeywordDtoActionsReply {
     /// Zorunlu.
     #[serde(rename = "text", deserialize_with = "crate::de::null_default")]
     pub text: String,
+}
+
+/// `CreateLandingPageDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "slug", deserialize_with = "crate::de::null_default")]
+    pub slug: String,
+    /// Zorunlu.
+    #[serde(rename = "document", deserialize_with = "crate::de::null_default")]
+    pub document: CreateLandingPageDtoDocument,
+    #[serde(rename = "seo", skip_serializing_if = "Option::is_none")]
+    pub seo: Option<CreateLandingPageDtoSeo>,
+    #[serde(rename = "settings", skip_serializing_if = "Option::is_none")]
+    pub settings: Option<CreateLandingPageDtoSettings>,
+    #[serde(rename = "custom_domain_id", skip_serializing_if = "Option::is_none")]
+    pub custom_domain_id: Option<String>,
+}
+
+/// `CreateLandingPageDtoDocument` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocument {
+    /// Zorunlu. Değerler: `1`.
+    #[serde(rename = "version", deserialize_with = "crate::de::null_default")]
+    pub version: f64,
+    /// Zorunlu.
+    #[serde(rename = "settings", deserialize_with = "crate::de::null_default")]
+    pub settings: CreateLandingPageDtoDocumentSettings,
+    /// Zorunlu.
+    #[serde(rename = "sections", deserialize_with = "crate::de::null_default")]
+    pub sections: Vec<CreateLandingPageDtoDocumentSectionsItem>,
+}
+
+/// `CreateLandingPageDtoDocumentSectionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocumentSectionsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu. Değerler: `"section"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "background_image", skip_serializing_if = "Option::is_none")]
+    pub background_image: Option<String>,
+    #[serde(rename = "padding", skip_serializing_if = "Option::is_none")]
+    pub padding: Option<CreateLandingPageDtoDocumentSectionsItemPadding>,
+    #[serde(rename = "stack_on_mobile", skip_serializing_if = "Option::is_none")]
+    pub stack_on_mobile: Option<bool>,
+    /// Zorunlu.
+    #[serde(rename = "columns", deserialize_with = "crate::de::null_default")]
+    pub columns: Vec<CreateLandingPageDtoDocumentSectionsItemColumnsItem>,
+}
+
+/// `CreateLandingPageDtoDocumentSectionsItemColumnsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocumentSectionsItemColumnsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    #[serde(rename = "width_percent", skip_serializing_if = "Option::is_none")]
+    pub width_percent: Option<i64>,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    /// Değerler: `"top"`, `"middle"`, `"bottom"`.
+    #[serde(rename = "vertical_align", skip_serializing_if = "Option::is_none")]
+    pub vertical_align: Option<String>,
+    #[serde(rename = "padding", skip_serializing_if = "Option::is_none")]
+    pub padding: Option<CreateLandingPageDtoDocumentSectionsItemColumnsItemPadding>,
+    /// Zorunlu.
+    #[serde(rename = "blocks", deserialize_with = "crate::de::null_default")]
+    pub blocks: Vec<serde_json::Value>,
+}
+
+/// `CreateLandingPageDtoDocumentSectionsItemColumnsItemPadding` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocumentSectionsItemColumnsItemPadding {
+    /// Zorunlu.
+    #[serde(rename = "top", deserialize_with = "crate::de::null_default")]
+    pub top: i64,
+    /// Zorunlu.
+    #[serde(rename = "right", deserialize_with = "crate::de::null_default")]
+    pub right: i64,
+    /// Zorunlu.
+    #[serde(rename = "bottom", deserialize_with = "crate::de::null_default")]
+    pub bottom: i64,
+    /// Zorunlu.
+    #[serde(rename = "left", deserialize_with = "crate::de::null_default")]
+    pub left: i64,
+}
+
+/// `CreateLandingPageDtoDocumentSectionsItemPadding` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocumentSectionsItemPadding {
+    /// Zorunlu.
+    #[serde(rename = "top", deserialize_with = "crate::de::null_default")]
+    pub top: i64,
+    /// Zorunlu.
+    #[serde(rename = "right", deserialize_with = "crate::de::null_default")]
+    pub right: i64,
+    /// Zorunlu.
+    #[serde(rename = "bottom", deserialize_with = "crate::de::null_default")]
+    pub bottom: i64,
+    /// Zorunlu.
+    #[serde(rename = "left", deserialize_with = "crate::de::null_default")]
+    pub left: i64,
+}
+
+/// `CreateLandingPageDtoDocumentSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocumentSettings {
+    #[serde(rename = "width", skip_serializing_if = "Option::is_none")]
+    pub width: Option<i64>,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "content_background_color", skip_serializing_if = "Option::is_none")]
+    pub content_background_color: Option<String>,
+    #[serde(rename = "text_color", skip_serializing_if = "Option::is_none")]
+    pub text_color: Option<String>,
+    #[serde(rename = "link_color", skip_serializing_if = "Option::is_none")]
+    pub link_color: Option<String>,
+    /// Değerler: `"system"`, `"arial"`, `"georgia"`, `"verdana"`, `"trebuchet"`, `"courier"`.
+    #[serde(rename = "font_family", skip_serializing_if = "Option::is_none")]
+    pub font_family: Option<String>,
+    #[serde(rename = "dark_mode", skip_serializing_if = "Option::is_none")]
+    pub dark_mode: Option<CreateLandingPageDtoDocumentSettingsDarkMode>,
+}
+
+/// `CreateLandingPageDtoDocumentSettingsDarkMode` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoDocumentSettingsDarkMode {
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "content_background_color", skip_serializing_if = "Option::is_none")]
+    pub content_background_color: Option<String>,
+    #[serde(rename = "text_color", skip_serializing_if = "Option::is_none")]
+    pub text_color: Option<String>,
+    #[serde(rename = "link_color", skip_serializing_if = "Option::is_none")]
+    pub link_color: Option<String>,
+}
+
+/// `CreateLandingPageDtoSeo` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoSeo {
+    #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "og_image", skip_serializing_if = "Option::is_none")]
+    pub og_image: Option<String>,
+    #[serde(rename = "canonical_url", skip_serializing_if = "Option::is_none")]
+    pub canonical_url: Option<String>,
+    #[serde(rename = "noindex", skip_serializing_if = "Option::is_none")]
+    pub noindex: Option<bool>,
+}
+
+/// `CreateLandingPageDtoSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoSettings {
+    #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    #[serde(rename = "form_id", skip_serializing_if = "Option::is_none")]
+    pub form_id: Option<String>,
+    #[serde(rename = "form_section_id", skip_serializing_if = "Option::is_none")]
+    pub form_section_id: Option<String>,
+    #[serde(rename = "cookie_consent", skip_serializing_if = "Option::is_none")]
+    pub cookie_consent: Option<CreateLandingPageDtoSettingsCookieConsent>,
+    #[serde(rename = "web_sdk", skip_serializing_if = "Option::is_none")]
+    pub web_sdk: Option<bool>,
+    #[serde(rename = "favicon_url", skip_serializing_if = "Option::is_none")]
+    pub favicon_url: Option<String>,
+}
+
+/// `CreateLandingPageDtoSettingsCookieConsent` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateLandingPageDtoSettingsCookieConsent {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    #[serde(rename = "text", skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    #[serde(rename = "accept_label", skip_serializing_if = "Option::is_none")]
+    pub accept_label: Option<String>,
+    #[serde(rename = "reject_label", skip_serializing_if = "Option::is_none")]
+    pub reject_label: Option<String>,
+    #[serde(rename = "policy_url", skip_serializing_if = "Option::is_none")]
+    pub policy_url: Option<String>,
 }
 
 /// `CreateLiveActivityTypeDto` şeması.
@@ -5758,6 +6856,22 @@ pub struct CreateSiteSearchSourceDto {
     pub refresh_hours: Option<i64>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+}
+
+/// `CreateSqlSegmentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CreateSqlSegmentDto {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    #[serde(rename = "refresh_interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub refresh_interval_minutes: Option<i64>,
 }
 
 /// `CreateSuppressionDto` şeması.
@@ -6735,6 +7849,224 @@ pub struct CreateWebPersonalizationDtoVariantsItem {
     pub changes: Vec<serde_json::Value>,
 }
 
+/// `CustomAgent` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgent {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "instructions", deserialize_with = "crate::de::null_default")]
+    pub instructions: String,
+    /// Zorunlu. Değerler: `"list_segments"`, `"campaign_performance"`, `"delivery_summary"`, `"create_segment_draft"`, `"create_campaign_draft"`.
+    #[serde(rename = "tools", deserialize_with = "crate::de::null_default")]
+    pub tools: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "schedule")]
+    pub schedule: Option<CustomAgentSchedule>,
+    /// Zorunlu.
+    #[serde(rename = "limits", deserialize_with = "crate::de::null_default")]
+    pub limits: CustomAgentLimits,
+    /// Zorunlu.
+    #[serde(rename = "next_run_at")]
+    pub next_run_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_run_at")]
+    pub last_run_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "usage", deserialize_with = "crate::de::null_default")]
+    pub usage: CustomAgentUsage,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `CustomAgentDraft` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentDraft {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "agent_id", deserialize_with = "crate::de::null_default")]
+    pub agent_id: String,
+    /// Zorunlu.
+    #[serde(rename = "run_id", deserialize_with = "crate::de::null_default")]
+    pub run_id: String,
+    /// Zorunlu. Değerler: `"segment"`, `"campaign"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu. Değerler: `"pending"`, `"applied"`, `"dismissed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "payload", deserialize_with = "crate::de::null_default")]
+    pub payload: std::collections::HashMap<String, serde_json::Value>,
+    /// Zorunlu.
+    #[serde(rename = "result_id")]
+    pub result_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "decided_at")]
+    pub decided_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+}
+
+/// `CustomAgentDraftList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentDraftList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CustomAgentDraft>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `CustomAgentLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentLimits {
+    /// Zorunlu.
+    #[serde(rename = "max_steps", deserialize_with = "crate::de::null_default")]
+    pub max_steps: i64,
+    /// Zorunlu.
+    #[serde(rename = "monthly_token_cap", deserialize_with = "crate::de::null_default")]
+    pub monthly_token_cap: i64,
+}
+
+/// `CustomAgentList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CustomAgent>,
+}
+
+/// `CustomAgentRun` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentRun {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "agent_id", deserialize_with = "crate::de::null_default")]
+    pub agent_id: String,
+    /// Zorunlu. Değerler: `"schedule"`, `"manual"`.
+    #[serde(rename = "trigger", deserialize_with = "crate::de::null_default")]
+    pub trigger: String,
+    /// Zorunlu. Değerler: `"pending"`, `"running"`, `"succeeded"`, `"failed"`, `"skipped"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "steps", deserialize_with = "crate::de::null_default")]
+    pub steps: Vec<CustomAgentRunStepsItem>,
+    /// Zorunlu.
+    #[serde(rename = "summary")]
+    pub summary: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "input_tokens", deserialize_with = "crate::de::null_default")]
+    pub input_tokens: i64,
+    /// Zorunlu.
+    #[serde(rename = "output_tokens", deserialize_with = "crate::de::null_default")]
+    pub output_tokens: i64,
+    /// Zorunlu.
+    #[serde(rename = "error")]
+    pub error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "drafts", deserialize_with = "crate::de::null_default")]
+    pub drafts: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "started_at")]
+    pub started_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "finished_at")]
+    pub finished_at: Option<String>,
+}
+
+/// `CustomAgentRunList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentRunList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<CustomAgentRun>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `CustomAgentRunStepsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentRunStepsItem {
+    /// Zorunlu. Değerler: `"tool"`, `"finish"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    #[serde(rename = "tool", skip_serializing_if = "Option::is_none")]
+    pub tool: Option<String>,
+    #[serde(rename = "ok", skip_serializing_if = "Option::is_none")]
+    pub ok: Option<bool>,
+    #[serde(rename = "error", skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    #[serde(rename = "duration_ms", skip_serializing_if = "Option::is_none")]
+    pub duration_ms: Option<i64>,
+}
+
+/// `CustomAgentSchedule` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentSchedule {
+    /// Zorunlu.
+    #[serde(rename = "cron", deserialize_with = "crate::de::null_default")]
+    pub cron: String,
+    /// Zorunlu.
+    #[serde(rename = "timezone", deserialize_with = "crate::de::null_default")]
+    pub timezone: String,
+}
+
+/// `CustomAgentUsage` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct CustomAgentUsage {
+    /// Zorunlu.
+    #[serde(rename = "tokens_this_month", deserialize_with = "crate::de::null_default")]
+    pub tokens_this_month: i64,
+    /// Zorunlu.
+    #[serde(rename = "period_start", deserialize_with = "crate::de::null_default")]
+    pub period_start: String,
+}
+
 /// `DataFeed` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -6835,6 +8167,464 @@ pub struct DataFeedTestResultUser {
     /// Zorunlu.
     #[serde(rename = "external_id")]
     pub external_id: Option<String>,
+}
+
+/// `DataQuarantineDiscardResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataQuarantineDiscardResult {
+    /// Zorunlu.
+    #[serde(rename = "discarded", deserialize_with = "crate::de::null_default")]
+    pub discarded: i64,
+}
+
+/// `DataQuarantineList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataQuarantineList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<DataQuarantineListDataItem>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+    /// Zorunlu.
+    #[serde(rename = "pending_total", deserialize_with = "crate::de::null_default")]
+    pub pending_total: i64,
+}
+
+/// `DataQuarantineListDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataQuarantineListDataItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Zorunlu.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu.
+    #[serde(rename = "source_id")]
+    pub source_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "transform_id")]
+    pub transform_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "payload", deserialize_with = "crate::de::null_default")]
+    pub payload: std::collections::HashMap<String, serde_json::Value>,
+    /// Zorunlu. Değerler: `"mapping_failed"`, `"invalid_path"`, `"cast_failed"`, `"rule_failed"`, `"invalid_output"`, `"js_error"`, `"js_timeout"`, `"js_memory"`, `"js_invalid_return"`, `"sandbox_unavailable"`, `"write_failed"`.
+    #[serde(rename = "error_code", deserialize_with = "crate::de::null_default")]
+    pub error_code: String,
+    /// Zorunlu.
+    #[serde(rename = "error_path")]
+    pub error_path: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error_message")]
+    pub error_message: Option<String>,
+    /// Zorunlu. Değerler: `"pending"`, `"reprocessed"`, `"discarded"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "attempts", deserialize_with = "crate::de::null_default")]
+    pub attempts: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+    /// Zorunlu.
+    #[serde(rename = "resolved_at")]
+    pub resolved_at: Option<String>,
+}
+
+/// `DataQuarantineReprocessResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataQuarantineReprocessResult {
+    /// Zorunlu.
+    #[serde(rename = "reprocessed", deserialize_with = "crate::de::null_default")]
+    pub reprocessed: i64,
+    /// Zorunlu.
+    #[serde(rename = "dropped", deserialize_with = "crate::de::null_default")]
+    pub dropped: i64,
+    /// Zorunlu.
+    #[serde(rename = "failed", deserialize_with = "crate::de::null_default")]
+    pub failed: i64,
+}
+
+/// `DataSource` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSource {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"webhook"`, `"http_pull"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"signature"`, `"token"`.
+    #[serde(rename = "auth_mode", deserialize_with = "crate::de::null_default")]
+    pub auth_mode: String,
+    /// Zorunlu.
+    #[serde(rename = "mapping", deserialize_with = "crate::de::null_default")]
+    pub mapping: DataSourceMapping,
+    /// Zorunlu.
+    #[serde(rename = "config", deserialize_with = "crate::de::null_default")]
+    pub config: DataSourceConfig,
+    /// Zorunlu.
+    #[serde(rename = "has_secret", deserialize_with = "crate::de::null_default")]
+    pub has_secret: bool,
+    /// Zorunlu.
+    #[serde(rename = "webhook_url")]
+    pub webhook_url: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "next_run_at")]
+    pub next_run_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_run_at")]
+    pub last_run_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_status")]
+    pub last_status: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_stats", deserialize_with = "crate::de::null_default")]
+    pub last_stats: std::collections::HashMap<String, f64>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `DataSourceConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceConfig {
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Değerler: `"GET"`, `"POST"`.
+    #[serde(rename = "method", skip_serializing_if = "Option::is_none")]
+    pub method: Option<String>,
+    #[serde(rename = "headers", skip_serializing_if = "Option::is_none")]
+    pub headers: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "body", skip_serializing_if = "Option::is_none")]
+    pub body: Option<String>,
+    #[serde(rename = "interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub interval_minutes: Option<i64>,
+    #[serde(rename = "auth_header", skip_serializing_if = "Option::is_none")]
+    pub auth_header: Option<String>,
+    #[serde(rename = "next_cursor_path", skip_serializing_if = "Option::is_none")]
+    pub next_cursor_path: Option<String>,
+    #[serde(rename = "cursor_param", skip_serializing_if = "Option::is_none")]
+    pub cursor_param: Option<String>,
+    #[serde(rename = "resume_cursor", skip_serializing_if = "Option::is_none")]
+    pub resume_cursor: Option<bool>,
+}
+
+/// `DataSourceList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<DataSource>,
+}
+
+/// `DataSourceMapping` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceMapping {
+    #[serde(rename = "records_path", skip_serializing_if = "Option::is_none")]
+    pub records_path: Option<String>,
+    #[serde(rename = "event_name", skip_serializing_if = "Option::is_none")]
+    pub event_name: Option<String>,
+    #[serde(rename = "event_name_path", skip_serializing_if = "Option::is_none")]
+    pub event_name_path: Option<String>,
+    #[serde(rename = "external_id_path", skip_serializing_if = "Option::is_none")]
+    pub external_id_path: Option<String>,
+    #[serde(rename = "occurred_at_path", skip_serializing_if = "Option::is_none")]
+    pub occurred_at_path: Option<String>,
+    #[serde(rename = "value_path", skip_serializing_if = "Option::is_none")]
+    pub value_path: Option<String>,
+    #[serde(rename = "event_id_path", skip_serializing_if = "Option::is_none")]
+    pub event_id_path: Option<String>,
+    #[serde(rename = "properties_path", skip_serializing_if = "Option::is_none")]
+    pub properties_path: Option<String>,
+    #[serde(rename = "tags_path", skip_serializing_if = "Option::is_none")]
+    pub tags_path: Option<String>,
+}
+
+/// `DataSourceRunResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceRunResult {
+    /// Zorunlu. Değerler: `"succeeded"`, `"partial"`, `"failed"`, `"skipped"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "stats", deserialize_with = "crate::de::null_default")]
+    pub stats: DataSourceRunResultStats,
+    /// Zorunlu.
+    #[serde(rename = "error")]
+    pub error: Option<String>,
+}
+
+/// `DataSourceRunResultStats` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceRunResultStats {
+    /// Zorunlu.
+    #[serde(rename = "received", deserialize_with = "crate::de::null_default")]
+    pub received: i64,
+    /// Zorunlu.
+    #[serde(rename = "processed", deserialize_with = "crate::de::null_default")]
+    pub processed: i64,
+    /// Zorunlu.
+    #[serde(rename = "dropped", deserialize_with = "crate::de::null_default")]
+    pub dropped: i64,
+    /// Zorunlu.
+    #[serde(rename = "quarantined", deserialize_with = "crate::de::null_default")]
+    pub quarantined: i64,
+}
+
+/// `DataSourceWithSecret` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceWithSecret {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"webhook"`, `"http_pull"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"signature"`, `"token"`.
+    #[serde(rename = "auth_mode", deserialize_with = "crate::de::null_default")]
+    pub auth_mode: String,
+    /// Zorunlu.
+    #[serde(rename = "mapping", deserialize_with = "crate::de::null_default")]
+    pub mapping: DataSourceWithSecretMapping,
+    /// Zorunlu.
+    #[serde(rename = "config", deserialize_with = "crate::de::null_default")]
+    pub config: DataSourceWithSecretConfig,
+    /// Zorunlu.
+    #[serde(rename = "has_secret", deserialize_with = "crate::de::null_default")]
+    pub has_secret: bool,
+    /// Zorunlu.
+    #[serde(rename = "webhook_url")]
+    pub webhook_url: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "next_run_at")]
+    pub next_run_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_run_at")]
+    pub last_run_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_status")]
+    pub last_status: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_error")]
+    pub last_error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_stats", deserialize_with = "crate::de::null_default")]
+    pub last_stats: std::collections::HashMap<String, f64>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+    /// Zorunlu.
+    #[serde(rename = "secret")]
+    pub secret: Option<String>,
+}
+
+/// `DataSourceWithSecretConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceWithSecretConfig {
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Değerler: `"GET"`, `"POST"`.
+    #[serde(rename = "method", skip_serializing_if = "Option::is_none")]
+    pub method: Option<String>,
+    #[serde(rename = "headers", skip_serializing_if = "Option::is_none")]
+    pub headers: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "body", skip_serializing_if = "Option::is_none")]
+    pub body: Option<String>,
+    #[serde(rename = "interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub interval_minutes: Option<i64>,
+    #[serde(rename = "auth_header", skip_serializing_if = "Option::is_none")]
+    pub auth_header: Option<String>,
+    #[serde(rename = "next_cursor_path", skip_serializing_if = "Option::is_none")]
+    pub next_cursor_path: Option<String>,
+    #[serde(rename = "cursor_param", skip_serializing_if = "Option::is_none")]
+    pub cursor_param: Option<String>,
+    #[serde(rename = "resume_cursor", skip_serializing_if = "Option::is_none")]
+    pub resume_cursor: Option<bool>,
+}
+
+/// `DataSourceWithSecretMapping` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataSourceWithSecretMapping {
+    #[serde(rename = "records_path", skip_serializing_if = "Option::is_none")]
+    pub records_path: Option<String>,
+    #[serde(rename = "event_name", skip_serializing_if = "Option::is_none")]
+    pub event_name: Option<String>,
+    #[serde(rename = "event_name_path", skip_serializing_if = "Option::is_none")]
+    pub event_name_path: Option<String>,
+    #[serde(rename = "external_id_path", skip_serializing_if = "Option::is_none")]
+    pub external_id_path: Option<String>,
+    #[serde(rename = "occurred_at_path", skip_serializing_if = "Option::is_none")]
+    pub occurred_at_path: Option<String>,
+    #[serde(rename = "value_path", skip_serializing_if = "Option::is_none")]
+    pub value_path: Option<String>,
+    #[serde(rename = "event_id_path", skip_serializing_if = "Option::is_none")]
+    pub event_id_path: Option<String>,
+    #[serde(rename = "properties_path", skip_serializing_if = "Option::is_none")]
+    pub properties_path: Option<String>,
+    #[serde(rename = "tags_path", skip_serializing_if = "Option::is_none")]
+    pub tags_path: Option<String>,
+}
+
+/// `DataTransform` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataTransform {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "app_id", deserialize_with = "crate::de::null_default")]
+    pub app_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Zorunlu. Değerler: `"rules"`, `"javascript"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    /// Zorunlu.
+    #[serde(rename = "position", deserialize_with = "crate::de::null_default")]
+    pub position: i64,
+    /// Zorunlu. Değerler: `"sdk"`, `"api"`, `"import"`, `"system"`, `"webhook_source"`, `"pull_source"`.
+    #[serde(rename = "sources", deserialize_with = "crate::de::null_default")]
+    pub sources: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "event_names", deserialize_with = "crate::de::null_default")]
+    pub event_names: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "rules", deserialize_with = "crate::de::null_default")]
+    pub rules: Vec<std::collections::HashMap<String, serde_json::Value>>,
+    /// Zorunlu.
+    #[serde(rename = "code")]
+    pub code: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error_count", deserialize_with = "crate::de::null_default")]
+    pub error_count: i64,
+    /// Zorunlu. Değerler: `"mapping_failed"`, `"invalid_path"`, `"cast_failed"`, `"rule_failed"`, `"invalid_output"`, `"js_error"`, `"js_timeout"`, `"js_memory"`, `"js_invalid_return"`, `"sandbox_unavailable"`, `"write_failed"`.
+    #[serde(rename = "last_error_code")]
+    pub last_error_code: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "last_error_at")]
+    pub last_error_at: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `DataTransformList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataTransformList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<DataTransform>,
+}
+
+/// `DataTransformPreview` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataTransformPreview {
+    /// Zorunlu.
+    #[serde(rename = "results", deserialize_with = "crate::de::null_default")]
+    pub results: Vec<DataTransformPreviewResultsItem>,
+    /// Zorunlu.
+    #[serde(rename = "duration_ms", deserialize_with = "crate::de::null_default")]
+    pub duration_ms: i64,
+}
+
+/// `DataTransformPreviewResultsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DataTransformPreviewResultsItem {
+    /// Zorunlu. Değerler: `"kept"`, `"dropped"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu.
+    #[serde(rename = "record")]
+    pub record: Option<std::collections::HashMap<String, serde_json::Value>>,
+    /// Zorunlu.
+    #[serde(rename = "transform_id")]
+    pub transform_id: Option<String>,
+    /// Zorunlu. Değerler: `"mapping_failed"`, `"invalid_path"`, `"cast_failed"`, `"rule_failed"`, `"invalid_output"`, `"js_error"`, `"js_timeout"`, `"js_memory"`, `"js_invalid_return"`, `"sandbox_unavailable"`, `"write_failed"`.
+    #[serde(rename = "error_code")]
+    pub error_code: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error_path")]
+    pub error_path: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error_message")]
+    pub error_message: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "logs", deserialize_with = "crate::de::null_default")]
+    pub logs: Vec<String>,
 }
 
 /// `DecideDto` şeması.
@@ -7184,6 +8974,15 @@ pub struct DeliveryList {
     /// Zorunlu.
     #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
     pub has_more: bool,
+}
+
+/// `DiscardQuarantineDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct DiscardQuarantineDto {
+    /// Zorunlu.
+    #[serde(rename = "ids", deserialize_with = "crate::de::null_default")]
+    pub ids: Vec<String>,
 }
 
 /// `EmailAddressCheck` şeması.
@@ -10358,6 +12157,30 @@ pub struct LandingPageStats {
     pub submissions: i64,
 }
 
+/// `LandingPageVersions` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct LandingPageVersions {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<LandingPageVersionsDataItem>,
+}
+
+/// `LandingPageVersionsDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct LandingPageVersionsDataItem {
+    /// Zorunlu.
+    #[serde(rename = "version", deserialize_with = "crate::de::null_default")]
+    pub version: i64,
+    /// Zorunlu.
+    #[serde(rename = "published_at", deserialize_with = "crate::de::null_default")]
+    pub published_at: String,
+    /// Zorunlu.
+    #[serde(rename = "published_by")]
+    pub published_by: Option<String>,
+}
+
 /// `LiveActivitySendResult` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -11784,6 +13607,43 @@ pub struct PredictionUsersPageDataItem {
     pub bucket: String,
 }
 
+/// `PreviewDataTransformDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PreviewDataTransformDto {
+    /// Zorunlu. Değerler: `"event"`, `"person"`.
+    #[serde(rename = "target", deserialize_with = "crate::de::null_default")]
+    pub target: String,
+    /// Değerler: `"sdk"`, `"api"`, `"import"`, `"system"`, `"webhook_source"`, `"pull_source"`.
+    #[serde(rename = "source", skip_serializing_if = "Option::is_none")]
+    pub source: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "records", deserialize_with = "crate::de::null_default")]
+    pub records: Vec<std::collections::HashMap<String, serde_json::Value>>,
+    #[serde(rename = "transform", skip_serializing_if = "Option::is_none")]
+    pub transform: Option<PreviewDataTransformDtoTransform>,
+    #[serde(rename = "transform_id", skip_serializing_if = "Option::is_none")]
+    pub transform_id: Option<String>,
+}
+
+/// `PreviewDataTransformDtoTransform` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct PreviewDataTransformDtoTransform {
+    /// Zorunlu. Değerler: `"rules"`, `"javascript"`.
+    #[serde(rename = "kind", deserialize_with = "crate::de::null_default")]
+    pub kind: String,
+    #[serde(rename = "rules", skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<serde_json::Value>>,
+    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// Değerler: `"sdk"`, `"api"`, `"import"`, `"system"`, `"webhook_source"`, `"pull_source"`.
+    #[serde(rename = "sources", skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<String>>,
+    #[serde(rename = "event_names", skip_serializing_if = "Option::is_none")]
+    pub event_names: Option<Vec<String>>,
+}
+
 /// `PreviewWarehouseQueryDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12651,6 +14511,14 @@ pub struct ReportRunBodyDtoSort {
     pub direction: Option<String>,
 }
 
+/// `ReprocessQuarantineDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct ReprocessQuarantineDto {
+    #[serde(rename = "ids", skip_serializing_if = "Option::is_none")]
+    pub ids: Option<Vec<String>>,
+}
+
 /// `RetentionReport` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -12967,6 +14835,19 @@ pub struct RfmUsersPageDataItem {
     /// Zorunlu.
     #[serde(rename = "segment_since", deserialize_with = "crate::de::null_default")]
     pub segment_since: String,
+}
+
+/// `RunSqlQueryDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct RunSqlQueryDto {
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    #[serde(rename = "row_limit", skip_serializing_if = "Option::is_none")]
+    pub row_limit: Option<i64>,
+    #[serde(rename = "timeout_ms", skip_serializing_if = "Option::is_none")]
+    pub timeout_ms: Option<i64>,
 }
 
 /// `SavedReport` şeması.
@@ -13385,6 +15266,14 @@ pub struct SelectWinnerDto {
     /// Zorunlu.
     #[serde(rename = "variant_id", deserialize_with = "crate::de::null_default")]
     pub variant_id: String,
+}
+
+/// `SetMemberDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SetMemberDto {
+    #[serde(rename = "role", skip_serializing_if = "Option::is_none")]
+    pub role: Option<String>,
 }
 
 /// `SetOwnerDto` şeması.
@@ -13838,6 +15727,174 @@ pub struct SmsVerificationCheck {
     /// Zorunlu.
     #[serde(rename = "verified", deserialize_with = "crate::de::null_default")]
     pub verified: bool,
+}
+
+/// `SqlQueryResult` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlQueryResult {
+    /// Zorunlu.
+    #[serde(rename = "run_id", deserialize_with = "crate::de::null_default")]
+    pub run_id: String,
+    /// Zorunlu.
+    #[serde(rename = "columns", deserialize_with = "crate::de::null_default")]
+    pub columns: Vec<SqlQueryResultColumnsItem>,
+    /// Zorunlu.
+    #[serde(rename = "rows", deserialize_with = "crate::de::null_default")]
+    pub rows: Vec<Vec<serde_json::Value>>,
+    /// Zorunlu.
+    #[serde(rename = "row_count", deserialize_with = "crate::de::null_default")]
+    pub row_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "truncated", deserialize_with = "crate::de::null_default")]
+    pub truncated: bool,
+    /// Zorunlu.
+    #[serde(rename = "duration_ms", deserialize_with = "crate::de::null_default")]
+    pub duration_ms: i64,
+}
+
+/// `SqlQueryResultColumnsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlQueryResultColumnsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"text"`, `"integer"`, `"number"`, `"boolean"`, `"timestamp"`, `"json"`, `"unknown"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+}
+
+/// `SqlRunList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlRunList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<SqlRunListDataItem>,
+    /// Zorunlu.
+    #[serde(rename = "next_cursor")]
+    pub next_cursor: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "has_more", deserialize_with = "crate::de::null_default")]
+    pub has_more: bool,
+}
+
+/// `SqlRunListDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlRunListDataItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "segment_id")]
+    pub segment_id: Option<String>,
+    /// Zorunlu. Değerler: `"panel"`, `"api"`, `"schedule"`.
+    #[serde(rename = "source", deserialize_with = "crate::de::null_default")]
+    pub source: String,
+    /// Zorunlu.
+    #[serde(rename = "actor_id")]
+    pub actor_id: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "query", deserialize_with = "crate::de::null_default")]
+    pub query: String,
+    /// Zorunlu.
+    #[serde(rename = "query_hash", deserialize_with = "crate::de::null_default")]
+    pub query_hash: String,
+    /// Zorunlu. Değerler: `"ok"`, `"rejected"`, `"timeout"`, `"failed"`.
+    #[serde(rename = "status", deserialize_with = "crate::de::null_default")]
+    pub status: String,
+    /// Zorunlu. Değerler: `"empty"`, `"too_long"`, `"syntax"`, `"multiple_statements"`, `"not_select"`, `"forbidden_relation"`, `"forbidden_function"`, `"forbidden_construct"`, `"forbidden_type"`.
+    #[serde(rename = "reason")]
+    pub reason: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "error")]
+    pub error: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "row_count", deserialize_with = "crate::de::null_default")]
+    pub row_count: i64,
+    /// Zorunlu.
+    #[serde(rename = "truncated", deserialize_with = "crate::de::null_default")]
+    pub truncated: bool,
+    /// Zorunlu.
+    #[serde(rename = "duration_ms", deserialize_with = "crate::de::null_default")]
+    pub duration_ms: i64,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+}
+
+/// `SqlSchema` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlSchema {
+    /// Zorunlu.
+    #[serde(rename = "views", deserialize_with = "crate::de::null_default")]
+    pub views: Vec<SqlSchemaViewsItem>,
+    /// Zorunlu.
+    #[serde(rename = "limits", deserialize_with = "crate::de::null_default")]
+    pub limits: SqlSchemaLimits,
+    /// Zorunlu.
+    #[serde(rename = "refresh_intervals", deserialize_with = "crate::de::null_default")]
+    pub refresh_intervals: Vec<i64>,
+}
+
+/// `SqlSchemaLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlSchemaLimits {
+    /// Zorunlu.
+    #[serde(rename = "query_max", deserialize_with = "crate::de::null_default")]
+    pub query_max: i64,
+    /// Zorunlu.
+    #[serde(rename = "row_limit_default", deserialize_with = "crate::de::null_default")]
+    pub row_limit_default: i64,
+    /// Zorunlu.
+    #[serde(rename = "row_limit_max", deserialize_with = "crate::de::null_default")]
+    pub row_limit_max: i64,
+    /// Zorunlu.
+    #[serde(rename = "timeout_default_ms", deserialize_with = "crate::de::null_default")]
+    pub timeout_default_ms: i64,
+    /// Zorunlu.
+    #[serde(rename = "timeout_max_ms", deserialize_with = "crate::de::null_default")]
+    pub timeout_max_ms: i64,
+    /// Zorunlu.
+    #[serde(rename = "segment_max_members", deserialize_with = "crate::de::null_default")]
+    pub segment_max_members: i64,
+}
+
+/// `SqlSchemaViewsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlSchemaViewsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "columns", deserialize_with = "crate::de::null_default")]
+    pub columns: Vec<SqlSchemaViewsItemColumnsItem>,
+}
+
+/// `SqlSchemaViewsItemColumnsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlSchemaViewsItemColumnsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu. Değerler: `"text"`, `"integer"`, `"number"`, `"boolean"`, `"timestamp"`, `"json"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+}
+
+/// `SqlSegmentList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct SqlSegmentList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<Segment>,
 }
 
 /// `StartLiveActivityDto` şeması.
@@ -14832,6 +16889,116 @@ pub struct UpdateAdCampaignDto {
     pub daily_budget: Option<serde_json::Value>,
 }
 
+/// `UpdateAffinityConfigDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAffinityConfigDto {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    /// Zorunlu.
+    #[serde(rename = "attributes", deserialize_with = "crate::de::null_default")]
+    pub attributes: Vec<String>,
+    /// Zorunlu.
+    #[serde(rename = "events", deserialize_with = "crate::de::null_default")]
+    pub events: std::collections::HashMap<String, f64>,
+    #[serde(rename = "window_days", skip_serializing_if = "Option::is_none")]
+    pub window_days: Option<i64>,
+    #[serde(rename = "half_life_days", skip_serializing_if = "Option::is_none")]
+    pub half_life_days: Option<i64>,
+}
+
+/// `UpdateAiAgentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAiAgentDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Değerler: `"whatsapp"`, `"sms"`, `"rcs"`, `"telegram"`, `"viber"`, `"chat"`.
+    #[serde(rename = "channels", skip_serializing_if = "Option::is_none")]
+    pub channels: Option<Vec<String>>,
+    #[serde(rename = "instructions", skip_serializing_if = "Option::is_none")]
+    pub instructions: Option<String>,
+    #[serde(rename = "faq", skip_serializing_if = "Option::is_none")]
+    pub faq: Option<Vec<UpdateAiAgentDtoFaqItem>>,
+    #[serde(rename = "tools", skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<UpdateAiAgentDtoToolsItem>>,
+    #[serde(rename = "handoff", skip_serializing_if = "Option::is_none")]
+    pub handoff: Option<UpdateAiAgentDtoHandoff>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<UpdateAiAgentDtoLimits>,
+    #[serde(rename = "ai_sentiment", skip_serializing_if = "Option::is_none")]
+    pub ai_sentiment: Option<bool>,
+}
+
+/// `UpdateAiAgentDtoFaqItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAiAgentDtoFaqItem {
+    /// Zorunlu.
+    #[serde(rename = "question", deserialize_with = "crate::de::null_default")]
+    pub question: String,
+    /// Zorunlu.
+    #[serde(rename = "answer", deserialize_with = "crate::de::null_default")]
+    pub answer: String,
+}
+
+/// `UpdateAiAgentDtoHandoff` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAiAgentDtoHandoff {
+    #[serde(rename = "keywords", skip_serializing_if = "Option::is_none")]
+    pub keywords: Option<Vec<String>>,
+    #[serde(rename = "max_bot_replies", skip_serializing_if = "Option::is_none")]
+    pub max_bot_replies: Option<i64>,
+    #[serde(rename = "on_negative_sentiment", skip_serializing_if = "Option::is_none")]
+    pub on_negative_sentiment: Option<bool>,
+    #[serde(rename = "message", skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// `UpdateAiAgentDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAiAgentDtoLimits {
+    #[serde(rename = "monthly_token_cap", skip_serializing_if = "Option::is_none")]
+    pub monthly_token_cap: Option<i64>,
+    #[serde(rename = "max_steps", skip_serializing_if = "Option::is_none")]
+    pub max_steps: Option<i64>,
+}
+
+/// `UpdateAiAgentDtoToolsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAiAgentDtoToolsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    /// Zorunlu.
+    #[serde(rename = "description", deserialize_with = "crate::de::null_default")]
+    pub description: String,
+    /// Zorunlu.
+    #[serde(rename = "url", deserialize_with = "crate::de::null_default")]
+    pub url: String,
+    #[serde(rename = "params", skip_serializing_if = "Option::is_none")]
+    pub params: Option<Vec<UpdateAiAgentDtoToolsItemParamsItem>>,
+}
+
+/// `UpdateAiAgentDtoToolsItemParamsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateAiAgentDtoToolsItemParamsItem {
+    /// Zorunlu.
+    #[serde(rename = "name", deserialize_with = "crate::de::null_default")]
+    pub name: String,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "required", skip_serializing_if = "Option::is_none")]
+    pub required: Option<bool>,
+}
+
 /// `UpdateApiKeyDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -15391,12 +17558,68 @@ pub struct UpdateChannelScoreConfigDto {
     pub count_email_opens: Option<bool>,
 }
 
+/// `UpdateCompanyDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateCompanyDto {
+    #[serde(rename = "external_id", skip_serializing_if = "Option::is_none")]
+    pub external_id: Option<String>,
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "domain", skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
+    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
 /// `UpdateContentTableDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
 pub struct UpdateContentTableDto {
     #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
+}
+
+/// `UpdateCustomAgentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateCustomAgentDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    #[serde(rename = "instructions", skip_serializing_if = "Option::is_none")]
+    pub instructions: Option<String>,
+    /// Değerler: `"list_segments"`, `"campaign_performance"`, `"delivery_summary"`, `"create_segment_draft"`, `"create_campaign_draft"`.
+    #[serde(rename = "tools", skip_serializing_if = "Option::is_none")]
+    pub tools: Option<Vec<String>>,
+    #[serde(rename = "schedule", skip_serializing_if = "Option::is_none")]
+    pub schedule: Option<UpdateCustomAgentDtoSchedule>,
+    #[serde(rename = "limits", skip_serializing_if = "Option::is_none")]
+    pub limits: Option<UpdateCustomAgentDtoLimits>,
+}
+
+/// `UpdateCustomAgentDtoLimits` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateCustomAgentDtoLimits {
+    #[serde(rename = "max_steps", skip_serializing_if = "Option::is_none")]
+    pub max_steps: Option<i64>,
+    #[serde(rename = "monthly_token_cap", skip_serializing_if = "Option::is_none")]
+    pub monthly_token_cap: Option<i64>,
+}
+
+/// `UpdateCustomAgentDtoSchedule` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateCustomAgentDtoSchedule {
+    /// Zorunlu.
+    #[serde(rename = "cron", deserialize_with = "crate::de::null_default")]
+    pub cron: String,
+    #[serde(rename = "timezone", skip_serializing_if = "Option::is_none")]
+    pub timezone: Option<String>,
 }
 
 /// `UpdateDataFeedDto` şeması.
@@ -15424,6 +17647,97 @@ pub struct UpdateDataFeedDto {
     pub enabled: Option<bool>,
 }
 
+/// `UpdateDataSourceDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateDataSourceDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// Değerler: `"signature"`, `"token"`.
+    #[serde(rename = "auth_mode", skip_serializing_if = "Option::is_none")]
+    pub auth_mode: Option<String>,
+    #[serde(rename = "mapping", skip_serializing_if = "Option::is_none")]
+    pub mapping: Option<UpdateDataSourceDtoMapping>,
+    #[serde(rename = "config", skip_serializing_if = "Option::is_none")]
+    pub config: Option<UpdateDataSourceDtoConfig>,
+    #[serde(rename = "auth_value", skip_serializing_if = "Option::is_none")]
+    pub auth_value: Option<String>,
+}
+
+/// `UpdateDataSourceDtoConfig` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateDataSourceDtoConfig {
+    #[serde(rename = "url", skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+    /// Değerler: `"GET"`, `"POST"`.
+    #[serde(rename = "method", skip_serializing_if = "Option::is_none")]
+    pub method: Option<String>,
+    #[serde(rename = "headers", skip_serializing_if = "Option::is_none")]
+    pub headers: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "body", skip_serializing_if = "Option::is_none")]
+    pub body: Option<String>,
+    #[serde(rename = "interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub interval_minutes: Option<i64>,
+    #[serde(rename = "auth_header", skip_serializing_if = "Option::is_none")]
+    pub auth_header: Option<String>,
+    #[serde(rename = "next_cursor_path", skip_serializing_if = "Option::is_none")]
+    pub next_cursor_path: Option<String>,
+    #[serde(rename = "cursor_param", skip_serializing_if = "Option::is_none")]
+    pub cursor_param: Option<String>,
+    #[serde(rename = "resume_cursor", skip_serializing_if = "Option::is_none")]
+    pub resume_cursor: Option<bool>,
+}
+
+/// `UpdateDataSourceDtoMapping` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateDataSourceDtoMapping {
+    #[serde(rename = "records_path", skip_serializing_if = "Option::is_none")]
+    pub records_path: Option<String>,
+    #[serde(rename = "event_name", skip_serializing_if = "Option::is_none")]
+    pub event_name: Option<String>,
+    #[serde(rename = "event_name_path", skip_serializing_if = "Option::is_none")]
+    pub event_name_path: Option<String>,
+    #[serde(rename = "external_id_path", skip_serializing_if = "Option::is_none")]
+    pub external_id_path: Option<String>,
+    #[serde(rename = "occurred_at_path", skip_serializing_if = "Option::is_none")]
+    pub occurred_at_path: Option<String>,
+    #[serde(rename = "value_path", skip_serializing_if = "Option::is_none")]
+    pub value_path: Option<String>,
+    #[serde(rename = "event_id_path", skip_serializing_if = "Option::is_none")]
+    pub event_id_path: Option<String>,
+    #[serde(rename = "properties_path", skip_serializing_if = "Option::is_none")]
+    pub properties_path: Option<String>,
+    #[serde(rename = "tags_path", skip_serializing_if = "Option::is_none")]
+    pub tags_path: Option<String>,
+}
+
+/// `UpdateDataTransformDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateDataTransformDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    #[serde(rename = "position", skip_serializing_if = "Option::is_none")]
+    pub position: Option<i64>,
+    #[serde(rename = "rules", skip_serializing_if = "Option::is_none")]
+    pub rules: Option<Vec<serde_json::Value>>,
+    #[serde(rename = "code", skip_serializing_if = "Option::is_none")]
+    pub code: Option<String>,
+    /// Değerler: `"sdk"`, `"api"`, `"import"`, `"system"`, `"webhook_source"`, `"pull_source"`.
+    #[serde(rename = "sources", skip_serializing_if = "Option::is_none")]
+    pub sources: Option<Vec<String>>,
+    #[serde(rename = "event_names", skip_serializing_if = "Option::is_none")]
+    pub event_names: Option<Vec<String>>,
+}
+
 /// `UpdateDecisionAgentDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -15439,6 +17753,107 @@ pub struct UpdateDecisionAgentDto {
     pub reward_window_hours: Option<i64>,
     #[serde(rename = "holdout_percent", skip_serializing_if = "Option::is_none")]
     pub holdout_percent: Option<i64>,
+}
+
+/// `UpdateFormDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateFormDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "fields", skip_serializing_if = "Option::is_none")]
+    pub fields: Option<Vec<UpdateFormDtoFieldsItem>>,
+    #[serde(rename = "settings", skip_serializing_if = "Option::is_none")]
+    pub settings: Option<UpdateFormDtoSettings>,
+    /// Değerler: `"active"`, `"archived"`.
+    #[serde(rename = "status", skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// `UpdateFormDtoFieldsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateFormDtoFieldsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu. Değerler: `"email"`, `"phone"`, `"first_name"`, `"last_name"`, `"full_name"`, `"text"`, `"textarea"`, `"select"`, `"radio"`, `"checkbox"`, `"consent"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: std::collections::HashMap<String, String>,
+    #[serde(rename = "placeholder", skip_serializing_if = "Option::is_none")]
+    pub placeholder: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "required", skip_serializing_if = "Option::is_none")]
+    pub required: Option<bool>,
+    #[serde(rename = "options", skip_serializing_if = "Option::is_none")]
+    pub options: Option<Vec<UpdateFormDtoFieldsItemOptionsItem>>,
+    #[serde(rename = "maps_to", skip_serializing_if = "Option::is_none")]
+    pub maps_to: Option<String>,
+    #[serde(rename = "max_length", skip_serializing_if = "Option::is_none")]
+    pub max_length: Option<i64>,
+    #[serde(rename = "policy_url", skip_serializing_if = "Option::is_none")]
+    pub policy_url: Option<String>,
+}
+
+/// `UpdateFormDtoFieldsItemOptionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateFormDtoFieldsItemOptionsItem {
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: std::collections::HashMap<String, String>,
+}
+
+/// `UpdateFormDtoSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateFormDtoSettings {
+    #[serde(rename = "submit_label", skip_serializing_if = "Option::is_none")]
+    pub submit_label: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "success_message", skip_serializing_if = "Option::is_none")]
+    pub success_message: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "redirect_url", skip_serializing_if = "Option::is_none")]
+    pub redirect_url: Option<String>,
+    #[serde(rename = "tags", skip_serializing_if = "Option::is_none")]
+    pub tags: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "subscribe", skip_serializing_if = "Option::is_none")]
+    pub subscribe: Option<UpdateFormDtoSettingsSubscribe>,
+    #[serde(rename = "double_opt_in", skip_serializing_if = "Option::is_none")]
+    pub double_opt_in: Option<UpdateFormDtoSettingsDoubleOptIn>,
+    #[serde(rename = "event_name", skip_serializing_if = "Option::is_none")]
+    pub event_name: Option<String>,
+    #[serde(rename = "captcha", skip_serializing_if = "Option::is_none")]
+    pub captcha: Option<bool>,
+    #[serde(rename = "default_language", skip_serializing_if = "Option::is_none")]
+    pub default_language: Option<String>,
+}
+
+/// `UpdateFormDtoSettingsDoubleOptIn` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateFormDtoSettingsDoubleOptIn {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    #[serde(rename = "subject", skip_serializing_if = "Option::is_none")]
+    pub subject: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "body", skip_serializing_if = "Option::is_none")]
+    pub body: Option<std::collections::HashMap<String, String>>,
+}
+
+/// `UpdateFormDtoSettingsSubscribe` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateFormDtoSettingsSubscribe {
+    #[serde(rename = "email", skip_serializing_if = "Option::is_none")]
+    pub email: Option<bool>,
+    #[serde(rename = "sms", skip_serializing_if = "Option::is_none")]
+    pub sms: Option<bool>,
 }
 
 /// `UpdateGeofenceDto` şeması.
@@ -15681,6 +18096,205 @@ pub struct UpdateKeywordDtoActionsReply {
     /// Zorunlu.
     #[serde(rename = "text", deserialize_with = "crate::de::null_default")]
     pub text: String,
+}
+
+/// `UpdateLandingPageDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "slug", skip_serializing_if = "Option::is_none")]
+    pub slug: Option<String>,
+    #[serde(rename = "document", skip_serializing_if = "Option::is_none")]
+    pub document: Option<UpdateLandingPageDtoDocument>,
+    #[serde(rename = "seo", skip_serializing_if = "Option::is_none")]
+    pub seo: Option<UpdateLandingPageDtoSeo>,
+    #[serde(rename = "settings", skip_serializing_if = "Option::is_none")]
+    pub settings: Option<UpdateLandingPageDtoSettings>,
+    #[serde(rename = "custom_domain_id", skip_serializing_if = "Option::is_none")]
+    pub custom_domain_id: Option<String>,
+}
+
+/// `UpdateLandingPageDtoDocument` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocument {
+    /// Zorunlu. Değerler: `1`.
+    #[serde(rename = "version", deserialize_with = "crate::de::null_default")]
+    pub version: f64,
+    /// Zorunlu.
+    #[serde(rename = "settings", deserialize_with = "crate::de::null_default")]
+    pub settings: UpdateLandingPageDtoDocumentSettings,
+    /// Zorunlu.
+    #[serde(rename = "sections", deserialize_with = "crate::de::null_default")]
+    pub sections: Vec<UpdateLandingPageDtoDocumentSectionsItem>,
+}
+
+/// `UpdateLandingPageDtoDocumentSectionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocumentSectionsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu. Değerler: `"section"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "background_image", skip_serializing_if = "Option::is_none")]
+    pub background_image: Option<String>,
+    #[serde(rename = "padding", skip_serializing_if = "Option::is_none")]
+    pub padding: Option<UpdateLandingPageDtoDocumentSectionsItemPadding>,
+    #[serde(rename = "stack_on_mobile", skip_serializing_if = "Option::is_none")]
+    pub stack_on_mobile: Option<bool>,
+    /// Zorunlu.
+    #[serde(rename = "columns", deserialize_with = "crate::de::null_default")]
+    pub columns: Vec<UpdateLandingPageDtoDocumentSectionsItemColumnsItem>,
+}
+
+/// `UpdateLandingPageDtoDocumentSectionsItemColumnsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocumentSectionsItemColumnsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    #[serde(rename = "width_percent", skip_serializing_if = "Option::is_none")]
+    pub width_percent: Option<i64>,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    /// Değerler: `"top"`, `"middle"`, `"bottom"`.
+    #[serde(rename = "vertical_align", skip_serializing_if = "Option::is_none")]
+    pub vertical_align: Option<String>,
+    #[serde(rename = "padding", skip_serializing_if = "Option::is_none")]
+    pub padding: Option<UpdateLandingPageDtoDocumentSectionsItemColumnsItemPadding>,
+    /// Zorunlu.
+    #[serde(rename = "blocks", deserialize_with = "crate::de::null_default")]
+    pub blocks: Vec<serde_json::Value>,
+}
+
+/// `UpdateLandingPageDtoDocumentSectionsItemColumnsItemPadding` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocumentSectionsItemColumnsItemPadding {
+    /// Zorunlu.
+    #[serde(rename = "top", deserialize_with = "crate::de::null_default")]
+    pub top: i64,
+    /// Zorunlu.
+    #[serde(rename = "right", deserialize_with = "crate::de::null_default")]
+    pub right: i64,
+    /// Zorunlu.
+    #[serde(rename = "bottom", deserialize_with = "crate::de::null_default")]
+    pub bottom: i64,
+    /// Zorunlu.
+    #[serde(rename = "left", deserialize_with = "crate::de::null_default")]
+    pub left: i64,
+}
+
+/// `UpdateLandingPageDtoDocumentSectionsItemPadding` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocumentSectionsItemPadding {
+    /// Zorunlu.
+    #[serde(rename = "top", deserialize_with = "crate::de::null_default")]
+    pub top: i64,
+    /// Zorunlu.
+    #[serde(rename = "right", deserialize_with = "crate::de::null_default")]
+    pub right: i64,
+    /// Zorunlu.
+    #[serde(rename = "bottom", deserialize_with = "crate::de::null_default")]
+    pub bottom: i64,
+    /// Zorunlu.
+    #[serde(rename = "left", deserialize_with = "crate::de::null_default")]
+    pub left: i64,
+}
+
+/// `UpdateLandingPageDtoDocumentSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocumentSettings {
+    #[serde(rename = "width", skip_serializing_if = "Option::is_none")]
+    pub width: Option<i64>,
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "content_background_color", skip_serializing_if = "Option::is_none")]
+    pub content_background_color: Option<String>,
+    #[serde(rename = "text_color", skip_serializing_if = "Option::is_none")]
+    pub text_color: Option<String>,
+    #[serde(rename = "link_color", skip_serializing_if = "Option::is_none")]
+    pub link_color: Option<String>,
+    /// Değerler: `"system"`, `"arial"`, `"georgia"`, `"verdana"`, `"trebuchet"`, `"courier"`.
+    #[serde(rename = "font_family", skip_serializing_if = "Option::is_none")]
+    pub font_family: Option<String>,
+    #[serde(rename = "dark_mode", skip_serializing_if = "Option::is_none")]
+    pub dark_mode: Option<UpdateLandingPageDtoDocumentSettingsDarkMode>,
+}
+
+/// `UpdateLandingPageDtoDocumentSettingsDarkMode` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoDocumentSettingsDarkMode {
+    #[serde(rename = "background_color", skip_serializing_if = "Option::is_none")]
+    pub background_color: Option<String>,
+    #[serde(rename = "content_background_color", skip_serializing_if = "Option::is_none")]
+    pub content_background_color: Option<String>,
+    #[serde(rename = "text_color", skip_serializing_if = "Option::is_none")]
+    pub text_color: Option<String>,
+    #[serde(rename = "link_color", skip_serializing_if = "Option::is_none")]
+    pub link_color: Option<String>,
+}
+
+/// `UpdateLandingPageDtoSeo` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoSeo {
+    #[serde(rename = "title", skip_serializing_if = "Option::is_none")]
+    pub title: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "og_image", skip_serializing_if = "Option::is_none")]
+    pub og_image: Option<String>,
+    #[serde(rename = "canonical_url", skip_serializing_if = "Option::is_none")]
+    pub canonical_url: Option<String>,
+    #[serde(rename = "noindex", skip_serializing_if = "Option::is_none")]
+    pub noindex: Option<bool>,
+}
+
+/// `UpdateLandingPageDtoSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoSettings {
+    #[serde(rename = "language", skip_serializing_if = "Option::is_none")]
+    pub language: Option<String>,
+    #[serde(rename = "form_id", skip_serializing_if = "Option::is_none")]
+    pub form_id: Option<String>,
+    #[serde(rename = "form_section_id", skip_serializing_if = "Option::is_none")]
+    pub form_section_id: Option<String>,
+    #[serde(rename = "cookie_consent", skip_serializing_if = "Option::is_none")]
+    pub cookie_consent: Option<UpdateLandingPageDtoSettingsCookieConsent>,
+    #[serde(rename = "web_sdk", skip_serializing_if = "Option::is_none")]
+    pub web_sdk: Option<bool>,
+    #[serde(rename = "favicon_url", skip_serializing_if = "Option::is_none")]
+    pub favicon_url: Option<String>,
+}
+
+/// `UpdateLandingPageDtoSettingsCookieConsent` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateLandingPageDtoSettingsCookieConsent {
+    /// Zorunlu.
+    #[serde(rename = "enabled", deserialize_with = "crate::de::null_default")]
+    pub enabled: bool,
+    #[serde(rename = "text", skip_serializing_if = "Option::is_none")]
+    pub text: Option<String>,
+    #[serde(rename = "accept_label", skip_serializing_if = "Option::is_none")]
+    pub accept_label: Option<String>,
+    #[serde(rename = "reject_label", skip_serializing_if = "Option::is_none")]
+    pub reject_label: Option<String>,
+    #[serde(rename = "policy_url", skip_serializing_if = "Option::is_none")]
+    pub policy_url: Option<String>,
 }
 
 /// `UpdateLiveActivityDto` şeması.
@@ -15982,6 +18596,85 @@ pub struct UpdateSiteSearchSourceDto {
     pub refresh_hours: Option<i64>,
     #[serde(rename = "enabled", skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+}
+
+/// `UpdateSqlSegmentDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSqlSegmentDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "description", skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "query", skip_serializing_if = "Option::is_none")]
+    pub query: Option<String>,
+    #[serde(rename = "refresh_interval_minutes", skip_serializing_if = "Option::is_none")]
+    pub refresh_interval_minutes: Option<i64>,
+}
+
+/// `UpdateSurveyDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSurveyDto {
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "questions", skip_serializing_if = "Option::is_none")]
+    pub questions: Option<Vec<UpdateSurveyDtoQuestionsItem>>,
+    #[serde(rename = "settings", skip_serializing_if = "Option::is_none")]
+    pub settings: Option<UpdateSurveyDtoSettings>,
+}
+
+/// `UpdateSurveyDtoQuestionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSurveyDtoQuestionsItem {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu. Değerler: `"nps"`, `"csat"`, `"single_choice"`, `"multiple_choice"`, `"text"`.
+    #[serde(rename = "type", deserialize_with = "crate::de::null_default")]
+    pub r#type: String,
+    /// Zorunlu.
+    #[serde(rename = "text", deserialize_with = "crate::de::null_default")]
+    pub text: std::collections::HashMap<String, String>,
+    #[serde(rename = "required", skip_serializing_if = "Option::is_none")]
+    pub required: Option<bool>,
+    #[serde(rename = "options", skip_serializing_if = "Option::is_none")]
+    pub options: Option<Vec<UpdateSurveyDtoQuestionsItemOptionsItem>>,
+    #[serde(rename = "low_label", skip_serializing_if = "Option::is_none")]
+    pub low_label: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "high_label", skip_serializing_if = "Option::is_none")]
+    pub high_label: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "placeholder", skip_serializing_if = "Option::is_none")]
+    pub placeholder: Option<std::collections::HashMap<String, String>>,
+}
+
+/// `UpdateSurveyDtoQuestionsItemOptionsItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSurveyDtoQuestionsItemOptionsItem {
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+    /// Zorunlu.
+    #[serde(rename = "label", deserialize_with = "crate::de::null_default")]
+    pub label: std::collections::HashMap<String, String>,
+}
+
+/// `UpdateSurveyDtoSettings` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpdateSurveyDtoSettings {
+    #[serde(rename = "thank_you", skip_serializing_if = "Option::is_none")]
+    pub thank_you: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "submit_label", skip_serializing_if = "Option::is_none")]
+    pub submit_label: Option<std::collections::HashMap<String, String>>,
+    #[serde(rename = "write_properties", skip_serializing_if = "Option::is_none")]
+    pub write_properties: Option<bool>,
+    #[serde(rename = "allow_multiple", skip_serializing_if = "Option::is_none")]
+    pub allow_multiple: Option<bool>,
+    #[serde(rename = "default_language", skip_serializing_if = "Option::is_none")]
+    pub default_language: Option<String>,
 }
 
 /// `UpdateTemplateDto` şeması.
@@ -16945,6 +19638,21 @@ pub struct UpsertCatalogItemsDtoItemsItem {
     pub attributes: Option<std::collections::HashMap<String, String>>,
 }
 
+/// `UpsertCompanyDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UpsertCompanyDto {
+    /// Zorunlu.
+    #[serde(rename = "external_id", deserialize_with = "crate::de::null_default")]
+    pub external_id: String,
+    #[serde(rename = "name", skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    #[serde(rename = "domain", skip_serializing_if = "Option::is_none")]
+    pub domain: Option<String>,
+    #[serde(rename = "properties", skip_serializing_if = "Option::is_none")]
+    pub properties: Option<std::collections::HashMap<String, serde_json::Value>>,
+}
+
 /// `UpsertUserDto` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -17180,6 +19888,93 @@ pub struct User {
     /// Zorunlu. Değerler: `"ios_push"`, `"android_push"`, `"hms_push"`, `"adm_push"`, `"wns_push"`, `"web_push"`, `"email"`, `"sms"`, `"whatsapp"`, `"rcs"`, `"telegram"`, `"viber"`.
     #[serde(rename = "channels", deserialize_with = "crate::de::null_default")]
     pub channels: Vec<String>,
+}
+
+/// `UserAffinity` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserAffinity {
+    /// Zorunlu.
+    #[serde(rename = "user_id", deserialize_with = "crate::de::null_default")]
+    pub user_id: String,
+    /// Zorunlu.
+    #[serde(rename = "affinities", deserialize_with = "crate::de::null_default")]
+    pub affinities: Vec<UserAffinityAffinitiesItem>,
+    /// Zorunlu.
+    #[serde(rename = "weekly_cap")]
+    pub weekly_cap: Option<i64>,
+    /// Zorunlu.
+    #[serde(rename = "engagement")]
+    pub engagement: Option<f64>,
+    /// Zorunlu.
+    #[serde(rename = "computed_at")]
+    pub computed_at: Option<String>,
+}
+
+/// `UserAffinityAffinitiesItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserAffinityAffinitiesItem {
+    /// Zorunlu.
+    #[serde(rename = "attribute", deserialize_with = "crate::de::null_default")]
+    pub attribute: String,
+    /// Zorunlu.
+    #[serde(rename = "value", deserialize_with = "crate::de::null_default")]
+    pub value: String,
+    /// Zorunlu.
+    #[serde(rename = "score", deserialize_with = "crate::de::null_default")]
+    pub score: f64,
+    /// Zorunlu.
+    #[serde(rename = "rank", deserialize_with = "crate::de::null_default")]
+    pub rank: i64,
+}
+
+/// `UserCompanyList` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserCompanyList {
+    /// Zorunlu.
+    #[serde(rename = "data", deserialize_with = "crate::de::null_default")]
+    pub data: Vec<UserCompanyListDataItem>,
+}
+
+/// `UserCompanyListDataItem` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserCompanyListDataItem {
+    /// Zorunlu.
+    #[serde(rename = "company", deserialize_with = "crate::de::null_default")]
+    pub company: UserCompanyListDataItemCompany,
+    /// Zorunlu.
+    #[serde(rename = "role", deserialize_with = "crate::de::null_default")]
+    pub role: String,
+    /// Zorunlu.
+    #[serde(rename = "created_at", deserialize_with = "crate::de::null_default")]
+    pub created_at: String,
+    /// Zorunlu.
+    #[serde(rename = "updated_at", deserialize_with = "crate::de::null_default")]
+    pub updated_at: String,
+}
+
+/// `UserCompanyListDataItemCompany` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct UserCompanyListDataItemCompany {
+    /// Zorunlu.
+    #[serde(rename = "id", deserialize_with = "crate::de::null_default")]
+    pub id: String,
+    /// Zorunlu.
+    #[serde(rename = "external_id", deserialize_with = "crate::de::null_default")]
+    pub external_id: String,
+    /// Zorunlu.
+    #[serde(rename = "name")]
+    pub name: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "domain")]
+    pub domain: Option<String>,
+    /// Zorunlu.
+    #[serde(rename = "properties", deserialize_with = "crate::de::null_default")]
+    pub properties: std::collections::HashMap<String, serde_json::Value>,
 }
 
 /// `UserDetail` şeması.
@@ -18812,6 +21607,15 @@ pub struct WebCampaignVariantStatsItem {
     pub conversion_rate: f64,
 }
 
+/// `WebCampaignWinnerDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebCampaignWinnerDto {
+    /// Zorunlu.
+    #[serde(rename = "variant_id", deserialize_with = "crate::de::null_default")]
+    pub variant_id: String,
+}
+
 /// `Webhook` şeması.
 #[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
 #[serde(default)]
@@ -19514,6 +22318,15 @@ pub struct WebPersonalizationVariantStatsItem {
     /// Zorunlu.
     #[serde(rename = "conversion_rate", deserialize_with = "crate::de::null_default")]
     pub conversion_rate: f64,
+    /// Zorunlu.
+    #[serde(rename = "variant_id", deserialize_with = "crate::de::null_default")]
+    pub variant_id: String,
+}
+
+/// `WebPersonalizationWinnerDto` şeması.
+#[derive(Debug, Clone, Default, PartialEq, serde::Serialize, serde::Deserialize)]
+#[serde(default)]
+pub struct WebPersonalizationWinnerDto {
     /// Zorunlu.
     #[serde(rename = "variant_id", deserialize_with = "crate::de::null_default")]
     pub variant_id: String,
